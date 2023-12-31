@@ -1,0 +1,95 @@
+{
+  "fileHashId": "6rs3",
+  "models": [
+    {
+      "name": "1",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    },
+    {
+      "name": "2",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    },
+    {
+      "name": "3",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    },
+    {
+      "name": "4",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    },
+    {
+      "name": "5",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    },
+    {
+      "name": "6",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    },
+    {
+      "name": "7",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    },
+    {
+      "name": "8",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    },
+    {
+      "name": "9",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    },
+    {
+      "name": "10",
+      "chains": [
+        {
+          "name": "A",
+          "sequence": "gggatgggacacaggggacggg"
+        }
+      ]
+    }
+  ]
+}

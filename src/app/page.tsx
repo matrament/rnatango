@@ -1,95 +1,55 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import styles from "./page.module.css";
+import FirstScenarioUpload from "@/components/FirstScenarioUpload";
+import SecondScenarioUpload from "@/components/SecondScenario";
+import ThirdScenarioUpload from "@/components/ThirdScenarioUpload";
+import FirstScenarioProperties from "@/components/FirstScenarioProperties";
+import { useState } from "react";
 
-export default function Home() {
+const ScenarioButton = (props: {
+  title: string;
+  onClick: any;
+  conditionalcss: any;
+}) => {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
+    <button
+      className={`${styles.buttonscenario} ${props.conditionalcss}`}
+      onClick={props.onClick}
+    >
+      {props.title}
+    </button>
+  );
+};
+
+const Home = () => {
+  const [chooseScenario, setChooseScenario] = useState(1);
+  const buttons = ["Single model", "Model(s) vs Target", "Model vs Model"];
+  return (
+    <>
+      <div className={styles.scenario}>
+        <p style={{ textAlign: "left", paddingLeft: "20px" }}>
+          Choose one scenario:
         </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+        <div className={styles.buttond}>
+          {buttons.map((button: string, index: number) => (
+            <ScenarioButton
+              key={index}
+              title={button}
+              onClick={() => setChooseScenario(index + 1)}
+              conditionalcss={
+                chooseScenario == index + 1 ? styles.active : styles.nonactive
+              }
             />
-          </a>
+          ))}
         </div>
       </div>
+      {chooseScenario === 1 ? <FirstScenarioUpload /> : null}
+      {chooseScenario === 2 ? <SecondScenarioUpload /> : null}
+      {chooseScenario === 3 ? <ThirdScenarioUpload /> : null}
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      <FirstScenarioProperties />
+    </>
+  );
+};
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+export default Home;
