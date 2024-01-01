@@ -1,12 +1,16 @@
 {
-  "fileHashId": "6rs3",
+  "fileHashId": "1JJP",
   "models": [
     {
       "name": "1",
       "chains": [
         {
           "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
+          "sequence": "ggaaaaFFFFFFtttgggat"
+        },
+        {
+          "name": "B",
+          "sequence": "gggaDDDDDDggtttgggat"
         }
       ]
     },
@@ -14,8 +18,12 @@
       "name": "2",
       "chains": [
         {
-          "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
+          "name": "C",
+          "sequence": "gggaggBBtttgggat"
+        },
+        {
+          "name": "D",
+          "sequence": "gggaDGtgggat"
         }
       ]
     },
@@ -23,8 +31,12 @@
       "name": "3",
       "chains": [
         {
-          "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
+          "name": "E",
+          "sequence": "gggaggtttgggat"
+        },
+        {
+          "name": "F",
+          "sequence": "gggaggtttgggat"
         }
       ]
     },
@@ -32,8 +44,12 @@
       "name": "4",
       "chains": [
         {
-          "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
+          "name": "F",
+          "sequence": "gggaggtttgggat"
+        },
+        {
+          "name": "G",
+          "sequence": "gggaggtttgggat"
         }
       ]
     },
@@ -42,7 +58,11 @@
       "chains": [
         {
           "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
+          "sequence": "gggaggtttgggat"
+        },
+        {
+          "name": "B",
+          "sequence": "gggaggtttgggat"
         }
       ]
     },
@@ -51,7 +71,11 @@
       "chains": [
         {
           "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
+          "sequence": "gggaggtttgggat"
+        },
+        {
+          "name": "B",
+          "sequence": "gggaggtttgggat"
         }
       ]
     },
@@ -60,7 +84,11 @@
       "chains": [
         {
           "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
+          "sequence": "gggaggtttgggat"
+        },
+        {
+          "name": "B",
+          "sequence": "gggaggtttgggat"
         }
       ]
     },
@@ -69,25 +97,11 @@
       "chains": [
         {
           "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
-        }
-      ]
-    },
-    {
-      "name": "9",
-      "chains": [
+          "sequence": "gggaggtttgggat"
+        },
         {
-          "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
-        }
-      ]
-    },
-    {
-      "name": "10",
-      "chains": [
-        {
-          "name": "A",
-          "sequence": "gggatgggacacaggggacggg"
+          "name": "B",
+          "sequence": "gggaggtttgggat"
         }
       ]
     }
