@@ -1,7 +1,8 @@
 "use client";
+import styles from "./page.module.css";
 
 const Help = () => {
-  return <div>Help</div>;
+  return <div className={styles.scenario}>Help</div>;
 };
 
 export default Help;

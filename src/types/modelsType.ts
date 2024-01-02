@@ -7,5 +7,7 @@ export type SingleModel = {
 };
 
 export type Chains = {
-  [key: string]: string;
+  name: string;
+  sequence: string;
+  residuesWithoutAtoms: number[];
 };

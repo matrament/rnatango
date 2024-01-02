@@ -1,0 +1,103 @@
+.scenario {
+  border: 1px solid #dcdcdc;
+  border-radius: 40px;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.upload {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.chains {
+  font-family: "Roboto Mono", monospace;
+}
+
+.sequence {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  max-width: 30em;
+  word-wrap: break-word;
+  padding-bottom: 15px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.nucleobases {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  height: 2.7em;
+  width: 2.5em;
+  cursor: pointer;
+  background: inherit;
+  border: 0;
+}
+
+.chainsarray {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.index {
+  color: #ed6a5a;
+  font-size: 12px;
+  padding-top: 0.1em;
+  margin-left: 1em;
+  font-family: "Roboto Mono", monospace;
+  font-weight: bold;
+  user-select: none;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none;
+}
+
+.residue {
+  font-family: "Roboto Mono", monospace;
+  font-weight: bold;
+  font-size: 16px;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
+  width: 100%;
+  text-align: center;
+}
+
+.nonactiveC {
+}
+
+.nonactiveC:hover {
+  background: #f8f0ef;
+}
+
+.activeC {
+  background: #ed6a5a;
+  color: #f8f8f8;
+}
+
+.menuchains {
+  padding-bottom: 10px;
+  display: flex;
+  column-gap: 10px;
+}
+
+.disable {
+  background: #eaeaea !important;
+  color: #8a8a8a !important;
+}

@@ -1,10 +1,11 @@
 "use client";
 import styles from "./page.module.css";
-import FirstScenarioUpload from "@/components/FirstScenarioUpload";
-import SecondScenarioUpload from "@/components/SecondScenario";
-import ThirdScenarioUpload from "@/components/ThirdScenarioUpload";
-import FirstScenarioProperties from "@/components/FirstScenarioProperties";
+import FirstScenarioUpload from "@/components/first-scenario/FirstScenarioUpload";
+import SecondScenarioUpload from "@/components/second-scenario/SecondScenario";
+import ThirdScenarioUpload from "@/components/third-scenario/ThirdScenarioUpload";
+import FirstScenarioProperties from "@/components/first-scenario/FirstScenarioProperties";
 import { useState } from "react";
+import ResultFile from "../components/first-scenario/ResultFile";
 
 const ScenarioButton = (props: {
   title: string;
@@ -48,6 +49,7 @@ const Home = () => {
       {chooseScenario === 3 ? <ThirdScenarioUpload /> : null}
 
       <FirstScenarioProperties />
+      <ResultFile />
     </>
   );
 };

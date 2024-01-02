@@ -39,6 +39,10 @@ export default function RootLayout({
               Upload: {
                 lineWidth: 0,
               },
+              Table: {
+                borderRadius: 24,
+                footerBg: "#ED6A5A",
+              },
             },
           }}
         >

@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Select, Button } from "antd";
-import styles from "./components.module.css";
-import Structures from "./chains.json";
+import styles from "./first-scenario.module.css";
+import Structures from "../chains.json";
 import SequenceCard from "./SequenceCard";
-import { Models, SingleModel, Chains } from "../types/modelsType";
+import { Models, SingleModel, Chains } from "../../types/modelsType";
 
 const onSearch = (value: string) => {
   console.log("search:", value);
@@ -39,7 +39,7 @@ const FirstScenarioProperties = () => {
   }, []);
 
   const testFunc = () => {
-    console.log(modelExample["1"]["A"]["sequence"]);
+    console.log(modelExample);
   };
 
   const chooseModels = (value: string) => {
@@ -85,6 +85,11 @@ const FirstScenarioProperties = () => {
               name={el}
               chain={
                 modelExample[Object.keys(selectedChains)[0]][el]["sequence"]
+              }
+              residuesWithoutAtoms={
+                modelExample[Object.keys(selectedChains)[0]][el][
+                  "residuesWithoutAtoms"
+                ]
               }
             />
           ))}

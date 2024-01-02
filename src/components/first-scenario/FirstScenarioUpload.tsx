@@ -1,8 +1,8 @@
 "use client";
-import { Button, Input, message, Upload, Radio } from "antd";
+import { Button, Input, message, Upload, Space } from "antd";
 import type { UploadProps } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import styles from "./components.module.css";
+import styles from "./first-scenario.module.css";
 import { useState } from "react";
 
 const { Dragger } = Upload;
@@ -28,15 +28,16 @@ const props: UploadProps = {
 };
 
 const FirstScenarioUpload = () => {
-  const [pdbId, setPdbId] = useState("");
+  const [pdbId, setPdbId] = useState("8");
   return (
     <div className={styles.scenario}>
       <p>From example collection:</p>
-      <Radio.Group value={pdbId} onChange={(e) => setPdbId(e.target.value)}>
-        <Radio.Button value="1ffk">1FFK</Radio.Button>
-        <Radio.Button value="6rs3">6RS3</Radio.Button>
-        <Radio.Button value="1jjp">1JJP</Radio.Button>
-      </Radio.Group>
+      <Space.Compact>
+        <Button onClick={() => setPdbId("1FFK")}>1FFK</Button>
+        <Button onClick={() => setPdbId("6RS3")}>6RS3</Button>
+        <Button onClick={() => setPdbId("1JJP")}>1JJP</Button>
+      </Space.Compact>
+
       <div className={styles.upload}>
         <div className={styles.column}>
           <p>From local drive:</p>
@@ -56,6 +57,8 @@ const FirstScenarioUpload = () => {
           <Input
             placeholder="PDB ID eg. ID59"
             onChange={(e) => setPdbId(e.target.value)}
+            value={pdbId}
+            maxLength={4}
           />
         </div>
       </div>

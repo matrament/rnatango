@@ -1,4 +1,4 @@
-import styles from "./components.module.css";
+import styles from "./first-scenario.module.css";
 import { useState } from "react";
 import { Button, InputNumber, Tooltip, Space } from "antd";
 import {
@@ -13,25 +13,34 @@ const Nucleobases = (props: {
   index: number;
   onClick: any;
   selectChains: any;
+  residuesWithoutAtoms: number[];
 }) => {
   return (
-    <button
-      className={`${styles.nucleobases} ${
-        props.selectChains.includes(props.index)
-          ? styles.activeC
-          : styles.nonactiveC
-      }`}
-      onClick={props.onClick}
-    >
+    <div className={styles.nucleobases} onClick={props.onClick}>
       <div className={styles.index}>
         {props.index % 5 == 0 ? props.index : null}
       </div>
-      <div>{props.name}</div>
-    </button>
+      <div
+        className={`${styles.residue} ${
+          props.selectChains.includes(props.index)
+            ? styles.activeC
+            : styles.nonactiveC
+        }
+      ${
+        props.residuesWithoutAtoms.includes(props.index) ? styles.disable : null
+      }`}
+      >
+        {props.name}
+      </div>
+    </div>
   );
 };
 
-const SequenceCard = (props: { name: string; chain: string }) => {
+const SequenceCard = (props: {
+  name: string;
+  chain: string;
+  residuesWithoutAtoms: number[];
+}) => {
   let arrayChains = props.chain.toUpperCase().split("");
   const [selectChains, setSelectChains] = useState<number[]>([]);
   const [addedChains, setAddedChains] = useState<number[][]>([]);
@@ -68,7 +77,6 @@ const SequenceCard = (props: { name: string; chain: string }) => {
     } else {
       setSelectChains([selectChains[selectChains.length - 1]]);
     }
-    console.log("changed", value);
   };
 
   const inputChainsEnd = (value: number | null) => {
@@ -84,7 +92,6 @@ const SequenceCard = (props: { name: string; chain: string }) => {
     ) {
       setSelectChains([selectChains[0]]);
     }
-    console.log("changed", value);
   };
 
   const handleSelectAll = () => {
@@ -98,12 +105,10 @@ const SequenceCard = (props: { name: string; chain: string }) => {
   const addNewChain = () => {
     setAddedChains((addedChains) => [...addedChains, selectChains]);
     setSelectChains([]);
-    console.log(addedChains);
   };
 
   const handleDeleteOneChain = (num: number) => {
     setAddedChains(addedChains.splice(num, 1));
-    console.log(num);
   };
 
   return (
@@ -157,6 +162,7 @@ const SequenceCard = (props: { name: string; chain: string }) => {
             name={el}
             onClick={() => handleAddChains(index + 1)}
             selectChains={selectChains}
+            residuesWithoutAtoms={props.residuesWithoutAtoms}
           />
         ))}
       </div>
