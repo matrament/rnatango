@@ -6,6 +6,7 @@ import ThirdScenarioUpload from "@/components/third-scenario/ThirdScenarioUpload
 import FirstScenarioProperties from "@/components/first-scenario/FirstScenarioProperties";
 import { useState } from "react";
 import ResultFile from "../components/first-scenario/ResultFile";
+import RequestForm from "../components/first-scenario/RequestForm";
 
 const ScenarioButton = (props: {
   title: string;
@@ -44,7 +45,7 @@ const Home = () => {
           ))}
         </div>
       </div>
-      {chooseScenario === 1 ? <FirstScenarioUpload /> : null}
+      {chooseScenario === 1 ? <RequestForm /> : null}
       {chooseScenario === 2 ? <SecondScenarioUpload /> : null}
       {chooseScenario === 3 ? <ThirdScenarioUpload /> : null}
 

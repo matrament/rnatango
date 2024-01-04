@@ -1,5 +1,5 @@
 import styles from "./first-scenario.module.css";
-import { Table, Button } from "antd";
+import { Table, Button, Collapse } from "antd";
 import type { ColumnsType } from "antd/es/table";
 // import { result } from "../result.json";
 import { DownOutlined, UpOutlined, DownloadOutlined } from "@ant-design/icons";
@@ -92,21 +92,29 @@ const Result = () => {
       className={styles.scenario}
       style={{ paddingTop: "40px", paddingBottom: "40px" }}
     >
-      <p>TaskId: 196d7adc-c837-4cb4-9f7c-008277a3f1ec</p>{" "}
-      <Table
-        columns={columns}
-        dataSource={data}
-        size="middle"
-        bordered
-        scroll={{ x: "calc(700px + 50%)", y: 1000 }}
-        title={() => "Table of torsion angles"}
-        footer={() => (
-          <>
-            <DownOutlined />
-            <p>show</p>
-          </>
-        )}
+      <p>TaskId: 196d7adc-c837-4cb4-9f7c-008277a3f1ec</p>
+      <Collapse
+        style={{ width: "600px" }}
+        items={[
+          {
+            key: "1",
+            label: "Table of torsion angles",
+            children: (
+              <div style={{ marginBottom: "20px" }}>
+                <div>bla bla select column</div>
+                <Table
+                  columns={columns}
+                  dataSource={data}
+                  size="middle"
+                  bordered
+                  scroll={{ x: "calc(700px + 50%)", y: 1000 }}
+                />
+              </div>
+            ),
+          },
+        ]}
       />
+
       <Button
         size="large"
         type="primary"

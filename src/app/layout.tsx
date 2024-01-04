@@ -40,8 +40,10 @@ export default function RootLayout({
                 lineWidth: 0,
               },
               Table: {
-                borderRadius: 24,
-                footerBg: "#ED6A5A",
+                headerBorderRadius: 0,
+              },
+              Collapse: {
+                contentPadding: "0px 0px",
               },
             },
           }}

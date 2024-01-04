@@ -12,7 +12,7 @@ const Nucleobases = (props: {
   name: string;
   index: number;
   onClick: any;
-  selectChains: any;
+  selectSequence: any;
   residuesWithoutAtoms: number[];
 }) => {
   return (
@@ -22,7 +22,7 @@ const Nucleobases = (props: {
       </div>
       <div
         className={`${styles.residue} ${
-          props.selectChains.includes(props.index)
+          props.selectSequence.includes(props.index)
             ? styles.activeC
             : styles.nonactiveC
         }
@@ -41,9 +41,9 @@ const SequenceCard = (props: {
   chain: string;
   residuesWithoutAtoms: number[];
 }) => {
-  let arrayChains = props.chain.toUpperCase().split("");
-  const [selectChains, setSelectChains] = useState<number[]>([]);
-  const [addedChains, setAddedChains] = useState<number[][]>([]);
+  let arrayChain = props.chain.toUpperCase().split("");
+  const [selectSequence, setSelectSequence] = useState<number[]>([]);
+  const [addedSequence, setAddedSequence] = useState<number[][]>([]);
 
   const range = (start: number, stop: number, step: number): number[] => {
     return Array.from(
@@ -52,63 +52,68 @@ const SequenceCard = (props: {
     );
   };
 
-  const handleAddChains = (index: number) => {
-    if (selectChains.length < 1) {
-      setSelectChains(() => [index]);
+  const handleAddSequence = (index: number) => {
+    if (selectSequence.length < 1) {
+      setSelectSequence(() => [index]);
     } else {
-      if (selectChains[0] < index) {
-        setSelectChains(range(selectChains[0], index, 1));
+      if (selectSequence[0] < index) {
+        setSelectSequence(range(selectSequence[0], index, 1));
       } else {
-        setSelectChains(range(index, selectChains[selectChains.length - 1], 1));
+        setSelectSequence(
+          range(index, selectSequence[selectSequence.length - 1], 1)
+        );
       }
     }
   };
 
-  const inputChainsFirst = (value: number | null) => {
+  const inputFirstNucleotyde = (value: number | null) => {
     if (value != null) {
       if (
-        value < selectChains[selectChains.length - 1] &&
-        selectChains.length > 0
+        value < selectSequence[selectSequence.length - 1] &&
+        selectSequence.length > 0
       ) {
-        setSelectChains(range(value, selectChains[selectChains.length - 1], 1));
+        setSelectSequence(
+          range(value, selectSequence[selectSequence.length - 1], 1)
+        );
       } else {
-        setSelectChains(() => [value]);
+        setSelectSequence(() => [value]);
       }
     } else {
-      setSelectChains([selectChains[selectChains.length - 1]]);
+      setSelectSequence([selectSequence[selectSequence.length - 1]]);
     }
   };
 
-  const inputChainsEnd = (value: number | null) => {
-    if (value != null && value > selectChains[0]) {
-      setSelectChains(range(selectChains[0], value, 1));
+  const inputLastNucleotyde = (value: number | null) => {
+    if (value != null && value > selectSequence[0]) {
+      setSelectSequence(range(selectSequence[0], value, 1));
     }
-    if (value != null && selectChains.length == 0) {
-      setSelectChains(range(1, value, 1));
+    if (value != null && selectSequence.length == 0) {
+      setSelectSequence(range(1, value, 1));
     }
     if (
       value == null ||
-      (value < selectChains[0] && selectChains.length == 1)
+      (value < selectSequence[0] && selectSequence.length == 1)
     ) {
-      setSelectChains([selectChains[0]]);
+      setSelectSequence([selectSequence[0]]);
     }
   };
 
   const handleSelectAll = () => {
-    setSelectChains(range(1, arrayChains.length, 1));
+    setSelectSequence(range(1, arrayChain.length, 1));
+    console.log(selectSequence);
   };
 
   const handleDeleteAll = () => {
-    setSelectChains([]);
+    setSelectSequence([]);
   };
 
   const addNewChain = () => {
-    setAddedChains((addedChains) => [...addedChains, selectChains]);
-    setSelectChains([]);
+    setAddedSequence((addedSequence) => [...addedSequence, selectSequence]);
+    setSelectSequence([]);
   };
 
   const handleDeleteOneChain = (num: number) => {
-    setAddedChains(addedChains.splice(num, 1));
+    setAddedSequence(addedSequence.splice(num, 1));
   };
 
   return (
@@ -140,38 +145,40 @@ const SequenceCard = (props: {
           <InputNumber
             style={{ width: 75 }}
             min={1}
-            max={arrayChains.length}
+            max={arrayChain.length}
+            value={selectSequence[0]}
             placeholder={"from"}
-            onChange={inputChainsFirst}
+            onChange={inputFirstNucleotyde}
           />
           <InputNumber
             className={styles.input}
             style={{ width: 75 }}
             min={1}
-            max={arrayChains.length}
+            max={arrayChain.length}
+            value={selectSequence[selectSequence.length - 1]}
             placeholder={"to"}
-            onChange={inputChainsEnd}
+            onChange={inputLastNucleotyde}
           />
         </Space.Compact>
       </div>
       <div className={styles.chainsarray}>
-        {arrayChains.map((el, index) => (
+        {arrayChain.map((el, index) => (
           <Nucleobases
             key={index}
             index={index + 1}
             name={el}
-            onClick={() => handleAddChains(index + 1)}
-            selectChains={selectChains}
+            onClick={() => handleAddSequence(index + 1)}
+            selectSequence={selectSequence}
             residuesWithoutAtoms={props.residuesWithoutAtoms}
           />
         ))}
       </div>
       <div>
-        chain {addedChains.length + 1}: from: {selectChains[0]} to:{" "}
-        {selectChains[selectChains.length - 1]} nucleobases
+        chain {addedSequence.length + 1}: from: {selectSequence[0]} to:{" "}
+        {selectSequence[selectSequence.length - 1]} nucleobases
       </div>
       <div>
-        {addedChains.map((el, index) => (
+        {addedSequence.map((el, index) => (
           <div key={index}>
             <p>
               chain {index + 1}: from: {el[0]} to: {el[el.length - 1]}{" "}

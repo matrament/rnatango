@@ -4,7 +4,12 @@ import { Select, Button } from "antd";
 import styles from "./first-scenario.module.css";
 import Structures from "../chains.json";
 import SequenceCard from "./SequenceCard";
-import { Models, SingleModel, Chains } from "../../types/modelsType";
+import {
+  Models,
+  SingleModel,
+  Chains,
+  selected_chains,
+} from "../../types/modelsType";
 
 const onSearch = (value: string) => {
   console.log("search:", value);
@@ -16,6 +21,25 @@ const filterOption = (
 ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
 const FirstScenarioProperties = () => {
+  let empty_chain: selected_chains = {
+    fileId: "",
+    selections: [
+      {
+        modelName: "1",
+        chains: [
+          {
+            name: "",
+            nucleotideRange: {
+              fromInclusive: 0,
+              toInclusive: 0,
+            },
+          },
+        ],
+      },
+    ],
+  };
+  const [selectedStructure, setSelectedStructure] =
+    useState<selected_chains>(empty_chain);
   const [allModels, setAllModels] = useState<string[]>([]);
   const [allChains, setAllChains] = useState<{ [key: string]: string[] }>({});
   const [modelExample, setModelExample] = useState<Models>({});
@@ -98,6 +122,7 @@ const FirstScenarioProperties = () => {
             type="primary"
             shape="round"
             onClick={() => testFunc()}
+            disabled={Object.keys(selectedChains).length == 0}
           >
             Submit a task
           </Button>
