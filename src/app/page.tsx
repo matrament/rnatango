@@ -29,7 +29,7 @@ const Home = () => {
   return (
     <>
       <div className={styles.scenario}>
-        <p style={{ textAlign: "left", paddingLeft: "20px" }}>
+        <p style={{ textAlign: "left", paddingLeft: "40px" }}>
           Choose one scenario:
         </p>
         <div className={styles.buttond}>
@@ -48,9 +48,6 @@ const Home = () => {
       {chooseScenario === 1 ? <RequestForm /> : null}
       {chooseScenario === 2 ? <SecondScenarioUpload /> : null}
       {chooseScenario === 3 ? <ThirdScenarioUpload /> : null}
-
-      <FirstScenarioProperties />
-      <ResultFile />
     </>
   );
 };

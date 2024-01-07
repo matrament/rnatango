@@ -1,30 +1,41 @@
 "use client";
 import { message } from "antd";
 import lang from "../components/first-scenario/lang.json";
+import { single_scenario_request } from "@/types/modelsType";
 
-type pdbId = {
-  name: string;
+let selected_example: any = {
+  fileId: "1FFK",
+  selections: [
+    {
+      modelName: "1",
+      chains: [
+        {
+          name: "0",
+          nucleotideRange: {
+            fromInclusive: 1,
+            toInclusive: 50,
+          },
+        },
+      ],
+    },
+  ],
 };
 
-export function processingRequest(
-  data: pdbId,
-  setLoading: any,
-  setGetStructure: any
-) {
+export function getTaskId(resultModel: single_scenario_request) {
   const requestOptions = {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify(resultModel),
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*", //localhost zabazpieczenie
     },
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
-  fetch("http://rnatango.cs.put.poznan.pl/pdb", requestOptions)
+  fetch("http://rnatango.cs.put.poznan.pl/single", requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
         message.error(lang.rcsb_error);
-        setLoading(false);
+        // setLoading(false);
         return "";
       } else {
         return response.json();
@@ -33,8 +44,7 @@ export function processingRequest(
     .then((response: any) => {
       if (response != "") {
         // window.open(config.FRONTEND_URL + "/result/" + response, "_self");
-        setLoading(false);
-        setGetStructure(response);
+        // setLoading(false);
         console.log(response);
       }
     })

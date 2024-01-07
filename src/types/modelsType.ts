@@ -15,19 +15,32 @@ export type Chains = {
 export type pdb_id = {
   name: string;
 };
-
-export type selected_chains = {
+export type single_scenario_request_selection_chain = {
+  name: string;
+  nucleotideRange: {
+    fromInclusive: number;
+    toInclusive: number;
+  };
+};
+export type single_scenario_request_selection = {
+  modelName: string;
+  chains: single_scenario_request_selection_chain[];
+};
+export type single_scenario_request = {
   fileId: string;
-  selections: [
+  selections: single_scenario_request_selection[];
+};
+
+export type structure = {
+  fileHashId: string;
+  models: [
     {
-      modelName: string;
+      name: string;
       chains: [
         {
           name: string;
-          nucleotideRange: {
-            fromInclusive: number;
-            toInclusive: number;
-          };
+          sequence: string;
+          residuesWithoutAtoms: number[];
         }
       ];
     }

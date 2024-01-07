@@ -28,7 +28,7 @@ const props: UploadProps = {
 };
 
 const FirstScenarioUpload = () => {
-  const [pdbId, setPdbId] = useState("8");
+  const [pdbId, setPdbId] = useState("");
   return (
     <div className={styles.scenario}>
       <p>From example collection:</p>

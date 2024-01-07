@@ -8,17 +8,17 @@ import styles from "./first-scenario.module.css";
 const { Dragger } = Upload;
 
 interface UploadFileArguments {
-  maxModel: number;
-  setMaxModel: any;
   pdbId: pdb_id;
   setPdbId: any;
   uploadStructure: UploadFile[] | undefined;
   setUploadStructure: any;
+  setGetStructure: any;
+  setIsUpload: any;
 }
 
 const UploadStructureFile = (props: UploadFileArguments) => {
   let uploader_props: UploadProps = {
-    name: "structure",
+    name: "file",
     multiple: false,
     action: "http://rnatango.cs.put.poznan.pl/upload",
     maxCount: 1,
@@ -29,7 +29,6 @@ const UploadStructureFile = (props: UploadFileArguments) => {
       props.setPdbId({
         name: "",
       });
-      props.setMaxModel(0);
       const isCifOrPdb =
         file.type === "chemical/x-cif" ||
         file.type === "chemical/x-pdb" ||
@@ -48,24 +47,25 @@ const UploadStructureFile = (props: UploadFileArguments) => {
     onRemove(info: any) {
       props.setPdbId({ name: "" });
       props.setUploadStructure([] as UploadFile<File>[]);
-      props.setMaxModel(0);
+      props.setIsUpload(false);
     },
     onChange(event) {
       const { status } = event.file;
+      console.log(event.file.status);
       if (status === "done") {
-        if (event.file.response.error.length > 0) {
-          message.error(lang.file_not_pdb_cif + `${event.file.name}`);
-          props.setUploadStructure([] as UploadFile<File>[]);
-          props.setPdbId({ name: "" });
-          return;
-        }
+        // if (event.file.response.error.length > 0) {
+        //   message.error(lang.file_not_pdb_cif + `${event.file.name}`);
+        //   props.setUploadStructure([] as UploadFile<File>[]);
+        //   props.setPdbId({ name: "" });
+        //   return;
+        // }
         message.success(lang.file_upload_success + `${event.file.name}`);
         props.setPdbId({
           name: "",
-          // fileId: event.file.response.id, zobaczyc czy bez tego zadziala
         });
-
-        props.setMaxModel(event.file.response.models);
+        props.setGetStructure(event.file.response);
+        console.log(event.file.response);
+        props.setIsUpload(true);
         props.setUploadStructure([event.file]);
       } else if (status === "error") {
         message.error(lang.error_uploading + `${event.file.name}`);

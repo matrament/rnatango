@@ -1,10 +1,15 @@
+.background {
+  background: #f8f8f8;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
 .header {
   height: 100px;
   display: flex;
-  flex-direction: row;
-  width: 100vw;
-  background: #f8f8f8;
-  justify-content: space-around;
+  width: 60vw;
+  justify-content: space-between;
   align-items: center;
 }
 

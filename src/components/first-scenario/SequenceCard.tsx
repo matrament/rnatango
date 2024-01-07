@@ -1,5 +1,5 @@
 import styles from "./first-scenario.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, InputNumber, Tooltip, Space } from "antd";
 import {
   SelectOutlined,
@@ -7,6 +7,7 @@ import {
   PlusOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
+import { single_scenario_request } from "@/types/modelsType";
 
 const Nucleobases = (props: {
   name: string;
@@ -38,12 +39,25 @@ const Nucleobases = (props: {
 
 const SequenceCard = (props: {
   name: string;
-  chain: string;
+  sequence: string;
+  indexChain: number;
   residuesWithoutAtoms: number[];
+  setResultModel: any;
+  resultModel: single_scenario_request;
 }) => {
-  let arrayChain = props.chain.toUpperCase().split("");
+  let arrayChain = props.sequence.toUpperCase().split("");
   const [selectSequence, setSelectSequence] = useState<number[]>([]);
   const [addedSequence, setAddedSequence] = useState<number[][]>([]);
+
+  useEffect(() => {
+    props.resultModel.selections[0].chains[
+      props.indexChain
+    ].nucleotideRange.fromInclusive = selectSequence[0];
+    props.resultModel.selections[0].chains[
+      props.indexChain
+    ].nucleotideRange.toInclusive = selectSequence[selectSequence.length - 1];
+    // FIXME: zrobić ładniej tego use effecta zeby uzyc setstate
+  }, [selectSequence]);
 
   const range = (start: number, stop: number, step: number): number[] => {
     return Array.from(
@@ -100,14 +114,27 @@ const SequenceCard = (props: {
 
   const handleSelectAll = () => {
     setSelectSequence(range(1, arrayChain.length, 1));
-    console.log(selectSequence);
+
+    // let x = {
+    //   ...props.resultModel,
+    //   selections: [
+    //     {
+    //       ...props.resultModel.selections,
+    //       chains: [
+    //         ...props.resultModel.selections.chains,
+    //         { name: props.name },
+    //       ],
+    //     },
+    //   ],
+    // };
+    // console.log(x);
   };
 
   const handleDeleteAll = () => {
     setSelectSequence([]);
   };
 
-  const addNewChain = () => {
+  const addNewNucleotideRange = () => {
     setAddedSequence((addedSequence) => [...addedSequence, selectSequence]);
     setSelectSequence([]);
   };
@@ -130,14 +157,15 @@ const SequenceCard = (props: {
         <Tooltip title="Clear recent">
           <Button
             shape="circle"
-            onClick={() => handleDeleteAll()}
+            onClick={() => handleDeleteAll()} // FIXME: change icon
             icon={<ClearOutlined />}
           />
         </Tooltip>
-        <Tooltip title="Add new chain">
+        <Tooltip title="Add new nucleotide range">
           <Button
             shape="circle"
-            onClick={() => addNewChain()}
+            onClick={() => addNewNucleotideRange()}
+            disabled
             icon={<PlusOutlined />}
           />
         </Tooltip>
@@ -174,14 +202,14 @@ const SequenceCard = (props: {
         ))}
       </div>
       <div>
-        chain {addedSequence.length + 1}: from: {selectSequence[0]} to:{" "}
+        Nucleotide range {addedSequence.length + 1}: from {selectSequence[0]} to{" "}
         {selectSequence[selectSequence.length - 1]} nucleobases
       </div>
       <div>
         {addedSequence.map((el, index) => (
           <div key={index}>
             <p>
-              chain {index + 1}: from: {el[0]} to: {el[el.length - 1]}{" "}
+              Nucleotide range {index + 1}: from {el[0]} to {el[el.length - 1]}{" "}
               nucleobases
             </p>
             <Button

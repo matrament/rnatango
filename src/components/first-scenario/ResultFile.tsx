@@ -86,7 +86,7 @@ const columns: ColumnsType<AngleType> = [
 
 const data: AngleType[] = [];
 
-const Result = () => {
+const ResultFile = () => {
   return (
     <div
       className={styles.scenario}
@@ -128,4 +128,4 @@ const Result = () => {
   );
 };
 
-export default Result;
+export default ResultFile;

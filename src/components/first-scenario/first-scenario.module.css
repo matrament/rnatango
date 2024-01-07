@@ -1,15 +1,32 @@
+.header {
+  border-bottom: solid 1px #dcdcdc;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.select {
+  border-bottom: solid 1px #dcdcdc;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .scenario {
   border: 1px solid #dcdcdc;
   border-radius: 40px;
-  width: 100%;
   margin-top: 5px;
   margin-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
   padding-bottom: 20px;
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
 }
 

@@ -16,6 +16,12 @@ const openSans = Montserrat({
   subsets: ["latin"],
 });
 
+const openSansBold = Montserrat({
+  style: "normal",
+  weight: "500",
+  subsets: ["latin"],
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -31,10 +37,13 @@ export default function RootLayout({
             token: {
               colorPrimary: "#ED6A5A",
               borderRadius: 16,
+              fontFamily: openSans.style.fontFamily,
             },
             components: {
               Button: {
                 textHoverBg: "#f9f9f9",
+                fontFamily: openSansBold.style.fontFamily,
+                contentFontSize: 16,
               },
               Upload: {
                 lineWidth: 0,
@@ -44,6 +53,16 @@ export default function RootLayout({
               },
               Collapse: {
                 contentPadding: "0px 0px",
+              },
+              Input: {
+                fontFamily: openSansBold.style.fontFamily,
+              },
+              InputNumber: {
+                fontFamily: openSansBold.style.fontFamily,
+              },
+              Select: {
+                fontFamily: openSansBold.style.fontFamily,
+                optionFontSize: 16,
               },
             },
           }}
