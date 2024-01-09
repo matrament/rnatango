@@ -46,3 +46,28 @@ export type structure = {
     }
   ];
 };
+
+export type torsion_angles_residue = {
+  key: number;
+  residue: string;
+  alpha: number | null;
+  beta: number | null;
+  gamma: number | null;
+  delta: number | null;
+  epsilon: number | null;
+  zeta: number | null;
+  eta: number | null;
+  theta: number | null;
+  eta_prim: number | null;
+  theta_prim: number | null;
+  chi: number | null;
+};
+
+export type torsion_angles = {
+  chain: {
+    name: string;
+    sequence: string;
+    residueWithoutAtom: number[];
+  };
+  residues: torsion_angles_residue[];
+};

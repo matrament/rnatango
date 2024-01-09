@@ -5,7 +5,7 @@ import SecondScenarioUpload from "@/components/second-scenario/SecondScenario";
 import ThirdScenarioUpload from "@/components/third-scenario/ThirdScenarioUpload";
 import FirstScenarioProperties from "@/components/first-scenario/FirstScenarioProperties";
 import { useState } from "react";
-import ResultFile from "../components/first-scenario/ResultFile";
+import ResultFile from "../components/first-scenario/ResultTable";
 import RequestForm from "../components/first-scenario/RequestForm";
 
 const ScenarioButton = (props: {

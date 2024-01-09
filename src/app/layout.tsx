@@ -50,9 +50,11 @@ export default function RootLayout({
               },
               Table: {
                 headerBorderRadius: 0,
+                fontFamily: openSansBold.style.fontFamily,
               },
               Collapse: {
                 contentPadding: "0px 0px",
+                fontFamily: openSansBold.style.fontFamily,
               },
               Input: {
                 fontFamily: openSansBold.style.fontFamily,
