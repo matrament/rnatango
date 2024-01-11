@@ -212,7 +212,7 @@ export default function RequestForm() {
         </div>
       </div>
       <div>
-        {modelQuery ? (
+        {getStructure.fileHashId != "" ? (
           <FirstScenarioProperties getStructure={getStructure} />
         ) : null}
       </div>

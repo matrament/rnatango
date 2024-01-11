@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Select, Button } from "antd";
 import styles from "./first-scenario.module.css";
 import SequenceCard from "./SequenceCard";
@@ -12,8 +13,7 @@ import {
   single_scenario_request,
   single_scenario_request_selection_chain,
 } from "../../types/modelsType";
-import { getTaskId } from "@/utils/getTaskId";
-import Link from "next/link";
+import { GetTaskId } from "@/utils/getTaskId";
 
 const onSearch = (value: string) => {
   console.log("search:", value);
@@ -36,7 +36,7 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
   const [selectedChains, setSelectedChains] = useState<{
     [key: string]: string[];
   }>({});
-
+  const router = useRouter();
   const submit = () => {
     // if (
     //   (!uploadStructure || uploadStructure.length == 0) &&
@@ -47,9 +47,7 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
     // }
     // setLoading(true);
 
-    // console.log(modelArray[Object.keys(selectedChains)[0]]["0"]);
-    console.log(resultModel);
-    getTaskId(resultModel);
+    GetTaskId(resultModel, router);
   };
 
   useEffect(() => {
@@ -157,17 +155,16 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
               resultModel={resultModel}
             />
           ))}
-          <Link href="/result">
-            <Button
-              size="large"
-              type="primary"
-              shape="round"
-              onClick={submit}
-              disabled={Object.keys(selectedChains).length == 0}
-            >
-              Submit a task
-            </Button>
-          </Link>
+
+          <Button
+            size="large"
+            type="primary"
+            shape="round"
+            onClick={submit}
+            // disabled={}
+          >
+            Submit a task
+          </Button>
         </>
       ) : null}
     </div>

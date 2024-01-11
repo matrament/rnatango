@@ -47,9 +47,35 @@ export type structure = {
   ];
 };
 
+// Result TORSION ANGLES
+export type single_result_angle_chain_residues = {
+  name: string;
+  number: number;
+  icode: string;
+  torsionAngles: [
+    {
+      angle: string;
+      value: number;
+    }
+  ];
+};
+
+export type single_result_angle_chain = {
+  chain: {
+    name: string;
+    sequence: string;
+    residuesWithoutAtoms: number[];
+  };
+  residues: single_result_angle_chain_residues[];
+};
+
+export type single_result_angle = {
+  torsionAngles: single_result_angle_chain[];
+};
+//................................
 export type torsion_angles_residue = {
   key: number;
-  residue: string;
+  name: string;
   alpha: number | null;
   beta: number | null;
   gamma: number | null;

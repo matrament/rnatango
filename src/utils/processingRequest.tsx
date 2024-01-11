@@ -20,7 +20,7 @@ export function processingRequest(
     },
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
-  fetch("http://rnatango.cs.put.poznan.pl/pdb", requestOptions)
+  fetch("https://rnatango.cs.put.poznan.pl/pdb", requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
         message.error(lang.rcsb_error);
@@ -35,7 +35,6 @@ export function processingRequest(
         // window.open(config.FRONTEND_URL + "/result/" + response, "_self");
         setLoading(false);
         setGetStructure(response);
-        console.log(response);
       }
     })
     .catch((error: any) => message.error("Something went wrong, try again"));

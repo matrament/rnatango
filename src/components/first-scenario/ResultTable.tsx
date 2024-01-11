@@ -1,11 +1,7 @@
 import styles from "./first-scenario.module.css";
 import { useState, useEffect } from "react";
-import { Table, Button, Collapse, Select } from "antd";
+import { Table, Collapse, Select } from "antd";
 import { torsion_angles_residue } from "@/types/modelsType";
-import type { ColumnsType } from "antd/es/table";
-import type { SelectProps } from "antd";
-import result from "./result.json";
-import { DownOutlined, UpOutlined, DownloadOutlined } from "@ant-design/icons";
 
 const angleName: { [key: string]: string } = {
   ["alpha"]: "alpha (\u03B1)",
@@ -122,9 +118,8 @@ const ResultTable = (props: {
       fixed: "left",
     });
     setAngleColumn(x);
-    console.log(angleName["alpha"]);
   };
-  // FIXME: zmienic zawartosc tabeli na monospace i tam gdzie nie ma misusa dac spacje
+  // FIXME: zmienic zawartosc tabeli na monospace i tam gdzie nie ma minusa dac spacje
   return (
     <>
       <Collapse
