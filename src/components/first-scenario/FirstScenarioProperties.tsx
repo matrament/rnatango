@@ -124,7 +124,7 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
             return { value: num, label: num };
           })}
         />
-        <p>Choose the chain(s):</p>
+        <p>Choose chain(s):</p>
         <Select
           mode="multiple"
           allowClear

@@ -63,7 +63,7 @@ export default function RequestForm() {
   }, [pdbId.name]);
 
   return (
-    <div style={{ marginBottom: "15px", width: "100%" }}>
+    <div style={{ marginBottom: "10px", width: "100%" }}>
       <div className={styles.scenario}>
         <div
           style={{
@@ -71,8 +71,6 @@ export default function RequestForm() {
             flexDirection: "column",
             alignItems: "flex-start",
             paddingTop: "20px",
-            paddingLeft: "40px",
-            paddingRight: "40px",
           }}
         >
           <div
@@ -127,7 +125,7 @@ export default function RequestForm() {
                   }}
                 >
                   <div>
-                    <div style={{ width: "400px", height: "200px" }}>
+                    <div style={{ minWidth: "350px" }}>
                       <p style={{ marginBottom: "5px", fontSize: "16px" }}>
                         From local drive:
                       </p>
@@ -142,15 +140,15 @@ export default function RequestForm() {
                     </div>
                   </div>
                   <div
-                    className="split-layout__divider"
+                    className={styles.split_layout_divider}
                     style={{ width: "90px" }}
                   >
-                    <div className="split-layout__rule"></div>
-                    <div className="split-layout__label">or</div>
-                    <div className="split-layout__rule"></div>
+                    <div className={styles.split_layout_rule}></div>
+                    <div className={styles.split_layout_label}>or</div>
+                    <div className={styles.split_layout_rule}></div>
                   </div>
                   <div>
-                    <div>
+                    <div style={{ minWidth: "350px" }}>
                       <p style={{ fontSize: "16px" }}>
                         From Protein Data Bank:
                       </p>
@@ -184,10 +182,10 @@ export default function RequestForm() {
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    marginTop: "25px",
+                    marginTop: "20px",
                   }}
                 >
-                  <Form.Item>
+                  <Form.Item noStyle>
                     <Button
                       data-testid="send-request-button"
                       htmlType="submit"

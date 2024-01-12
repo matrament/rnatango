@@ -5,11 +5,10 @@ import {
   RadialLinearScale,
   ArcElement,
   Tooltip,
-  Legend,
 } from "chart.js";
 import { PolarArea } from "react-chartjs-2";
 
-ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
+ChartJS.register(RadialLinearScale, ArcElement, Tooltip);
 
 const chartDataRange = {
   0: "[-180,-165)",
@@ -59,24 +58,27 @@ const HistogramResult = (props: { angle: any[] }) => {
     labels: Object.values(chartDataRange),
     datasets: [
       {
-        label: "# of Votes",
+        label: "angles:",
         data: Object.values(angleResult),
-        backgroundColor: ["rgba(255, 99, 132, 0.5)"],
+        backgroundColor: ["#ed6a5a"],
         borderWidth: 1,
       },
     ],
   };
 
   return (
-    <>
+    <div
+      style={{
+        maxWidth: "500px",
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        textAlign: "center",
+      }}
+    >
       <h3>Angle: alpha</h3>
-      <ul>
-        {props.angle.map((e) => (
-          <li key={e}>{e}</li>
-        ))}
-      </ul>
       <PolarArea data={data} />
-    </>
+    </div>
   );
 };
 

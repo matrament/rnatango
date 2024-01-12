@@ -55,6 +55,7 @@ export default function RootLayout({
               Collapse: {
                 contentPadding: "0px 0px",
                 fontFamily: openSansBold.style.fontFamily,
+                colorBorder: "#dcdcdc",
               },
               Input: {
                 fontFamily: openSansBold.style.fontFamily,
@@ -64,7 +65,7 @@ export default function RootLayout({
               },
               Select: {
                 fontFamily: openSansBold.style.fontFamily,
-                optionFontSize: 16,
+                // optionFontSize: 16,
               },
             },
           }}

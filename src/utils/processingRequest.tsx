@@ -32,7 +32,6 @@ export function processingRequest(
     })
     .then((response: any) => {
       if (response != "") {
-        // window.open(config.FRONTEND_URL + "/result/" + response, "_self");
         setLoading(false);
         setGetStructure(response);
       }

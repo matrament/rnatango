@@ -120,6 +120,7 @@ const ResultTable = (props: {
     setAngleColumn(x);
   };
   // FIXME: zmienic zawartosc tabeli na monospace i tam gdzie nie ma minusa dac spacje
+  // TODO: czy kolejnosc katow w tabeli jest istotna? jesli tak poprawic przy selekcie
   return (
     <>
       <Collapse
@@ -127,7 +128,11 @@ const ResultTable = (props: {
         items={[
           {
             key: "1",
-            label: `Chain: ${props.chain}, Sequence: ${props.sequence}`,
+            label: (
+              <p className={styles.header_collapse}>
+                Chain: {props.chain}, {props.sequence}
+              </p>
+            ),
             children: (
               <div>
                 <div style={{ padding: "10px" }}>

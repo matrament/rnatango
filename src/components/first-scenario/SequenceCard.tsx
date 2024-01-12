@@ -201,7 +201,7 @@ const SequenceCard = (props: {
           />
         ))}
       </div>
-      <div>
+      <div style={{ marginTop: "15px" }}>
         Nucleotide range {addedSequence.length + 1}: from {selectSequence[0]} to{" "}
         {selectSequence[selectSequence.length - 1]} nucleobases
       </div>
@@ -209,8 +209,7 @@ const SequenceCard = (props: {
         {addedSequence.map((el, index) => (
           <div key={index}>
             <p>
-              Nucleotide range {index + 1}: from {el[0]} to {el[el.length - 1]}{" "}
-              nucleobases
+              Nucleotide range: from {el[0]} to {el[el.length - 1]} nucleobases
             </p>
             <Button
               shape="circle"

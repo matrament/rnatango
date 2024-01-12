@@ -29,7 +29,7 @@ const ResultPage = () => {
   }, [params.taskid]);
 
   useEffect(() => {
-    getResultFile.torsionAngles.length != 0 ? getFile() : null;
+    getResultFile.torsionAngles?.length != 0 ? getFile() : null;
   }, [getResultFile]); // FIXME: zobaczyc czy tu cos nie gra najlepiej dla 1ffk
 
   function getFile() {
@@ -91,14 +91,14 @@ const ResultPage = () => {
                 sequence={el.chain.sequence}
               />
             ))}
+            {resultTorsionAngle.map((el) => (
+              <HistogramResult
+                key={el.chain.sequence}
+                angle={el.residues.map((a) => a.alpha)}
+              />
+            ))}
           </div>
         ) : null}
-        {/* {resultTorsionAngle.map((el) => (
-          <HistogramResult
-            key={el.chain.sequence}
-            angle={el.residues.map((a) => a.alpha)}
-          />
-        ))} */}
         <Button
           size="large"
           type="primary"
