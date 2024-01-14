@@ -201,7 +201,7 @@ const SequenceCard = (props: {
           />
         ))}
       </div>
-      <div style={{ marginTop: "15px" }}>
+      <div style={{ marginTop: "15px", fontWeight: "bold" }}>
         Nucleotide range {addedSequence.length + 1}: from {selectSequence[0]} to{" "}
         {selectSequence[selectSequence.length - 1]} nucleobases
       </div>

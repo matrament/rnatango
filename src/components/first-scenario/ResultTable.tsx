@@ -128,11 +128,7 @@ const ResultTable = (props: {
         items={[
           {
             key: "1",
-            label: (
-              <p className={styles.header_collapse}>
-                Chain: {props.chain}, {props.sequence}
-              </p>
-            ),
+            label: `Chain: ${props.chain}, ${props.sequence}`,
             children: (
               <div>
                 <div style={{ padding: "10px" }}>
