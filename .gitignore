@@ -43,7 +43,6 @@ next-env.d.ts
 logs
 **/*.backup.*
 **/*.back.*
-
 node_modules
 bower_components
 
@@ -55,3 +54,4 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/react,nextjs
 
+package-lock.json

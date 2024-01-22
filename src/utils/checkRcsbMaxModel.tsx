@@ -1,7 +1,7 @@
 import { message } from "antd";
 import lang from "../components/first-scenario/lang.json";
 export function checkRcsbMaxModel(
-  setPDBError: any,
+  setPdbError: any,
   pdbId: string,
   setModelQuery: any
 ) {
@@ -16,7 +16,7 @@ export function checkRcsbMaxModel(
     .then((response: any) => response.json())
     .then((response: any) => {
       if (!response.rcsb_entry_container_identifiers) {
-        setPDBError(true);
+        setPdbError(true);
         message.error(lang.rcsb_error_with_name + "'" + pdbId + "'");
       }
       setModelQuery(false);

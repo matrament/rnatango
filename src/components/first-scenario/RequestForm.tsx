@@ -32,7 +32,7 @@ export default function RequestForm() {
 
   const [getStructure, setGetStructure] = useState<structure>(firstStructure);
   const [loading, setLoading] = useState(false);
-  const [pdbError, setPDBError] = useState(false);
+  const [pdbError, setPdbError] = useState(false);
   const [modelQuery, setModelQuery] = useState(false);
   const [pdbId, setPdbId] = useState(rcsbPdbId);
   const [isUpload, setIsUpload] = useState(false);
@@ -48,17 +48,17 @@ export default function RequestForm() {
     //   message.error(lang.lack_of_source);
     //   return null;
     // }
+    setLoading(true);
+    setModelQuery(true);
     if (pdbId.name.length != 0) {
       processingRequest(pdbId, setLoading, setGetStructure);
     }
-    setLoading(true);
-    setModelQuery(true);
   };
   useEffect(() => {
     if (pdbId.name.length === 4) {
-      checkRcsbMaxModel(setPDBError, pdbId.name, setModelQuery);
+      checkRcsbMaxModel(setPdbError, pdbId.name, setModelQuery);
     } else {
-      setPDBError(false);
+      setPdbError(false);
     }
   }, [pdbId.name]);
 
@@ -192,12 +192,12 @@ export default function RequestForm() {
                       size="large"
                       type="primary"
                       shape="round"
-                      // disabled={
-                      //   (!isUpload && pdbId.name.length < 4) ||
-                      //   pdbError ||
-                      //   modelQuery
-                      // }
-                      // loading={loading || modelQuery || isUpload}
+                      disabled={
+                        (!isUpload && pdbId.name.length < 4) ||
+                        pdbError ||
+                        modelQuery
+                      }
+                      loading={loading || isUpload}
                       onClick={submit}
                     >
                       Load

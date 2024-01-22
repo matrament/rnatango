@@ -136,3 +136,34 @@
 .header_collapse {
   word-wrap: break-word !important;
 }
+.histogram {
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  border: solid 1px #dcdcdc;
+  border-radius: 16px;
+}
+
+.histogramtitle {
+  background: #fafafa;
+  border-bottom: solid 1px #dcdcdc;
+  border-radius: 16px 16px 0px 0px;
+  margin-bottom: 15px;
+  color: #ed6a5a;
+  font-weight: bold;
+}
+
+.tableAngleResidue {
+  margin: 0;
+  font-family: "Roboto Mono", monospace;
+  color: #04afa4;
+  font-weight: bold;
+}
+
+.tableAngleMono {
+  font-family: "Roboto Mono", monospace;
+  margin: 0;
+  font-weight: bold;
+}

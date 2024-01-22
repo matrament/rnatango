@@ -1,7 +1,8 @@
 import styles from "./first-scenario.module.css";
 import { useState, useEffect } from "react";
-import { Table, Collapse, Select } from "antd";
+import { Table, Collapse, Select, Tooltip } from "antd";
 import { torsion_angles_residue } from "@/types/modelsType";
+import type { TableColumnsType } from "antd";
 
 const angleName: { [key: string]: string } = {
   ["alpha"]: "alpha (\u03B1)",
@@ -103,12 +104,13 @@ const ResultTable = (props: {
   }, []);
 
   const handleChange = (value: string[]) => {
-    let x: tableAngle[] = value.map((e) => ({
+    let x: TableColumnsType<tableAngle> = value.map((e) => ({
       title: angleName[e],
       key: e,
       dataIndex: e,
       width: 30,
       fixed: false,
+      render: (e) => <p className={styles.tableAngleMono}>{e}</p>,
     }));
     x.splice(0, 0, {
       title: "Residue",
@@ -116,6 +118,7 @@ const ResultTable = (props: {
       dataIndex: "name",
       width: 30,
       fixed: "left",
+      render: (name) => <p className={styles.tableAngleResidue}>{name}</p>,
     });
     setAngleColumn(x);
   };

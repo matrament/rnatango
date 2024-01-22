@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import styles from "./first-scenario.module.css";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -37,49 +38,51 @@ const chartDataRange = {
   23: "[165:180)",
 };
 
-const HistogramResult = (props: { angle: any[] }) => {
+const HistogramResult = (props: { angle: any[]; title: string }) => {
   const [angleResult, setAngleResult] = useState<{ [key: number]: number }>({});
+  const [testResult, setTestResult] = useState<{ [key: number]: number }>({});
+
   useEffect(() => {
     let x = props.angle.filter((e) => {
       return e != null;
     });
     x = x.map((e) => (e == null ? null : Math.floor((e + 180) / 15)));
-    let counts: any = {};
+    let counts: { [key: number]: number } = {};
     for (let i = 0; i < 24; i++) {
       counts[i] = 0;
     }
+    // for (let i = 0, j = -172.5; i < 24; i++) {
+    //   counts[j] = 0;
+    //   j = j + 15;
+    // }
     x.forEach(function (x) {
       counts[x] = (counts[x] || 0) + 1;
     });
     setAngleResult(counts);
+    setTestResult(Object.values(counts).map((e) => Math.sqrt(e)));
+    console.log(counts);
+    console.log(Object.values(counts).map((e) => Math.sqrt(e)));
   }, [props.angle]);
 
   const data = {
     labels: Object.values(chartDataRange),
     datasets: [
       {
-        label: "angles:",
-        data: Object.values(angleResult),
-        backgroundColor: ["#ed6a5a"],
+        label: "angles",
+        data: Object.values(testResult),
+        backgroundColor: ["#04AFA4"],
         borderWidth: 1,
       },
     ],
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "500px",
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        textAlign: "center",
-      }}
-    >
-      <h3>Angle: alpha</h3>
+    <div className={styles.histogram}>
+      <div className={styles.histogramtitle}>
+        <h3>{props.title}</h3>
+      </div>
       <PolarArea data={data} />
     </div>
   );
 };
-
 export default HistogramResult;

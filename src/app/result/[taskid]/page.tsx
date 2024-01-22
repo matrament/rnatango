@@ -2,13 +2,14 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { single_result_angle, torsion_angles } from "@/types/modelsType";
-import result from "../../../components/first-scenario/result.json";
 import ResultTable from "../../../components/first-scenario/ResultTable";
+import Loading from "@/components/loading";
 import styles from "./page.module.css";
 import { Button } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import HistogramResult from "@/components/first-scenario/HistogramResult";
 import { processingResponce } from "@/utils/processingResponse";
+import TestHistogram from "@/components/echarts/TestHistogram";
 
 let emptyResult: single_result_angle = {
   torsionAngles: [],
@@ -73,6 +74,7 @@ const ResultPage = () => {
     <div style={{ width: "100%" }}>
       <div className={styles.scenario}>
         <h2>TaskId: {params.taskid}</h2>
+        {/* <Loading /> */}
         {!loading ? (
           <div
             style={{
@@ -91,12 +93,29 @@ const ResultPage = () => {
                 sequence={el.chain.sequence}
               />
             ))}
+            <h2>Angle Torsion Histograms</h2>
             {resultTorsionAngle.map((el) => (
               <HistogramResult
                 key={el.chain.sequence}
+                title={"alpha"}
                 angle={el.residues.map((a) => a.alpha)}
               />
             ))}
+            {resultTorsionAngle.map((el) => (
+              <HistogramResult
+                key={el.chain.sequence}
+                title={"beta"}
+                angle={el.residues.map((a) => a.beta)}
+              />
+            ))}
+            {resultTorsionAngle.map((el) => (
+              <HistogramResult
+                key={el.chain.sequence}
+                title={"gamma"}
+                angle={el.residues.map((a) => a.gamma)}
+              />
+            ))}
+            <TestHistogram />
           </div>
         ) : null}
         <Button
