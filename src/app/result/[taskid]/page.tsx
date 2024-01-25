@@ -1,19 +1,99 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { single_result_angle, torsion_angles } from "@/types/modelsType";
+import {
+  single_result_angle,
+  torsion_angles,
+  torsion_angles_residue,
+} from "@/types/modelsType";
+import type { CheckboxOptionType } from "antd";
 import ResultTable from "../../../components/first-scenario/ResultTable";
 import Loading from "@/components/loading";
 import styles from "./page.module.css";
-import { Button } from "antd";
+import { Button, Select, Checkbox } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
-import HistogramResult from "@/components/first-scenario/HistogramResult";
 import { processingResponce } from "@/utils/processingResponse";
-import TestHistogram from "@/components/echarts/TestHistogram";
+import TestHistogram from "@/components/first-scenario/TestHistogram";
 
 let emptyResult: single_result_angle = {
   torsionAngles: [],
 };
+
+const angleName = {
+  alpha: "alpha (\u03B1)",
+
+  beta: "beta (\u03B2)",
+
+  gamma: "gamma (\u03B3)",
+
+  delta: "delta (\u03B4)",
+
+  epsilon: "epsilon (\u03B5)",
+
+  zeta: "zeta (\u03B6)",
+
+  eta: "eta (\u03B7)",
+
+  theta: "theta (\u03B8)",
+
+  eta_prim: "eta prim (\u03B7')",
+
+  theta_prim: "theta prim (\u03B8')",
+
+  chi: "chi (\u03C7)",
+};
+
+interface ItemProps {
+  label: string;
+  value: string;
+}
+
+const options: ItemProps[] = [
+  {
+    label: "alpha (\u03B1)",
+    value: "alpha",
+  },
+  {
+    label: "beta (\u03B2)",
+    value: "beta",
+  },
+  {
+    label: "gamma (\u03B3)",
+    value: "gamma",
+  },
+  {
+    label: "delta (\u03B4)",
+    value: "delta",
+  },
+  {
+    label: "epsilon (\u03B5)",
+    value: "epsilon",
+  },
+  {
+    label: "zeta (\u03B6)",
+    value: "zeta",
+  },
+  {
+    label: "eta (\u03B7)",
+    value: "eta",
+  },
+  {
+    label: "theta (\u03B8)",
+    value: "theta",
+  },
+  {
+    label: "eta prim (\u03B7')",
+    value: "eta_prim",
+  },
+  {
+    label: "theta prim (\u03B8')",
+    value: "theta_prim",
+  },
+  {
+    label: "chi (\u03C7)",
+    value: "chi",
+  },
+];
 
 const ResultPage = () => {
   const params = useParams<{ taskid: string }>();
@@ -22,11 +102,19 @@ const ResultPage = () => {
   const [resultTorsionAngle, setResultTorsionAngle] = useState<
     torsion_angles[]
   >([]);
+  const [concatResidues, setConcatResidues] = useState<
+    torsion_angles_residue[]
+  >([]);
+  const [showAngleHistogram, setShowAngleHistogram] = useState<string[]>(
+    Object.keys(angleName)
+  );
+  const [selectRows, setSelectRows] = useState<{
+    [key: number]: torsion_angles_residue[];
+  }>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     processingResponce(params.taskid, setGetResultFile);
-    console.log(getResultFile);
   }, [params.taskid]);
 
   useEffect(() => {
@@ -62,12 +150,25 @@ const ResultPage = () => {
       }
     }
     setResultTorsionAngle(x);
+    setConcatResidues(x.map((chain: torsion_angles) => chain.residues).flat());
+    console.log(x);
     setLoading(false);
-    console.log(resultTorsionAngle);
   }
+
+  useEffect(() => {
+    let x: torsion_angles_residue[];
+    x = Object.values(selectRows).flat();
+    setConcatResidues(x);
+  }, [selectRows]);
 
   const test = () => {
     console.log();
+  };
+
+  type ObjectKey = keyof typeof angleName;
+
+  const handleChange = (value: string[]) => {
+    setShowAngleHistogram(value);
   };
 
   return (
@@ -85,37 +186,47 @@ const ResultPage = () => {
               marginBottom: "20px",
             }}
           >
-            {resultTorsionAngle.map((el) => (
+            {resultTorsionAngle.map((el, index) => (
               <ResultTable
-                key={el.chain.sequence}
+                key={el.chain.name}
                 dataAngle={el.residues}
                 chain={el.chain.name}
                 sequence={el.chain.sequence}
+                indexChain={index}
+                selectRows={selectRows}
+                setSelectRows={setSelectRows}
               />
             ))}
-            <h2>Angle Torsion Histograms</h2>
-            {resultTorsionAngle.map((el) => (
-              <HistogramResult
-                key={el.chain.sequence}
-                title={"alpha"}
-                angle={el.residues.map((a) => a.alpha)}
+            <h2 style={{ textAlign: "center" }}>Angle Torsion Histograms</h2>
+            <div style={{ padding: "10px" }}>
+              Show/hide histograms:
+              <Select
+                mode="multiple"
+                style={{ width: "100%" }}
+                options={options}
+                defaultValue={Object.keys(angleName)}
+                onChange={handleChange}
+                placeholder="Select angles to display histograms"
+                maxTagCount="responsive"
               />
-            ))}
-            {resultTorsionAngle.map((el) => (
-              <HistogramResult
-                key={el.chain.sequence}
-                title={"beta"}
-                angle={el.residues.map((a) => a.beta)}
-              />
-            ))}
-            {resultTorsionAngle.map((el) => (
-              <HistogramResult
-                key={el.chain.sequence}
-                title={"gamma"}
-                angle={el.residues.map((a) => a.gamma)}
-              />
-            ))}
-            <TestHistogram />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                width: "100%",
+                gap: "20px",
+                justifyContent: "center",
+              }}
+            >
+              {showAngleHistogram.map((angleName) => (
+                <TestHistogram
+                  key={angleName}
+                  title={angleName}
+                  angle={concatResidues.map((el) => el[angleName as ObjectKey])}
+                />
+              ))}
+            </div>
           </div>
         ) : null}
         <Button

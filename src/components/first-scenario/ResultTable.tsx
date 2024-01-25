@@ -1,9 +1,10 @@
 import styles from "./first-scenario.module.css";
 import { useState, useEffect } from "react";
-import { Table, Collapse, Select, Tooltip } from "antd";
+import { Table, Collapse, Select } from "antd";
 import { torsion_angles_residue } from "@/types/modelsType";
-import type { TableColumnsType } from "antd";
+import type { TableColumnsType, TableProps } from "antd";
 
+type TableRowSelection<T> = TableProps<T>["rowSelection"];
 const angleName: { [key: string]: string } = {
   ["alpha"]: "alpha (\u03B1)",
 
@@ -35,8 +36,6 @@ interface tableAngle {
   width: number;
   fixed: any;
 }
-
-const data: torsion_angles_residue[] = [];
 
 interface ItemProps {
   label: string;
@@ -94,13 +93,21 @@ const ResultTable = (props: {
   dataAngle: torsion_angles_residue[];
   chain: string;
   sequence: string;
+  indexChain: number;
+  selectRows: any;
+  setSelectRows: any;
 }) => {
   const [angleColumn, setAngleColumn] = useState<any>();
   const [resultResidues, setResultResidues] =
     useState<torsion_angles_residue[]>();
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   useEffect(() => {
     handleChange(Object.keys(angleName));
+  }, []);
+
+  useEffect(() => {
+    setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
   }, []);
 
   const handleChange = (value: string[]) => {
@@ -124,6 +131,24 @@ const ResultTable = (props: {
   };
   // FIXME: zmienic zawartosc tabeli na monospace i tam gdzie nie ma minusa dac spacje
   // TODO: czy kolejnosc katow w tabeli jest istotna? jesli tak poprawic przy selekcie
+
+  const handleOnChange = (
+    newSelectedRowKeys: React.Key[],
+    selectedRows: any
+  ) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+    props.setSelectRows({
+      ...props.selectRows,
+      [props.indexChain]: selectedRows,
+    });
+  };
+
+  const rowSelection: TableRowSelection<torsion_angles_residue> = {
+    columnWidth: "10px",
+    selectedRowKeys,
+    onChange: handleOnChange,
+  };
+
   return (
     <>
       <Collapse
@@ -148,6 +173,8 @@ const ResultTable = (props: {
                 </div>
                 <Table
                   columns={angleColumn}
+                  rowSelection={rowSelection}
+                  rowClassName={styles.rowStyle}
                   dataSource={props.dataAngle}
                   size="middle"
                   bordered

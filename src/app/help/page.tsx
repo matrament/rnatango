@@ -1,5 +1,4 @@
 "use client";
-import TestHistogram from "@/components/echarts/TestHistogram";
 import styles from "./page.module.css";
 
 const Help = () => {
@@ -8,7 +7,6 @@ const Help = () => {
       <div className={styles.scenario}>
         <p>Help</p>
       </div>
-      <TestHistogram />
     </>
   );
 };

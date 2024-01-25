@@ -137,7 +137,7 @@
   word-wrap: break-word !important;
 }
 .histogram {
-  max-width: 500px;
+  width: 500px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -166,4 +166,8 @@
   font-family: "Roboto Mono", monospace;
   margin: 0;
   font-weight: bold;
+}
+.rowStyle {
+  background-color: #eaeaea;
+  /* color: #8a8a8a; */
 }

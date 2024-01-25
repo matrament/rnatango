@@ -51,6 +51,9 @@ export default function RootLayout({
               Table: {
                 headerBorderRadius: 0,
                 fontFamily: openSansBold.style.fontFamily,
+                rowSelectedBg: "white",
+                rowSelectedHoverBg: "#f9f9f9",
+                rowHoverBg: "#fff4f0",
               },
               Collapse: {
                 contentPadding: "0px 0px",
