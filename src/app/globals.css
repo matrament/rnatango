@@ -24,11 +24,29 @@ body {
 }
 
 main {
-  min-height: 100vh;
+  min-height: 79vh;
   width: 60vw;
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+@media only screen and (min-width: 1001px) and (max-width: 1450px) {
+  main {
+    width: 75vw;
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1000px) {
+  main {
+    width: 90vw;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  main {
+    width: 98vw;
+  }
 }
 
 a {
@@ -41,4 +59,9 @@ h2 {
   color: #ed6a5a;
   font-weight: bold;
   font-size: 26px;
+}
+h1 {
+  color: #04afa4;
+  font-weight: bold;
+  font-size: 28px;
 }

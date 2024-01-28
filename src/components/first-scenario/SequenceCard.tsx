@@ -56,7 +56,7 @@ const SequenceCard = (props: {
     props.resultModel.selections[0].chains[
       props.indexChain
     ].nucleotideRange.toInclusive = selectSequence[selectSequence.length - 1];
-    // FIXME: zrobić ładniej tego use effecta zeby uzyc setstate
+    // FIXME: zrobić ładniej tego use effecta zeby uzyc setstate MUTABLE!!!
   }, [selectSequence]);
 
   const range = (start: number, stop: number, step: number): number[] => {
@@ -135,8 +135,7 @@ const SequenceCard = (props: {
   };
 
   const addNewNucleotideRange = () => {
-    setAddedSequence((addedSequence) => [...addedSequence, selectSequence]);
-    setSelectSequence([]);
+    console.log("test");
   };
 
   const handleDeleteOneChain = (num: number) => {
@@ -145,7 +144,17 @@ const SequenceCard = (props: {
 
   return (
     <div className={styles.sequence}>
-      <h3>Chain: {props.name}</h3>
+      <div className={styles.sequenceTitle}>
+        <Tooltip title="Add new nucleotide range">
+          <Button
+            shape="circle"
+            type="text"
+            onClick={() => addNewNucleotideRange()}
+            icon={<PlusOutlined />}
+          />
+        </Tooltip>
+        <h3>Chain: {props.name}</h3>
+      </div>
       <div className={styles.menuchains}>
         <Tooltip title="Select all">
           <Button
@@ -161,14 +170,7 @@ const SequenceCard = (props: {
             icon={<ClearOutlined />}
           />
         </Tooltip>
-        <Tooltip title="Add new nucleotide range">
-          <Button
-            shape="circle"
-            onClick={() => addNewNucleotideRange()}
-            disabled
-            icon={<PlusOutlined />}
-          />
-        </Tooltip>
+
         <Space.Compact>
           <InputNumber
             style={{ width: 75 }}
@@ -201,23 +203,11 @@ const SequenceCard = (props: {
           />
         ))}
       </div>
-      <div style={{ marginTop: "15px", fontWeight: "bold" }}>
-        Nucleotide range {addedSequence.length + 1}: from {selectSequence[0]} to{" "}
+      <div
+        style={{ padding: "15px", marginBottom: "10px", fontWeight: "bold" }}
+      >
+        Nucleotide range: from {selectSequence[0]} to{" "}
         {selectSequence[selectSequence.length - 1]} nucleobases
-      </div>
-      <div>
-        {addedSequence.map((el, index) => (
-          <div key={index}>
-            <p>
-              Nucleotide range: from {el[0]} to {el[el.length - 1]} nucleobases
-            </p>
-            <Button
-              shape="circle"
-              onClick={() => handleDeleteOneChain(index)}
-              icon={<DeleteOutlined />}
-            />
-          </div>
-        ))}
       </div>
     </div>
   );

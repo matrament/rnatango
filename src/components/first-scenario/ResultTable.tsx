@@ -1,9 +1,9 @@
 import styles from "./first-scenario.module.css";
 import { useState, useEffect } from "react";
-import { Table, Collapse, Select } from "antd";
+import { Table, Collapse, Select, Button } from "antd";
 import { torsion_angles_residue } from "@/types/modelsType";
 import type { TableColumnsType, TableProps } from "antd";
-
+import { DownloadOutlined } from "@ant-design/icons";
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 const angleName: { [key: string]: string } = {
   ["alpha"]: "alpha (\u03B1)",
@@ -156,7 +156,11 @@ const ResultTable = (props: {
         items={[
           {
             key: "1",
-            label: `Chain: ${props.chain}, ${props.sequence}`,
+            label: (
+              <p style={{ margin: 0 }}>
+                Chain: {props.chain}, {props.sequence.toUpperCase()}
+              </p>
+            ),
             children: (
               <div>
                 <div style={{ padding: "10px" }}>
@@ -181,6 +185,15 @@ const ResultTable = (props: {
                   pagination={{ position: ["bottomCenter"] }}
                   scroll={{ x: "calc(1600px)", y: 2000 }}
                 />
+                <div className={styles.downloadButton}>
+                  <Button
+                    type="primary"
+                    shape="round"
+                    icon={<DownloadOutlined />}
+                  >
+                    Download .civ
+                  </Button>
+                </div>
               </div>
             ),
           },

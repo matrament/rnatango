@@ -9,3 +9,17 @@
   align-items: center;
   flex-direction: column;
 }
+.section {
+  border-top: 1px solid #dcdcdc;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.angle {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 20px;
+  justify-content: center;
+}

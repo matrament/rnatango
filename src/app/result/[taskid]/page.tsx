@@ -14,6 +14,7 @@ import { Button, Select, Checkbox } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import { processingResponce } from "@/utils/processingResponse";
 import TestHistogram from "@/components/first-scenario/TestHistogram";
+import ChiStatistics from "@/components/first-scenario/ChiStatistics";
 
 let emptyResult: single_result_angle = {
   torsionAngles: [],
@@ -174,7 +175,7 @@ const ResultPage = () => {
   return (
     <div style={{ width: "100%" }}>
       <div className={styles.scenario}>
-        <h2>TaskId: {params.taskid}</h2>
+        <h1>TaskId: {params.taskid}</h1>
         {/* <Loading /> */}
         {!loading ? (
           <div
@@ -182,50 +183,53 @@ const ResultPage = () => {
               display: "flex",
               rowGap: "15px",
               flexDirection: "column",
-              width: "90%",
+              width: "100%",
               marginBottom: "20px",
             }}
           >
-            {resultTorsionAngle.map((el, index) => (
-              <ResultTable
-                key={el.chain.name}
-                dataAngle={el.residues}
-                chain={el.chain.name}
-                sequence={el.chain.sequence}
-                indexChain={index}
-                selectRows={selectRows}
-                setSelectRows={setSelectRows}
-              />
-            ))}
-            <h2 style={{ textAlign: "center" }}>Angle Torsion Histograms</h2>
-            <div style={{ padding: "10px" }}>
-              Show/hide histograms:
-              <Select
-                mode="multiple"
-                style={{ width: "100%" }}
-                options={options}
-                defaultValue={Object.keys(angleName)}
-                onChange={handleChange}
-                placeholder="Select angles to display histograms"
-                maxTagCount="responsive"
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                width: "100%",
-                gap: "20px",
-                justifyContent: "center",
-              }}
-            >
-              {showAngleHistogram.map((angleName) => (
-                <TestHistogram
-                  key={angleName}
-                  title={angleName}
-                  angle={concatResidues.map((el) => el[angleName as ObjectKey])}
+            <div className={styles.section}>
+              <h2>Angle Torsion Table</h2>
+              {resultTorsionAngle.map((el, index) => (
+                <ResultTable
+                  key={el.chain.name}
+                  dataAngle={el.residues}
+                  chain={el.chain.name}
+                  sequence={el.chain.sequence}
+                  indexChain={index}
+                  selectRows={selectRows}
+                  setSelectRows={setSelectRows}
                 />
               ))}
+            </div>
+            <div className={styles.section}>
+              <h2 style={{ textAlign: "center" }}>Angle Torsion Histograms</h2>
+              <div style={{ padding: "10px" }}>
+                Show/hide histograms:
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  options={options}
+                  defaultValue={Object.keys(angleName)}
+                  onChange={handleChange}
+                  placeholder="Select angles to display histograms"
+                  maxTagCount="responsive"
+                />
+              </div>
+              <div className={styles.angle}>
+                {showAngleHistogram.map((angleName) => (
+                  <TestHistogram
+                    key={angleName}
+                    title={angleName}
+                    angle={concatResidues.map(
+                      (el) => el[angleName as ObjectKey]
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className={styles.section}>
+              <h2>Statistics of Chi Angle</h2>
+              <ChiStatistics angle={concatResidues.map((el) => el.chi)} />
             </div>
           </div>
         ) : null}

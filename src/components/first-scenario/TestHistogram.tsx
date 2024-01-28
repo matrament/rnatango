@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ReactECharts } from "../echarts/ReactECharts";
 import { ReactEChartsProps } from "../echarts/ReactECharts";
+import { AngleIcon } from "../icons/Icons";
 import styles from "./first-scenario.module.css";
 
 const TestHistogram = (props: { angle: any[]; title: string }) => {
@@ -99,7 +100,11 @@ const TestHistogram = (props: { angle: any[]; title: string }) => {
   return (
     <div className={styles.histogram}>
       <div className={styles.histogramtitle}>
-        <h3>{props.title}</h3>
+        <h3>
+          <AngleIcon style={{ fontSize: "16px", color: "#ed6a5a" }} />
+          {"  "}
+          {props.title}
+        </h3>
       </div>
       <ReactECharts option={option} />
     </div>
