@@ -5,10 +5,7 @@ const CiteUs = () => {
   return (
     <div className={styles.scenario}>
       <h1>Cite us</h1>
-      <p>
-        Any published work which has made use of WebTetrado should cite the
-        following paper:
-      </p>
+      <p>Work in progress</p>
     </div>
   );
 };

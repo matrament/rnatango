@@ -5,7 +5,8 @@ const Help = () => {
   return (
     <>
       <div className={styles.scenario}>
-        <p>Help</p>
+        <h1>Help</h1>
+        <p>Work in progress</p>
       </div>
     </>
   );

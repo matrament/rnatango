@@ -1,5 +1,10 @@
 const SecondScenarioUpload = () => {
-  return <p>Second scenario</p>;
+  return (
+    <div>
+      <h3>Second Scenario</h3>
+      <p>work in progress</p>
+    </div>
+  );
 };
 
 export default SecondScenarioUpload;

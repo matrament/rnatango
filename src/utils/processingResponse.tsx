@@ -2,7 +2,11 @@
 import { message } from "antd";
 import lang from "../components/first-scenario/lang.json";
 
-export function processingResponce(taskId: string, setGetResultFile: any) {
+export function processingResponce(
+  taskId: string,
+  setGetResultFile: any,
+  setGetStatus: any
+) {
   const requestOptions = {
     method: "GET",
     headers: {
@@ -36,6 +40,8 @@ export function processingResponce(taskId: string, setGetResultFile: any) {
         .then((response: any) => response.json())
         .then((response: any) => {
           setGetResultFile(response);
+          console.log(a);
+          setGetStatus(a.status);
           socket.close();
         })
         .catch((error: any) => {
@@ -44,11 +50,10 @@ export function processingResponce(taskId: string, setGetResultFile: any) {
           socket.close();
         });
     } else {
-      console.log(event);
-
+      setGetStatus(a.status);
+      console.log(a);
       if (a.status === "FAILED") {
         //setLoading(false);
-        console.log("h");
       }
     }
   };

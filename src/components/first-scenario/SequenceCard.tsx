@@ -1,42 +1,25 @@
 import styles from "./first-scenario.module.css";
 import { useEffect, useState } from "react";
 import { Button, InputNumber, Tooltip, Space } from "antd";
-import {
-  SelectOutlined,
-  ClearOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { SelectOutlined, ClearOutlined, PlusOutlined } from "@ant-design/icons";
 import { single_scenario_request } from "@/types/modelsType";
+import NucleotidePanel from "./NucleotidePanel";
 
-const Nucleobases = (props: {
-  name: string;
-  index: number;
-  onClick: any;
-  selectSequence: any;
-  residuesWithoutAtoms: number[];
-}) => {
-  return (
-    <div className={styles.nucleobases} onClick={props.onClick}>
-      <div className={styles.index}>
-        {props.index % 5 == 0 ? props.index : null}
-      </div>
-      <div
-        className={`${styles.residue} ${
-          props.selectSequence.includes(props.index)
-            ? styles.activeC
-            : styles.nonactiveC
-        }
-      ${
-        props.residuesWithoutAtoms.includes(props.index) ? styles.disable : null
-      }`}
-      >
-        {props.name}
-      </div>
-    </div>
-  );
+type seqtest = {
+  [key: number]: seg;
 };
 
+type seg = {
+  start: number;
+  stop: number;
+};
+
+const testempty = {
+  1: {
+    start: 0,
+    stop: 0,
+  },
+};
 const SequenceCard = (props: {
   name: string;
   sequence: string;
@@ -47,7 +30,7 @@ const SequenceCard = (props: {
 }) => {
   let arrayChain = props.sequence.toUpperCase().split("");
   const [selectSequence, setSelectSequence] = useState<number[]>([]);
-  const [addedSequence, setAddedSequence] = useState<number[][]>([]);
+  const [multipleSequence, setMultipleSequence] = useState<seqtest>(testempty);
 
   useEffect(() => {
     props.resultModel.selections[0].chains[
@@ -59,87 +42,18 @@ const SequenceCard = (props: {
     // FIXME: zrobić ładniej tego use effecta zeby uzyc setstate MUTABLE!!!
   }, [selectSequence]);
 
-  const range = (start: number, stop: number, step: number): number[] => {
-    return Array.from(
-      { length: (stop - start) / step + 1 },
-      (_, i) => start + i * step
-    );
-  };
-
-  const handleAddSequence = (index: number) => {
-    if (selectSequence.length < 1) {
-      setSelectSequence(() => [index]);
-    } else {
-      if (selectSequence[0] < index) {
-        setSelectSequence(range(selectSequence[0], index, 1));
-      } else {
-        setSelectSequence(
-          range(index, selectSequence[selectSequence.length - 1], 1)
-        );
-      }
-    }
-  };
-
-  const inputFirstNucleotyde = (value: number | null) => {
-    if (value != null) {
-      if (
-        value < selectSequence[selectSequence.length - 1] &&
-        selectSequence.length > 0
-      ) {
-        setSelectSequence(
-          range(value, selectSequence[selectSequence.length - 1], 1)
-        );
-      } else {
-        setSelectSequence(() => [value]);
-      }
-    } else {
-      setSelectSequence([selectSequence[selectSequence.length - 1]]);
-    }
-  };
-
-  const inputLastNucleotyde = (value: number | null) => {
-    if (value != null && value > selectSequence[0]) {
-      setSelectSequence(range(selectSequence[0], value, 1));
-    }
-    if (value != null && selectSequence.length == 0) {
-      setSelectSequence(range(1, value, 1));
-    }
-    if (
-      value == null ||
-      (value < selectSequence[0] && selectSequence.length == 1)
-    ) {
-      setSelectSequence([selectSequence[0]]);
-    }
-  };
-
-  const handleSelectAll = () => {
-    setSelectSequence(range(1, arrayChain.length, 1));
-
-    // let x = {
-    //   ...props.resultModel,
-    //   selections: [
-    //     {
-    //       ...props.resultModel.selections,
-    //       chains: [
-    //         ...props.resultModel.selections.chains,
-    //         { name: props.name },
-    //       ],
-    //     },
-    //   ],
-    // };
-    // console.log(x);
-  };
-
-  const handleDeleteAll = () => {
-    setSelectSequence([]);
-  };
-
-  const addNewNucleotideRange = () => {
-    console.log("test");
-  };
-
-  const handleDeleteOneChain = (num: number) => {
-    setAddedSequence(addedSequence.splice(num, 1));
+  const addNewRange = () => {
+    let i: number = Object.keys(multipleSequence).length;
+    setMultipleSequence({
+      ...multipleSequence,
+      [i + 1]: { start: 0, stop: 0 },
+    });
+    // console.log(props.name);
+    // console.log(props.sequence);
+    // console.log(props.indexChain);
+    // console.log(props.resultModel);
+    // console.log(arrayChain);
+    console.log(multipleSequence);
   };
 
   return (
@@ -149,66 +63,21 @@ const SequenceCard = (props: {
           <Button
             shape="circle"
             type="text"
-            onClick={() => addNewNucleotideRange()}
+            onClick={() => addNewRange()}
             icon={<PlusOutlined />}
           />
         </Tooltip>
         <h3>Chain: {props.name}</h3>
       </div>
-      <div className={styles.menuchains}>
-        <Tooltip title="Select all">
-          <Button
-            shape="circle"
-            onClick={() => handleSelectAll()}
-            icon={<SelectOutlined />}
-          />
-        </Tooltip>
-        <Tooltip title="Clear recent">
-          <Button
-            shape="circle"
-            onClick={() => handleDeleteAll()} // FIXME: change icon
-            icon={<ClearOutlined />}
-          />
-        </Tooltip>
-
-        <Space.Compact>
-          <InputNumber
-            style={{ width: 75 }}
-            min={1}
-            max={arrayChain.length}
-            value={selectSequence[0]}
-            placeholder={"from"}
-            onChange={inputFirstNucleotyde}
-          />
-          <InputNumber
-            className={styles.input}
-            style={{ width: 75 }}
-            min={1}
-            max={arrayChain.length}
-            value={selectSequence[selectSequence.length - 1]}
-            placeholder={"to"}
-            onChange={inputLastNucleotyde}
-          />
-        </Space.Compact>
-      </div>
-      <div className={styles.chainsarray}>
-        {arrayChain.map((el, index) => (
-          <Nucleobases
-            key={index}
-            index={index + 1}
-            name={el}
-            onClick={() => handleAddSequence(index + 1)}
-            selectSequence={selectSequence}
-            residuesWithoutAtoms={props.residuesWithoutAtoms}
-          />
-        ))}
-      </div>
-      <div
-        style={{ padding: "15px", marginBottom: "10px", fontWeight: "bold" }}
-      >
-        Nucleotide range: from {selectSequence[0]} to{" "}
-        {selectSequence[selectSequence.length - 1]} nucleobases
-      </div>
+      {Object.keys(multipleSequence).map((e) => (
+        <NucleotidePanel
+          // selectSequence={selectSequence}
+          // setSelectSequence={setSelectSequence}
+          arrayChain={arrayChain}
+          residuesWithoutAtoms={props.residuesWithoutAtoms}
+          key={e}
+        />
+      ))}
     </div>
   );
 };

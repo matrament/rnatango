@@ -4,7 +4,7 @@ import { ReactEChartsProps } from "../echarts/ReactECharts";
 import { AngleIcon } from "../icons/Icons";
 import styles from "./first-scenario.module.css";
 
-const TestHistogram = (props: { angle: any[]; title: string }) => {
+const HistogramAngles = (props: { angle: any[]; title: string }) => {
   const [angleResult, setAngleResult] = useState<[number, number][]>([]);
 
   useEffect(() => {
@@ -69,6 +69,9 @@ const TestHistogram = (props: { angle: any[]; title: string }) => {
     radiusAxis: [
       {
         min: 0,
+        max: function (value) {
+          return value.max;
+        },
         axisLabel: {
           show: false,
         },
@@ -110,4 +113,4 @@ const TestHistogram = (props: { angle: any[]; title: string }) => {
     </div>
   );
 };
-export default TestHistogram;
+export default HistogramAngles;
