@@ -4,7 +4,9 @@ import { Table, Collapse, Select, Button } from "antd";
 import { torsion_angles_residue } from "@/types/modelsType";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
+
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
+
 const angleName: { [key: string]: string } = {
   ["alpha"]: "alpha (\u03B1)",
 

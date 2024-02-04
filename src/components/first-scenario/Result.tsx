@@ -1,16 +1,14 @@
 "use client";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import styles from "./first-scenario.module.css";
 import {
   single_result_angle,
   torsion_angles,
   torsion_angles_residue,
 } from "@/types/modelsType";
 import ResultTable from "../first-scenario/ResultTable";
-import styles from "./first-scenario.module.css";
 import { Button, Select } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
-import { processingResponce } from "@/utils/processingResponse";
 import HistogramAngles from "@/components/first-scenario/HistogramAngles";
 import ChiStatistics from "@/components/first-scenario/ChiStatistics";
 
@@ -95,9 +93,6 @@ const options: ItemProps[] = [
 ];
 
 const Result = (props: { getResultFile: single_result_angle }) => {
-  //   const params = useParams<{ taskid: string }>();
-  //   const [getResultFile, setGetResultFile] =
-  //     useState<single_result_angle>(emptyResult);
   const [resultTorsionAngle, setResultTorsionAngle] = useState<
     torsion_angles[]
   >([]);
@@ -111,15 +106,7 @@ const Result = (props: { getResultFile: single_result_angle }) => {
     [key: number]: torsion_angles_residue[];
   }>([]);
 
-  //   useEffect(() => {
-  //     processingResponce(params.taskid, setGetResultFile);
-  //   }, [params.taskid]);
-
   useEffect(() => {
-    getFile();
-  }, []); // FIXME: zobaczyc czy tu cos nie gra najlepiej dla 1ffk
-
-  function getFile() {
     let x: any = [];
     for (let i = 0; i < props.getResultFile.torsionAngles.length; i++) {
       x[i] = {
@@ -158,8 +145,8 @@ const Result = (props: { getResultFile: single_result_angle }) => {
     }
     setResultTorsionAngle(x);
     setConcatResidues(x.map((chain: torsion_angles) => chain.residues).flat());
-    console.log(x);
-  }
+    console.log(x.map((chain: torsion_angles) => chain.residues).flat());
+  }, [props.getResultFile]);
 
   useEffect(() => {
     let x: torsion_angles_residue[];

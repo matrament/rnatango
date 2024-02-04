@@ -1,9 +1,8 @@
 import { message, UploadFile, UploadProps, Upload } from "antd";
 import { pdb_id } from "../../types/modelsType";
 import config from "../../config.json";
-import lang from "./lang.json";
+import lang from "../../utils/lang.json";
 import { InboxOutlined } from "@ant-design/icons";
-import styles from "./first-scenario.module.css";
 
 const { Dragger } = Upload;
 

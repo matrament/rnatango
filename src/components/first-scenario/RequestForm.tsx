@@ -1,13 +1,12 @@
 "use client";
-import { Button, Form, Input, message, Space } from "antd";
-import { UploadFile } from "antd/lib/upload/interface";
 import { useEffect, useState } from "react";
-import lang from "./lang.json";
+import styles from "./first-scenario.module.css";
+import { Button, Form, Input, Space } from "antd";
+import { UploadFile } from "antd/lib/upload/interface";
 import { pdb_id, structure } from "../../types/modelsType";
 import { checkRcsbMaxModel } from "../../utils/checkRcsbMaxModel";
 import { processingRequest } from "../../utils/processingRequest";
 import UploadStructureFile from "./UploadStructureFile";
-import styles from "./first-scenario.module.css";
 import FirstScenarioProperties from "./FirstScenarioProperties";
 
 export default function RequestForm() {

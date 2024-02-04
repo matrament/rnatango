@@ -15,7 +15,6 @@ const ChiStatistics = (props: { angle: any[] }) => {
     let count = x.filter((e) => e < 120 && e > -30).length;
     setSyn([[count, 172.5]]);
     setAnti([[x.length - count, 127.5]]);
-    console.log(anti);
   }, [props.angle]);
 
   const option: ReactEChartsProps["option"] = {

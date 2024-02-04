@@ -8,6 +8,7 @@ const HistogramAngles = (props: { angle: any[]; title: string }) => {
   const [angleResult, setAngleResult] = useState<[number, number][]>([]);
 
   useEffect(() => {
+    console.log(props.angle);
     let x = props.angle.filter((e) => {
       return e != null;
     });

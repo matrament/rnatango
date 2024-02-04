@@ -1,6 +1,6 @@
 "use client";
 import { message } from "antd";
-import lang from "../components/first-scenario/lang.json";
+import lang from "./lang.json";
 import { single_scenario_request } from "@/types/modelsType";
 
 export function GetTaskId(resultModel: single_scenario_request, router: any) {

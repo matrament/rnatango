@@ -1,8 +1,12 @@
 import styles from "./first-scenario.module.css";
 import { useEffect, useState } from "react";
 import { Button, InputNumber, Tooltip, Space } from "antd";
-import { SelectOutlined, ClearOutlined, PlusOutlined } from "@ant-design/icons";
-import { single_scenario_request } from "@/types/modelsType";
+import {
+  SelectOutlined,
+  ClearOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
+import { single_scenario_request_selection_chain } from "@/types/modelsType";
 
 const Nucleobases = (props: {
   name: string;
@@ -33,12 +37,29 @@ const Nucleobases = (props: {
 };
 
 const NucleotidePanel = (props: {
-  //   selectSequence: any;
-  //   setSelectSequence: any;
+  multipleSequence: single_scenario_request_selection_chain[];
+  indexRange: number;
+  setMultipleSequence: any;
   arrayChain: string[];
   residuesWithoutAtoms: number[];
 }) => {
   const [selectSequence, setSelectSequence] = useState<number[]>([]);
+
+  useEffect(() => {
+    let newState = props.multipleSequence.map((e, index) => {
+      if (index === props.indexRange) {
+        return {
+          ...e,
+          nucleotideRange: {
+            fromInclusive: selectSequence[0],
+            toInclusive: selectSequence[selectSequence.length - 1],
+          },
+        };
+      }
+      return e;
+    });
+    props.setMultipleSequence(newState);
+  }, [selectSequence]);
 
   const range = (start: number, stop: number, step: number): number[] => {
     return Array.from(
@@ -102,41 +123,53 @@ const NucleotidePanel = (props: {
 
   return (
     <>
-      <div className={styles.menuchains}>
-        <Tooltip title="Select all">
-          <Button
-            shape="circle"
-            onClick={() => handleSelectAll()}
-            icon={<SelectOutlined />}
-          />
-        </Tooltip>
-        <Tooltip title="Clear recent">
-          <Button
-            shape="circle"
-            onClick={() => handleDeleteAll()} // FIXME: change icon
-            icon={<ClearOutlined />}
-          />
-        </Tooltip>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className={styles.menuchains}>
+          <Tooltip title="Select all">
+            <Button
+              shape="circle"
+              onClick={() => handleSelectAll()}
+              icon={<SelectOutlined />}
+            />
+          </Tooltip>
+          <Tooltip title="Clear recent">
+            <Button
+              shape="circle"
+              onClick={() => handleDeleteAll()} // FIXME: change icon
+              icon={<ClearOutlined />}
+            />
+          </Tooltip>
 
-        <Space.Compact>
-          <InputNumber
-            style={{ width: 75 }}
-            min={1}
-            max={props.arrayChain.length}
-            value={selectSequence[0]}
-            placeholder={"from"}
-            onChange={inputFirstNucleotyde}
-          />
-          <InputNumber
-            className={styles.input}
-            style={{ width: 75 }}
-            min={1}
-            max={props.arrayChain.length}
-            value={selectSequence[selectSequence.length - 1]}
-            placeholder={"to"}
-            onChange={inputLastNucleotyde}
-          />
-        </Space.Compact>
+          <Space.Compact>
+            <InputNumber
+              style={{ width: 75 }}
+              min={1}
+              max={props.arrayChain.length}
+              value={selectSequence[0]}
+              placeholder={"from"}
+              onChange={inputFirstNucleotyde}
+            />
+            <InputNumber
+              className={styles.input}
+              style={{ width: 75 }}
+              min={1}
+              max={props.arrayChain.length}
+              value={selectSequence[selectSequence.length - 1]}
+              placeholder={"to"}
+              onChange={inputLastNucleotyde}
+            />
+          </Space.Compact>
+        </div>
+        <div style={{ padding: "15px" }}>
+          <Tooltip title="Delete this chain">
+            <Button
+              shape="circle"
+              type="text"
+              onClick={() => console.log("delete")}
+              icon={<CloseOutlined />}
+            />
+          </Tooltip>
+        </div>
       </div>
 
       <div className={styles.chainsarray}>

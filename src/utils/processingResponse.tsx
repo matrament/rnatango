@@ -1,6 +1,6 @@
 "use client";
 import { message } from "antd";
-import lang from "../components/first-scenario/lang.json";
+import lang from "./lang.json";
 
 export function processingResponce(
   taskId: string,

@@ -2,21 +2,23 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Select, Button } from "antd";
 import styles from "./first-scenario.module.css";
-import SequenceCard from "./SequenceCard";
+import { Select, Button } from "antd";
 import {
   Models,
-  SingleModel,
-  Chains,
   structure,
   single_scenario_request,
   single_scenario_request_selection_chain,
 } from "../../types/modelsType";
 import { GetTaskId } from "@/utils/getTaskId";
+import SequenceCard from "./SequenceCard";
 
-const onSearch = (value: string) => {
-  console.log("search:", value);
+type seqtest = {
+  name: string;
+  nucleotideRange: {
+    fromInclusive: number;
+    toInclusive: number;
+  };
 };
 
 const filterOption = (
@@ -25,7 +27,6 @@ const filterOption = (
 ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
 const FirstScenarioProperties = (props: { getStructure: structure }) => {
-  const [loading, setLoading] = useState(false);
   const [resultModel, setResultModel] = useState<single_scenario_request>({
     fileId: "",
     selections: [],
@@ -36,17 +37,11 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
   const [selectedChains, setSelectedChains] = useState<{
     [key: string]: string[];
   }>({});
+  const [concatRange, setConcatRange] = useState<seqtest[][]>([]);
   const router = useRouter();
-  const submit = () => {
-    // if (
-    //   (!uploadStructure || uploadStructure.length == 0) &&
-    //   pdbId.name.length < 4
-    // ) {
-    //   message.error(lang.lack_of_source);
-    //   return null;
-    // }
-    // setLoading(true);
 
+  const submit = () => {
+    console.log(resultModel);
     GetTaskId(resultModel, router);
   };
 
@@ -63,6 +58,12 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
     setModelArray(x);
     setAllModels(Object.keys(x));
     setAllChains({ ["1"]: Object.keys(x["1"]) });
+
+    let y = [];
+    for (let i = 0; i < props.getStructure.models[0].chains.length; i++) {
+      y.push([]);
+    }
+    setConcatRange(y);
   }, [props.getStructure.models]);
 
   useEffect(() => {
@@ -73,35 +74,41 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (concatRange.length != 0) {
+      let newState = concatRange.flat();
+      setResultModel({
+        ...resultModel,
+        selections: [
+          {
+            modelName:
+              resultModel.selections.length > 0
+                ? resultModel.selections[0].modelName
+                : "1",
+            chains: newState,
+          },
+        ],
+      });
+    }
+  }, [concatRange]);
+
   const chooseModels = (value: string) => {
     setAllChains({ [value]: Object.keys(modelArray[value]) });
     setResultModel({
       ...resultModel,
       selections: [{ ...resultModel.selections, modelName: value, chains: [] }],
     });
+    let x = [];
+    for (let i = 0; i < Object.keys(modelArray[value]).length; i++) {
+      x.push([]);
+    }
+    setConcatRange(x);
+    // setSelectedChains({});
+    handleChooseChain([]);
   };
 
   const handleChooseChain = (value: string[]) => {
     setSelectedChains({ [Object.keys(allChains)[0]]: value });
-    let x: single_scenario_request_selection_chain[] = value.map((e) => ({
-      name: e,
-      nucleotideRange: {
-        fromInclusive: 0,
-        toInclusive: 0,
-      },
-    }));
-    setResultModel({
-      ...resultModel,
-      selections: [
-        {
-          modelName:
-            resultModel.selections.length > 0
-              ? resultModel.selections[0].modelName
-              : "1",
-          chains: x,
-        },
-      ],
-    });
   };
 
   return (
@@ -118,7 +125,6 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
           defaultValue={"1"}
           optionFilterProp="children"
           onChange={chooseModels}
-          onSearch={onSearch}
           filterOption={filterOption}
           options={allModels?.map((num) => {
             return { value: num, label: num };
@@ -127,7 +133,7 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
         <p>Choose chain(s):</p>
         <Select
           mode="multiple"
-          allowClear
+          // allowClear
           style={{ width: 200 }}
           placeholder="Please select"
           onChange={handleChooseChain}
@@ -151,22 +157,21 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
                   "residuesWithoutAtoms"
                 ]
               }
-              setResultModel={setResultModel}
-              resultModel={resultModel}
+              setConcatRange={setConcatRange}
+              concatRange={concatRange}
             />
           ))}
-
-          <Button
-            size="large"
-            type="primary"
-            shape="round"
-            onClick={submit}
-            // disabled={}
-          >
-            Submit a task
-          </Button>
         </>
       ) : null}
+      <Button
+        size="large"
+        type="primary"
+        shape="round"
+        onClick={submit}
+        disabled={Object.values(selectedChains)[0]?.length === 0}
+      >
+        Submit a task
+      </Button>
     </div>
   );
 };
