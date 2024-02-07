@@ -4,6 +4,7 @@ import { Table, Collapse, Select, Button } from "antd";
 import { torsion_angles_residue } from "@/types/modelsType";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
+import { exportDataToCSV } from "@/utils/exportDataToCSV";
 
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
@@ -100,16 +101,17 @@ const ResultTable = (props: {
   setSelectRows: any;
 }) => {
   const [angleColumn, setAngleColumn] = useState<any>();
-  const [resultResidues, setResultResidues] =
-    useState<torsion_angles_residue[]>();
+  const [csvData, setCsvData] = useState<torsion_angles_residue[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   useEffect(() => {
     handleChange(Object.keys(angleName));
+    setCsvData(props.dataAngle);
   }, []);
 
   useEffect(() => {
     setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (value: string[]) => {
@@ -143,12 +145,18 @@ const ResultTable = (props: {
       ...props.selectRows,
       [props.indexChain]: selectedRows,
     });
+    setCsvData(selectedRows);
   };
 
   const rowSelection: TableRowSelection<torsion_angles_residue> = {
     columnWidth: "10px",
     selectedRowKeys,
     onChange: handleOnChange,
+  };
+
+  const tableCsv = () => {
+    console.log(angleColumn);
+    console.log(props.selectRows);
   };
 
   return (
@@ -192,8 +200,9 @@ const ResultTable = (props: {
                     type="primary"
                     shape="round"
                     icon={<DownloadOutlined />}
+                    onClick={() => exportDataToCSV(csvData, angleColumn)}
                   >
-                    Download .civ
+                    Download .csv
                   </Button>
                 </div>
               </div>

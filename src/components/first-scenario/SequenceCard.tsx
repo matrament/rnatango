@@ -35,6 +35,7 @@ const SequenceCard = (props: {
       return e;
     });
     props.setConcatRange(newState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [multipleSequence]);
 
   const addNewRange = () => {

@@ -116,13 +116,7 @@ export default function RequestForm() {
           <div className={styles.upload}>
             <div className={styles.column}>
               <Form labelCol={{ span: 16 }} wrapperCol={{ span: 32 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                  }}
-                >
+                <div className={styles.requestCard}>
                   <div>
                     <div style={{ minWidth: "350px" }}>
                       <p style={{ marginBottom: "5px", fontSize: "16px" }}>
@@ -138,10 +132,7 @@ export default function RequestForm() {
                       />
                     </div>
                   </div>
-                  <div
-                    className={styles.split_layout_divider}
-                    style={{ width: "90px" }}
-                  >
+                  <div className={styles.split_layout_divider}>
                     <div className={styles.split_layout_rule}></div>
                     <div className={styles.split_layout_label}>or</div>
                     <div className={styles.split_layout_rule}></div>
@@ -198,6 +189,7 @@ export default function RequestForm() {
                       }
                       loading={loading || isUpload}
                       onClick={submit}
+                      style={{ marginBottom: "25px" }}
                     >
                       Load
                     </Button>

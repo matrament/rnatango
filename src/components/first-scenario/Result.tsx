@@ -7,14 +7,9 @@ import {
   torsion_angles_residue,
 } from "@/types/modelsType";
 import ResultTable from "../first-scenario/ResultTable";
-import { Button, Select } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { Select } from "antd";
 import HistogramAngles from "@/components/first-scenario/HistogramAngles";
 import ChiStatistics from "@/components/first-scenario/ChiStatistics";
-
-let emptyResult: single_result_angle = {
-  torsionAngles: [],
-};
 
 const angleName = {
   alpha: "alpha (\u03B1)",
@@ -170,31 +165,36 @@ const Result = (props: { getResultFile: single_result_angle }) => {
         <div
           style={{
             display: "flex",
-            rowGap: "15px",
+
             flexDirection: "column",
             width: "100%",
-            marginBottom: "20px",
           }}
         >
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              padding: "30px",
+              paddingLeft: "30px",
+              paddingRight: "30px",
+
               alignItems: "center",
             }}
           >
             <h2>Angle Torsion Table</h2>
             {resultTorsionAngle.map((el, index) => (
-              <ResultTable
+              <div
+                style={{ paddingBottom: "25px", width: "100%" }}
                 key={el.chain.name}
-                dataAngle={el.residues}
-                chain={el.chain.name}
-                sequence={el.chain.sequence}
-                indexChain={index}
-                selectRows={selectRows}
-                setSelectRows={setSelectRows}
-              />
+              >
+                <ResultTable
+                  dataAngle={el.residues}
+                  chain={el.chain.name}
+                  sequence={el.chain.sequence}
+                  indexChain={index}
+                  selectRows={selectRows}
+                  setSelectRows={setSelectRows}
+                />
+              </div>
             ))}
           </div>
 
@@ -227,15 +227,6 @@ const Result = (props: { getResultFile: single_result_angle }) => {
             <ChiStatistics angle={concatResidues.map((el) => el.chi)} />
           </div>
         </div>
-        <Button
-          size="large"
-          type="primary"
-          shape="round"
-          icon={<DownloadOutlined />}
-          onClick={() => test()}
-        >
-          Download .zip
-        </Button>
       </div>
     </div>
   );

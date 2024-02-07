@@ -59,6 +59,7 @@ const NucleotidePanel = (props: {
       return e;
     });
     props.setMultipleSequence(newState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectSequence]);
 
   const range = (start: number, stop: number, step: number): number[] => {
