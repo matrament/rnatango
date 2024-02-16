@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "../components/Header";
+import HeaderMobile from "../components/HeaderMobile";
 import Footer from "@/components/Footer";
 import { ConfigProvider } from "antd";
 import { Montserrat } from "next/font/google";
@@ -31,7 +32,7 @@ export default function RootLayout({
     <html lang="en" className={openSans.className}>
       <body>
         <script>0</script>
-        <Header />
+        <HeaderMobile />
         <ConfigProvider
           theme={{
             token: {

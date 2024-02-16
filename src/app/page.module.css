@@ -18,6 +18,9 @@
   padding-left: 10px;
   padding-right: 10px;
   /* flex-wrap: wrap; */
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 }
 
 .buttonscenario {

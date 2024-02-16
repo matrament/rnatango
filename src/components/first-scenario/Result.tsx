@@ -6,10 +6,15 @@ import {
   torsion_angles,
   torsion_angles_residue,
 } from "@/types/modelsType";
-import ResultTable from "../first-scenario/ResultTable";
-import { Select } from "antd";
-import HistogramAngles from "@/components/first-scenario/HistogramAngles";
-import ChiStatistics from "@/components/first-scenario/ChiStatistics";
+import { Button, Select } from "antd";
+import dynamic from "next/dynamic";
+const HistogramAngles = dynamic(
+  () => import("@/components/first-scenario/HistogramAngles")
+);
+const ResultTable = dynamic(() => import("../first-scenario/ResultTable"));
+const ChiStatistics = dynamic(
+  () => import("@/components/first-scenario/ChiStatistics")
+);
 
 const angleName = {
   alpha: "alpha (\u03B1)",
@@ -139,19 +144,15 @@ const Result = (props: { getResultFile: single_result_angle }) => {
       }
     }
     setResultTorsionAngle(x);
+    setSelectRows(x.map((chain: torsion_angles) => chain.residues));
     setConcatResidues(x.map((chain: torsion_angles) => chain.residues).flat());
-    console.log(x.map((chain: torsion_angles) => chain.residues).flat());
   }, [props.getResultFile]);
 
   useEffect(() => {
     let x: torsion_angles_residue[];
     x = Object.values(selectRows).flat();
-    setConcatResidues(x);
+    Object.keys(selectRows).length != 0 ? setConcatResidues(x) : null;
   }, [selectRows]);
-
-  const test = () => {
-    console.log();
-  };
 
   type ObjectKey = keyof typeof angleName;
 
@@ -208,10 +209,11 @@ const Result = (props: { getResultFile: single_result_angle }) => {
                 options={options}
                 defaultValue={Object.keys(angleName)}
                 onChange={handleChange}
-                placeholder="Select angles to display histograms"
+                placeholder="Select angle(s) to display histogram(s)"
                 maxTagCount="responsive"
               />
             </div>
+
             <div className={styles.angle}>
               {showAngleHistogram.map((angleName) => (
                 <HistogramAngles

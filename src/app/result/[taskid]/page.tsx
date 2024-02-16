@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { single_result_angle } from "@/types/modelsType";
 import styles from "./page.module.css";
 import { processingResponce } from "@/utils/processingResponse";
-import { Steps } from "antd";
+import { Button, Steps } from "antd";
 import LoadingCard from "@/components/LoadingCard";
-
+import { ReloadOutlined } from "@ant-design/icons";
 import Result from "../../../components/first-scenario/Result";
 
 let emptyResult: single_result_angle = {
@@ -19,6 +19,7 @@ const ResultPage = () => {
     useState<single_result_angle>(emptyResult);
   const [getStatus, setGetStatus] = useState("");
   const [stepsNumber, setStepsNumber] = useState(2);
+  const [seedState, setSeedState] = useState(1);
 
   const steps = [
     { title: "Task uploaded" },
@@ -45,18 +46,35 @@ const ResultPage = () => {
     }
   }, [params.taskid, getStatus]);
 
+  const resetSettings = () => {
+    let x = seedState + 1;
+    setSeedState(x);
+  };
+
   return (
     <div style={{ width: "100%" }}>
       <div className={styles.scenario}>
-        <h1>TaskId: {params.taskid}</h1>
-        <div style={{ width: "80%" }}>
+        <h1 className={styles.textwrap}>TaskId: {params.taskid}</h1>
+        <div
+          style={{
+            width: "80%",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
           <Steps current={stepsNumber} items={steps} status="wait" />
+        </div>
+        <div className={styles.resetSettings}>
+          <Button icon={<ReloadOutlined />} onClick={() => resetSettings()}>
+            Reset settings
+          </Button>
         </div>
       </div>
       {stepsNumber < 4 ? (
         <LoadingCard />
       ) : (
-        <Result getResultFile={getResultFile} />
+        <Result getResultFile={getResultFile} key={seedState} />
       )}
     </div>
   );

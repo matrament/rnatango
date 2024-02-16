@@ -107,12 +107,16 @@ const ResultTable = (props: {
   useEffect(() => {
     handleChange(Object.keys(angleName));
     setCsvData(props.dataAngle);
+    setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
   }, []);
 
-  useEffect(() => {
-    setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+
+  //   props.setSelectRows({
+  //     ...props.selectRows,
+  //     [props.indexChain]: props.dataAngle,
+  //   });
+  // }, []);
 
   const handleChange = (value: string[]) => {
     let x: TableColumnsType<tableAngle> = value.map((e) => ({
@@ -152,11 +156,6 @@ const ResultTable = (props: {
     columnWidth: "10px",
     selectedRowKeys,
     onChange: handleOnChange,
-  };
-
-  const tableCsv = () => {
-    console.log(angleColumn);
-    console.log(props.selectRows);
   };
 
   return (

@@ -40,21 +40,21 @@ export default function RequestForm() {
   >(undefined);
 
   const submit = () => {
-    // if (
-    //   (!uploadStructure || uploadStructure.length == 0) &&
-    //   pdbId.name.length < 4
-    // ) {
-    //   message.error(lang.lack_of_source);
-    //   return null;
-    // }
     setLoading(true);
-    setModelQuery(true);
-    if (pdbId.name.length != 0) {
+    if (pdbId.name.length === 4) {
       processingRequest(pdbId, setLoading, setGetStructure);
+      setModelQuery(true);
+    }
+    if (isUpload && getStructure.fileHashId != "") {
+      setLoading(false);
+      setModelQuery(true);
     }
   };
   useEffect(() => {
-    if (pdbId.name.length === 4) {
+    setModelQuery(false);
+    setGetStructure(firstStructure);
+    if (pdbId.name.length != 0) {
+      setIsUpload(false);
       checkRcsbMaxModel(setPdbError, pdbId.name, setModelQuery);
     } else {
       setPdbError(false);
@@ -83,6 +83,7 @@ export default function RequestForm() {
             <Space.Compact>
               <Button
                 onClick={() => {
+                  setGetStructure(firstStructure);
                   setUploadStructure([]);
                   setPdbId({
                     name: "1FFK",
@@ -93,6 +94,8 @@ export default function RequestForm() {
               </Button>
               <Button
                 onClick={() => {
+                  setGetStructure(firstStructure);
+
                   setUploadStructure([]);
                   setPdbId({
                     name: "6RS3",
@@ -103,6 +106,7 @@ export default function RequestForm() {
               </Button>
               <Button
                 onClick={() => {
+                  setGetStructure(firstStructure);
                   setUploadStructure([]);
                   setPdbId({
                     name: "1JJP",
@@ -129,6 +133,7 @@ export default function RequestForm() {
                         setUploadStructure={setUploadStructure}
                         setGetStructure={setGetStructure}
                         setIsUpload={setIsUpload}
+                        setLoading={setLoading}
                       />
                     </div>
                   </div>
@@ -187,7 +192,7 @@ export default function RequestForm() {
                         pdbError ||
                         modelQuery
                       }
-                      loading={loading || isUpload}
+                      loading={loading}
                       onClick={submit}
                       style={{ marginBottom: "25px" }}
                     >
@@ -201,7 +206,7 @@ export default function RequestForm() {
         </div>
       </div>
       <div>
-        {getStructure.fileHashId != "" ? (
+        {getStructure.fileHashId != "" && modelQuery ? (
           <FirstScenarioProperties getStructure={getStructure} />
         ) : null}
       </div>

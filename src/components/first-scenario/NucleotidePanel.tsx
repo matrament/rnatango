@@ -116,7 +116,7 @@ const NucleotidePanel = (props: {
   };
 
   const handleSelectAll = () => {
-    setSelectSequence(range(1, props.arrayChain.length, 1));
+    setSelectSequence(range(0, props.arrayChain.length, 1));
   };
   const handleDeleteAll = () => {
     setSelectSequence([]);
@@ -144,7 +144,7 @@ const NucleotidePanel = (props: {
           <Space.Compact>
             <InputNumber
               style={{ width: 75 }}
-              min={1}
+              min={0}
               max={props.arrayChain.length}
               value={selectSequence[0]}
               placeholder={"from"}
@@ -153,7 +153,7 @@ const NucleotidePanel = (props: {
             <InputNumber
               className={styles.input}
               style={{ width: 75 }}
-              min={1}
+              min={0}
               max={props.arrayChain.length}
               value={selectSequence[selectSequence.length - 1]}
               placeholder={"to"}
@@ -177,9 +177,9 @@ const NucleotidePanel = (props: {
         {props.arrayChain.map((el, index) => (
           <Nucleobases
             key={index}
-            index={index + 1}
+            index={index}
             name={el}
-            onClick={() => handleAddSequence(index + 1)}
+            onClick={() => handleAddSequence(index)}
             selectSequence={selectSequence}
             residuesWithoutAtoms={props.residuesWithoutAtoms}
           />

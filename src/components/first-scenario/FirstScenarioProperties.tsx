@@ -165,6 +165,7 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
       ) : null}
       <Button
         size="large"
+        style={{ marginBottom: "25px" }}
         type="primary"
         shape="round"
         onClick={submit}

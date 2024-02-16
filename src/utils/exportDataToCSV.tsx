@@ -2,14 +2,6 @@
 import Papa from "papaparse";
 import { torsion_angles_residue } from "@/types/modelsType";
 
-const DATA = {
-  fields: ["Column 1", "Column 2"],
-  data: [
-    ["foo", "bar"],
-    ["abc", "def"],
-  ],
-};
-
 type angleObject = { [key: string]: number | string | null };
 
 export function exportDataToCSV(

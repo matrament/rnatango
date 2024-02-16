@@ -13,6 +13,7 @@ interface UploadFileArguments {
   setUploadStructure: any;
   setGetStructure: any;
   setIsUpload: any;
+  setLoading: any;
 }
 
 const UploadStructureFile = (props: UploadFileArguments) => {
@@ -63,12 +64,14 @@ const UploadStructureFile = (props: UploadFileArguments) => {
           name: "",
         });
         props.setGetStructure(event.file.response);
-        console.log(event.file.response);
+
         props.setIsUpload(true);
+        props.setLoading(false);
         props.setUploadStructure([event.file]);
       } else if (status === "error") {
         message.error(lang.error_uploading + `${event.file.name}`);
         props.setPdbId({ name: "" });
+        props.setLoading(false);
         props.setUploadStructure(undefined);
       }
     },

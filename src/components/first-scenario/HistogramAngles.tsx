@@ -4,14 +4,17 @@ import { ReactEChartsProps } from "../echarts/ReactECharts";
 import { AngleIcon } from "../icons/Icons";
 import styles from "./first-scenario.module.css";
 
-const HistogramAngles = (props: { angle: any[]; title: string }) => {
+const HistogramAngles = (props: {
+  angle: (number | null)[];
+  title: string;
+}) => {
   const [angleResult, setAngleResult] = useState<[number, number][]>([]);
 
   useEffect(() => {
-    let x = props.angle.filter((e) => {
-      return e != null;
-    });
-    x = x.map((e) => (e == null ? null : Math.floor((e + 180) / 15)));
+    let x: number[] = props.angle.filter(
+      (element): element is number => element !== null
+    );
+    x = x.map((e) => Math.floor((e + 180) / 15));
     let counts: { [key: number]: [number, number] } = {};
     for (let i = 0; i < 24; i++) {
       counts[i] = [0, -172.5 + 15 * i];
