@@ -20,7 +20,7 @@ const UploadStructureFile = (props: UploadFileArguments) => {
   let uploader_props: UploadProps = {
     name: "file",
     multiple: false,
-    action: "http://rnatango.cs.put.poznan.pl/upload",
+    action: config.SERVER_URL + "/upload",
     maxCount: 1,
     beforeUpload: (file: File) => {
       let fileName = file.name.split(".");
