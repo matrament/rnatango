@@ -59,6 +59,7 @@ export default function RequestForm() {
     } else {
       setPdbError(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdbId.name]);
 
   return (
@@ -192,7 +193,7 @@ export default function RequestForm() {
                         pdbError ||
                         modelQuery
                       }
-                      loading={loading}
+                      loading={loading && modelQuery}
                       onClick={submit}
                       style={{ marginBottom: "25px" }}
                     >

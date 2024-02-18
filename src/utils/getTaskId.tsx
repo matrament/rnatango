@@ -2,6 +2,7 @@
 import { message } from "antd";
 import lang from "./lang.json";
 import { single_scenario_request } from "@/types/modelsType";
+import config from "../config.json";
 
 export function GetTaskId(resultModel: single_scenario_request, router: any) {
   const requestOptions = {
@@ -13,7 +14,7 @@ export function GetTaskId(resultModel: single_scenario_request, router: any) {
     },
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
-  fetch("https://rnatango.cs.put.poznan.pl/single", requestOptions)
+  fetch(config.SERVER_URL + "/single", requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
         message.error(lang.rcsb_error);
@@ -25,7 +26,7 @@ export function GetTaskId(resultModel: single_scenario_request, router: any) {
     })
     .then((response: any) => {
       if (response != "") {
-        router.push(`/result/${response.taskId}`);
+        router.push(`/result?id=${response.taskId}`);
       }
     })
     .catch((error: any) => message.error("Something went wrong, try again"));

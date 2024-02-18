@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { single_result_angle } from "@/types/modelsType";
 import styles from "./page.module.css";
@@ -7,14 +7,15 @@ import { processingResponce } from "@/utils/processingResponse";
 import { Button, Steps } from "antd";
 import LoadingCard from "@/components/LoadingCard";
 import { ReloadOutlined } from "@ant-design/icons";
-import DataResult from "./../../../components/first-scenario/DataResult";
+import DataResult from "../../components/first-scenario/DataResult";
 
 let emptyResult: single_result_angle = {
   torsionAngles: [],
 };
 
 const ResultPage = () => {
-  const params = useParams<{ taskid: string }>();
+  const searchParams = useSearchParams();
+  // const params = useParams<{ taskid: string }>();
   const [getResultFile, setGetResultFile] =
     useState<single_result_angle>(emptyResult);
   const [getStatus, setGetStatus] = useState("");
@@ -35,8 +36,10 @@ const ResultPage = () => {
   ];
 
   useEffect(() => {
-    processingResponce(params.taskid, setGetResultFile, setGetStatus);
+    processingResponce(searchParams.get("id")!, setGetResultFile, setGetStatus);
+  }, []);
 
+  useEffect(() => {
     console.log(getStatus);
     if (getStatus === "PROCESSING") {
       setStepsNumber(3);
@@ -44,7 +47,7 @@ const ResultPage = () => {
     if (getStatus === "SUCCESS") {
       setStepsNumber(5);
     }
-  }, [params.taskid, getStatus]);
+  }, [getStatus]);
 
   const resetSettings = () => {
     let x = seedState + 1;
@@ -54,7 +57,7 @@ const ResultPage = () => {
   return (
     <div style={{ width: "100%" }}>
       <div className={styles.scenario}>
-        <h1 className={styles.textwrap}>TaskId: {params.taskid}</h1>
+        <h1 className={styles.textwrap}>TaskId: {searchParams.get("id")!}</h1>
         <div
           style={{
             width: "80%",

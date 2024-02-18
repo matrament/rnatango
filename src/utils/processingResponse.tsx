@@ -1,6 +1,7 @@
 "use client";
 import { message } from "antd";
 import lang from "./lang.json";
+import config from "../config.json";
 
 export function processingResponce(
   taskId: string,
@@ -16,14 +17,14 @@ export function processingResponce(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  let socket = new WebSocket(`wss://rnatango.cs.put.poznan.pl/ws/single`);
+  let socket = new WebSocket(config.SERVER_WEB_SOCKET_URL + `/single`);
   let timer: any = null;
   const request = { hashId: taskId };
   socket.onopen = () => {
     socket.send(JSON.stringify(request));
     timer = setInterval(() => {
       socket.send(JSON.stringify(request));
-    }, 5000);
+    }, 200);
   };
   socket.onmessage = (event) => {
     let a = JSON.parse(event.data);
