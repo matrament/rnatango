@@ -78,7 +78,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  transition: transform 0.4s cubic-bezier(0, 0.52, 0, 1);
+  transition: transform 0.4s cubic-bezier(0, 0.6, 0, 0.6);
 
   z-index: 1000;
 }

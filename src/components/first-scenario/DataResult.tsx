@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 const HistogramAngles = dynamic(
   () => import("@/components/first-scenario/HistogramAngles")
 );
-const ResultTable = dynamic(() => import("../first-scenario/ResultTable"));
+const ResultTable = dynamic(() => import("./ResultTable"));
 const ChiStatistics = dynamic(
   () => import("@/components/first-scenario/ChiStatistics")
 );
@@ -92,7 +92,7 @@ const options: ItemProps[] = [
   },
 ];
 
-const Result = (props: { getResultFile: single_result_angle }) => {
+const DataResult = (props: { getResultFile: single_result_angle }) => {
   const [resultTorsionAngle, setResultTorsionAngle] = useState<
     torsion_angles[]
   >([]);
@@ -234,4 +234,4 @@ const Result = (props: { getResultFile: single_result_angle }) => {
   );
 };
 
-export default Result;
+export default DataResult;

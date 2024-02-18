@@ -1,6 +1,6 @@
 import styles from "./first-scenario.module.css";
 import { useEffect, useState } from "react";
-import { Button, InputNumber, Tooltip } from "antd";
+import { Button, Tooltip } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { single_scenario_request_selection_chain } from "@/types/modelsType";
 import NucleotidePanel from "./NucleotidePanel";
@@ -49,30 +49,48 @@ const SequenceCard = (props: {
     setMultipleSequence([...multipleSequence, x]);
   };
 
+  const deleteChainRange = (index: number) => {
+    console.log(index);
+    console.log(multipleSequence.slice(index + 1, multipleSequence.length));
+    let newArray: single_scenario_request_selection_chain[] = [];
+    setMultipleSequence(
+      newArray.concat(
+        multipleSequence.slice(0, index),
+        multipleSequence.slice(index + 1, multipleSequence.length)
+      )
+    );
+  };
+
   return (
-    <div className={styles.sequence}>
-      <div className={styles.sequenceTitle}>
-        <Tooltip title="Add new nucleotide range">
-          <Button
-            shape="circle"
-            type="text"
-            onClick={() => addNewRange()}
-            icon={<PlusOutlined />}
-          />
-        </Tooltip>
-        <h3>Chain: {props.name}</h3>
-      </div>
-      {multipleSequence.map((e, index) => (
-        <NucleotidePanel
-          multipleSequence={multipleSequence}
-          setMultipleSequence={setMultipleSequence}
-          indexRange={index}
-          arrayChain={arrayChain}
-          residuesWithoutAtoms={props.residuesWithoutAtoms}
-          key={index}
-        />
-      ))}
-    </div>
+    <>
+      {multipleSequence.length != 0 ? (
+        <div className={styles.sequence}>
+          <div className={styles.sequenceTitle}>
+            <Tooltip title="Add new nucleotide range">
+              <Button
+                shape="circle"
+                type="text"
+                onClick={() => addNewRange()}
+                icon={<PlusOutlined />}
+              />
+            </Tooltip>
+            <h3>Chain: {props.name}</h3>
+          </div>
+          {multipleSequence.map((e, index) => (
+            <NucleotidePanel
+              multipleSequence={multipleSequence}
+              setMultipleSequence={setMultipleSequence}
+              deleteChainRange={deleteChainRange}
+              currentSequence={e}
+              indexRange={index}
+              arrayChain={arrayChain}
+              residuesWithoutAtoms={props.residuesWithoutAtoms}
+              key={index}
+            />
+          ))}
+        </div>
+      ) : null}
+    </>
   );
 };
 

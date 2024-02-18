@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "../components/Header";
-import HeaderMobile from "../components/HeaderMobile";
 import Footer from "@/components/Footer";
 import { ConfigProvider } from "antd";
 import { Montserrat } from "next/font/google";
@@ -10,7 +9,6 @@ export const metadata: Metadata = {
   title: "RNAtango",
   description: "RNA 3d structure analysis in Torsion ANGle dOmain",
 };
-
 const openSans = Montserrat({
   style: "normal",
   weight: "300",
@@ -32,7 +30,6 @@ export default function RootLayout({
     <html lang="en" className={openSans.className}>
       <body>
         <script>0</script>
-        <HeaderMobile />
         <ConfigProvider
           theme={{
             token: {
@@ -74,9 +71,10 @@ export default function RootLayout({
             },
           }}
         >
+          <Header />
           <main>{children}</main>
+          <Footer />
         </ConfigProvider>
-        <Footer />
       </body>
     </html>
   );

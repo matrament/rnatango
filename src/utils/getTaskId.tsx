@@ -26,7 +26,6 @@ export function GetTaskId(resultModel: single_scenario_request, router: any) {
     .then((response: any) => {
       if (response != "") {
         router.push(`/result/${response.taskId}`);
-        console.log(resultModel);
       }
     })
     .catch((error: any) => message.error("Something went wrong, try again"));

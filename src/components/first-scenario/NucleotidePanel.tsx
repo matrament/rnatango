@@ -1,10 +1,11 @@
 import styles from "./first-scenario.module.css";
 import { useEffect, useState } from "react";
-import { Button, InputNumber, Tooltip, Space } from "antd";
+import { Button, InputNumber, Tooltip, Space, Popconfirm } from "antd";
 import {
   SelectOutlined,
   ClearOutlined,
   CloseOutlined,
+  QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { single_scenario_request_selection_chain } from "@/types/modelsType";
 
@@ -38,12 +39,19 @@ const Nucleobases = (props: {
 
 const NucleotidePanel = (props: {
   multipleSequence: single_scenario_request_selection_chain[];
+  currentSequence: single_scenario_request_selection_chain;
   indexRange: number;
   setMultipleSequence: any;
   arrayChain: string[];
   residuesWithoutAtoms: number[];
+  deleteChainRange: any;
 }) => {
   const [selectSequence, setSelectSequence] = useState<number[]>([]);
+
+  useEffect(() => {
+    let start = props.currentSequence.nucleotideRange.fromInclusive;
+    console.log(start);
+  }, [props.currentSequence]);
 
   useEffect(() => {
     let newState = props.multipleSequence.map((e, index) => {
@@ -162,14 +170,14 @@ const NucleotidePanel = (props: {
           </Space.Compact>
         </div>
         <div style={{ padding: "15px" }}>
-          <Tooltip title="Delete this chain">
-            <Button
-              shape="circle"
-              type="text"
-              onClick={() => console.log("delete")}
-              icon={<CloseOutlined />}
-            />
-          </Tooltip>
+          <Popconfirm
+            title="Delete pot"
+            description="Are you sure to delete this pot?"
+            icon={<QuestionCircleOutlined />}
+            onConfirm={() => props.deleteChainRange(props.indexRange)}
+          >
+            <Button type="text" shape="circle" icon={<CloseOutlined />} />
+          </Popconfirm>
         </div>
       </div>
 

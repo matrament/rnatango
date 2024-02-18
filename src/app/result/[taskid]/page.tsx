@@ -7,7 +7,7 @@ import { processingResponce } from "@/utils/processingResponse";
 import { Button, Steps } from "antd";
 import LoadingCard from "@/components/LoadingCard";
 import { ReloadOutlined } from "@ant-design/icons";
-import Result from "../../../components/first-scenario/Result";
+import DataResult from "./../../../components/first-scenario/DataResult";
 
 let emptyResult: single_result_angle = {
   torsionAngles: [],
@@ -74,7 +74,7 @@ const ResultPage = () => {
       {stepsNumber < 4 ? (
         <LoadingCard />
       ) : (
-        <Result getResultFile={getResultFile} key={seedState} />
+        <DataResult getResultFile={getResultFile} key={seedState} />
       )}
     </div>
   );

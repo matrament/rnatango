@@ -41,7 +41,6 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
   const router = useRouter();
 
   const submit = () => {
-    console.log(resultModel);
     GetTaskId(resultModel, router);
   };
 

@@ -99,6 +99,7 @@
 }
 
 .nonactiveC {
+  font-color: black;
 }
 
 .nonactiveC:hover {
@@ -187,9 +188,7 @@
   font-weight: bold;
 }
 .rowStyle {
-  /* text-decoration: line-through; */
   background-color: #eaeaea;
-  /* color: #8a8a8a; */
 }
 
 .downloadButton {
@@ -209,17 +208,33 @@
   align-items: center;
   padding-left: 15px;
 }
-.section {
-  border-top: 1px solid #dcdcdc;
-  padding: 0px 30px 30px 30px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
+
 .angle {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   gap: 20px;
   justify-content: center;
+}
+
+.section {
+  border-top: 1px solid #dcdcdc;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.resetSettings {
+  border-top: 1px solid #dcdcdc;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  padding-top: 15px;
+}
+.textwrap {
+  word-wrap: break-word;
+  text-align: center;
+  padding: 0px 15px 0px 15px;
 }

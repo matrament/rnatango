@@ -51,7 +51,6 @@ const UploadStructureFile = (props: UploadFileArguments) => {
     },
     onChange(event) {
       const { status } = event.file;
-      console.log(event.file.status);
       if (status === "done") {
         // if (event.file.response.error.length > 0) {
         //   message.error(lang.file_not_pdb_cif + `${event.file.name}`);
