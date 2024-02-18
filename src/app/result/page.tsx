@@ -40,7 +40,6 @@ const ResultPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log(getStatus);
     if (getStatus === "PROCESSING") {
       setStepsNumber(3);
     }

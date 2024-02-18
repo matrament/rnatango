@@ -50,8 +50,7 @@ const SequenceCard = (props: {
   };
 
   const deleteChainRange = (index: number) => {
-    console.log(index);
-    console.log(multipleSequence.slice(index + 1, multipleSequence.length));
+    // console.log(multipleSequence.slice(index + 1, multipleSequence.length));
     let newArray: single_scenario_request_selection_chain[] = [];
     setMultipleSequence(
       newArray.concat(

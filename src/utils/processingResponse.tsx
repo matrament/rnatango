@@ -34,14 +34,11 @@ export function processingResponce(
       a.status === "PROCESSING"
     ) {
       clearInterval(timer);
-      fetch(
-        "https://rnatango.cs.put.poznan.pl/single/" + taskId + "/result",
-        requestOptions
-      )
+      fetch(config.SERVER_URL + "/single/" + taskId + "/result", requestOptions)
         .then((response: any) => response.json())
         .then((response: any) => {
           setGetResultFile(response);
-          console.log(a);
+
           setGetStatus(a.status);
           socket.close();
         })
@@ -52,7 +49,6 @@ export function processingResponce(
         });
     } else {
       setGetStatus(a.status);
-      console.log(a);
       if (a.status === "FAILED") {
         //setLoading(false);
       }

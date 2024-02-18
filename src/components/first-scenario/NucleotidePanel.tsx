@@ -50,7 +50,6 @@ const NucleotidePanel = (props: {
 
   useEffect(() => {
     let start = props.currentSequence.nucleotideRange.fromInclusive;
-    console.log(start);
   }, [props.currentSequence]);
 
   useEffect(() => {
