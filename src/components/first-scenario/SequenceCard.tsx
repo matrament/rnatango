@@ -1,3 +1,4 @@
+"use client";
 import styles from "./first-scenario.module.css";
 import { useEffect, useState } from "react";
 import { Button, Tooltip } from "antd";

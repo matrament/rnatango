@@ -35,6 +35,7 @@ export default function RequestForm() {
   const [modelQuery, setModelQuery] = useState(false);
   const [pdbId, setPdbId] = useState(rcsbPdbId);
   const [isUpload, setIsUpload] = useState(false);
+  const [showResult, setShowResult] = useState(false);
   const [uploadStructure, setUploadStructure] = useState<
     UploadFile[] | undefined
   >(undefined);
@@ -44,18 +45,21 @@ export default function RequestForm() {
     if (pdbId.name.length === 4) {
       processingRequest(pdbId, setLoading, setGetStructure);
       setModelQuery(true);
+      setShowResult(true);
     }
     if (isUpload && getStructure.fileHashId != "") {
       setLoading(false);
       setModelQuery(true);
+      setShowResult(true);
     }
   };
   useEffect(() => {
-    setModelQuery(false);
+    setIsUpload(false);
     setGetStructure(firstStructure);
-    if (pdbId.name.length != 0) {
-      setIsUpload(false);
+    console.log(pdbId);
+    if (pdbId.name.length === 4) {
       checkRcsbMaxModel(setPdbError, pdbId.name, setModelQuery);
+      console.log(pdbError);
     } else {
       setPdbError(false);
     }
@@ -166,7 +170,7 @@ export default function RequestForm() {
                             paddingTop: "2px",
                             paddingBottom: "2px",
                           }}
-                          placeholder={"PDB ID eg. 1D59 "}
+                          placeholder={"PDB ID eg. 1FFK"}
                           maxLength={4}
                         />
                       </Form.Item>
@@ -189,11 +193,11 @@ export default function RequestForm() {
                       type="primary"
                       shape="round"
                       disabled={
-                        (!isUpload && pdbId.name.length < 4) ||
+                        (pdbId.name.length < 4 && !isUpload) ||
                         pdbError ||
                         modelQuery
                       }
-                      loading={loading && modelQuery}
+                      loading={loading}
                       onClick={submit}
                       style={{ marginBottom: "25px" }}
                     >
@@ -207,7 +211,7 @@ export default function RequestForm() {
         </div>
       </div>
       <div>
-        {getStructure.fileHashId != "" && modelQuery ? (
+        {getStructure.fileHashId != "" && !loading && showResult ? (
           <FirstScenarioProperties getStructure={getStructure} />
         ) : null}
       </div>

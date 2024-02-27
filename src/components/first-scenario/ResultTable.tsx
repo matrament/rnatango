@@ -1,3 +1,4 @@
+"use client";
 import styles from "./first-scenario.module.css";
 import { useState, useEffect } from "react";
 import { Table, Collapse, Select, Button } from "antd";
@@ -108,15 +109,8 @@ const ResultTable = (props: {
     handleChange(Object.keys(angleName));
     setCsvData(props.dataAngle);
     setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-
-  //   props.setSelectRows({
-  //     ...props.selectRows,
-  //     [props.indexChain]: props.dataAngle,
-  //   });
-  // }, []);
 
   const handleChange = (value: string[]) => {
     let x: TableColumnsType<tableAngle> = value.map((e) => ({
@@ -166,9 +160,12 @@ const ResultTable = (props: {
           {
             key: "1",
             label: (
-              <p style={{ margin: 0 }}>
-                Chain: {props.chain}, {props.sequence.toUpperCase()}
-              </p>
+              <>
+                <p className={styles.chainTitle}>Chain: {props.chain}</p>
+                <p className={styles.sequenceText}>
+                  {props.sequence.toUpperCase()}
+                </p>
+              </>
             ),
             children: (
               <div>

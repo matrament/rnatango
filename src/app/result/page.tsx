@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { single_result_angle } from "@/types/modelsType";
 import styles from "./page.module.css";
 import { processingResponce } from "@/utils/processingResponse";
-import { Button, Steps } from "antd";
+import { Button, Steps, Alert } from "antd";
 import LoadingCard from "@/components/LoadingCard";
 import { ReloadOutlined } from "@ant-design/icons";
 import DataResult from "../../components/first-scenario/DataResult";
@@ -27,16 +27,16 @@ const ResultPage = () => {
     { title: "Queueing" },
     { title: "Processing" },
     {
-      title: "Task completed",
-      description: "success",
-      // resultSet.status === 4
-      //   ? "Results will be stored until " + resultSet.remove_date + "."
-      //   : "",
+      title: "Success",
+      description: `${
+        stepsNumber === 4 ? "Results will be stored a week" : ""
+      }`,
     },
   ];
 
   useEffect(() => {
     processingResponce(searchParams.get("id")!, setGetResultFile, setGetStatus);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const ResultPage = () => {
       setStepsNumber(3);
     }
     if (getStatus === "SUCCESS") {
-      setStepsNumber(5);
+      setStepsNumber(4);
     }
   }, [getStatus]);
 
@@ -66,6 +66,17 @@ const ResultPage = () => {
           }}
         >
           <Steps current={stepsNumber} items={steps} status="wait" />
+          {getStatus === "FAILED" ? (
+            <Alert
+              message="Server error"
+              showIcon
+              // description={resultSet.error_message}
+              type="error"
+              style={{ margin: "20px" }}
+            />
+          ) : (
+            <></>
+          )}
         </div>
         <div className={styles.resetSettings}>
           <Button icon={<ReloadOutlined />} onClick={() => resetSettings()}>

@@ -226,7 +226,9 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
           </div>
           <div className={styles.section}>
             <h2>Statistics of Chi Angle</h2>
-            <ChiStatistics angle={concatResidues.map((el) => el.chi)} />
+            <div className={styles.angle}>
+              <ChiStatistics angle={concatResidues.map((el) => el.chi)} />
+            </div>
           </div>
         </div>
       </div>

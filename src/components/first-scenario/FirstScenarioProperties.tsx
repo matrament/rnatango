@@ -114,7 +114,6 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
     <div className={styles.scenario}>
       <div className={styles.header}>
         <h2>{props.getStructure.fileHashId.toUpperCase()}</h2>
-        <p style={{ margin: "0" }}>fileHashId</p>
       </div>
       <div className={styles.select}>
         <p>Choose model for analyse:</p>

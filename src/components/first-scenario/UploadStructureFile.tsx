@@ -3,8 +3,26 @@ import { pdb_id } from "../../types/modelsType";
 import config from "../../config.json";
 import lang from "../../utils/lang.json";
 import { InboxOutlined } from "@ant-design/icons";
+import { structure } from "../../types/modelsType";
+import { useState } from "react";
 
 const { Dragger } = Upload;
+
+let firstStructure: structure = {
+  fileHashId: "",
+  models: [
+    {
+      name: "",
+      chains: [
+        {
+          name: "",
+          sequence: "",
+          residuesWithoutAtoms: [],
+        },
+      ],
+    },
+  ],
+};
 
 interface UploadFileArguments {
   pdbId: pdb_id;
@@ -17,6 +35,7 @@ interface UploadFileArguments {
 }
 
 const UploadStructureFile = (props: UploadFileArguments) => {
+  const [fileHashId, setFileHashId] = useState("");
   let uploader_props: UploadProps = {
     name: "file",
     multiple: false,
@@ -45,25 +64,21 @@ const UploadStructureFile = (props: UploadFileArguments) => {
       return isCifOrPdb;
     },
     onRemove(info: any) {
+      removeFile(fileHashId);
       props.setPdbId({ name: "" });
       props.setUploadStructure([] as UploadFile<File>[]);
       props.setIsUpload(false);
+      props.setGetStructure(firstStructure);
     },
     onChange(event) {
       const { status } = event.file;
       if (status === "done") {
-        // if (event.file.response.error.length > 0) {
-        //   message.error(lang.file_not_pdb_cif + `${event.file.name}`);
-        //   props.setUploadStructure([] as UploadFile<File>[]);
-        //   props.setPdbId({ name: "" });
-        //   return;
-        // }
         message.success(lang.file_upload_success + `${event.file.name}`);
         props.setPdbId({
           name: "",
         });
         props.setGetStructure(event.file.response);
-
+        setFileHashId(event.file.response.fileHashId);
         props.setIsUpload(true);
         props.setLoading(false);
         props.setUploadStructure([event.file]);
@@ -96,3 +111,27 @@ const UploadStructureFile = (props: UploadFileArguments) => {
 };
 
 export default UploadStructureFile;
+
+export function removeFile(fileId: string) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*", //localhost zabazpieczenie
+    },
+  };
+  requestOptions.headers["Access-Control-Allow-Origin"] = "*";
+  fetch(config.SERVER_URL + "/upload/remove/" + fileId, requestOptions)
+    .then((response: any) => {
+      if (response.status == 200) {
+        console.log(response);
+      } else {
+        console.log(response);
+      }
+    })
+    .then((response: any) => {
+      if (response != "") {
+      }
+    })
+    .catch((error: any) => message.error("Something went wrong, try again"));
+}

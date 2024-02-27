@@ -1,7 +1,9 @@
+"use client";
 import { useState, useEffect } from "react";
 import { ReactECharts } from "../echarts/ReactECharts";
 import { ReactEChartsProps } from "../echarts/ReactECharts";
 import { AngleIcon } from "../icons/Icons";
+import anglesnames from "../../angles.json";
 import styles from "./first-scenario.module.css";
 
 const HistogramAngles = (props: {
@@ -43,7 +45,9 @@ const HistogramAngles = (props: {
       formatter: function (params: any) {
         return `from ${params.data[1] - 7.5}\u00B0 to ${
           params.data[1] + 7.5
-        }\u00B0: ${Math.round(params.data[0] * params.data[0])} angle(s)`;
+        }\u00B0: ${Math.round(params.data[0] * params.data[0])} ${
+          params.data[0] === 1 ? "angle" : "angles"
+        }`;
       },
     },
     angleAxis: [
@@ -106,11 +110,10 @@ const HistogramAngles = (props: {
   return (
     <div className={styles.histogram}>
       <div className={styles.histogramtitle}>
-        <h3>
+        <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
           <AngleIcon style={{ fontSize: "16px", color: "#ed6a5a" }} />
-          {"  "}
-          {props.title}
-        </h3>
+          <h3>{props.title}</h3>
+        </div>
       </div>
       <ReactECharts option={option} />
     </div>

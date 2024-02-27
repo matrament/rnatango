@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={openSans.className}>
       <body>
-        <script>0</script>
+        {/* <script>0</script> */}
         <ConfigProvider
           theme={{
             token: {

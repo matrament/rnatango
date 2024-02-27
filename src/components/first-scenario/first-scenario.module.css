@@ -1,7 +1,8 @@
 .header {
   border-bottom: solid 1px #dcdcdc;
   margin-bottom: 10px;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
+  padding-top: 10px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -169,6 +170,9 @@
 
 .histogramtitle {
   background: #fafafa;
+  display: flex;
+  justify-content: center;
+
   border-bottom: solid 1px #dcdcdc;
   border-radius: 16px 16px 0px 0px;
   margin-bottom: 15px;
@@ -237,4 +241,18 @@
   word-wrap: break-word;
   text-align: center;
   padding: 0px 15px 0px 15px;
+}
+
+.chainTitle {
+  color: #ed6a5a;
+  margin: 0;
+  font-weight: bold;
+}
+
+.sequenceText {
+  margin: 0;
+  word-break: break-word;
+  font-family: "Roboto Mono", monospace;
+  font-weight: bold;
+  letter-spacing: 3px;
 }

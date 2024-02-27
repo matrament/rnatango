@@ -1,8 +1,8 @@
+"use client";
 import { useState, useEffect } from "react";
 import { ReactECharts } from "../echarts/ReactECharts";
 import { ReactEChartsProps } from "../echarts/ReactECharts";
 import styles from "./first-scenario.module.css";
-
 
 const ChiStatistics = (props: { angle: any[] }) => {
   const [syn, setSyn] = useState<[number, number][]>([[0, 172.5]]);
@@ -13,23 +13,24 @@ const ChiStatistics = (props: { angle: any[] }) => {
       return e != null;
     });
     let count = x.filter((e) => e < 120 && e > -30).length;
-    setSyn([[count, 172.5]]);
-    setAnti([[x.length - count, 127.5]]);
+    setSyn([[Math.sqrt(count), 172.5]]);
+    setAnti([[Math.sqrt(x.length - count), 127.5]]);
   }, [props.angle]);
 
   const option: ReactEChartsProps["option"] = {
     legend: {
       show: true,
-      top: "center",
-      itemWidth: 40,
+      // top: "bottom",
+      bottom: "0%",
+      itemWidth: 30,
       itemHeight: 30,
-      right: "right",
-      orient: "vertical",
-      align: "right",
+      orient: "horizontal",
+      align: "auto",
       textStyle: {
         fontSize: 14,
       },
       selectedMode: false,
+      borderRadius: 15,
     },
     polar: {},
     toolbox: {
@@ -43,7 +44,9 @@ const ChiStatistics = (props: { angle: any[] }) => {
     },
     tooltip: {
       formatter: function (params: any) {
-        return `${params.seriesName}: ${params.data[0]} angle(s)`;
+        return `${params.seriesName}: ${Math.round(
+          params.data[0] * params.data[0]
+        )} ${params.data[0] === 1 ? "angle" : "angles"}`;
       },
     },
     angleAxis: [
@@ -117,9 +120,10 @@ const ChiStatistics = (props: { angle: any[] }) => {
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
+        width: "500px",
       }}
     >
-      <div style={{ width: "700px" }}>
+      <div style={{ width: "100%" }}>
         <ReactECharts option={option} />
       </div>
     </div>

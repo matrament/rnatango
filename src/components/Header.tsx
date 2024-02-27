@@ -81,18 +81,20 @@ const HeaderMobile = () => {
             />
           </div>
           <Link href="/" onClick={handleClick}>
-            <h4 className={pathname == "/" ? styles.active : ""}>Home</h4>
+            <h4 className={pathname === "/" ? styles.active : ""}>Home</h4>
           </Link>
           <Link href="/about" onClick={handleClick}>
-            <h4 className={pathname == "/about" ? styles.active : ""}>About</h4>
+            <h4 className={pathname === "/about" ? styles.active : ""}>
+              About
+            </h4>
           </Link>
           <Link href="/cite_us" onClick={handleClick}>
-            <h4 className={pathname == "/cite_us" ? styles.active : ""}>
+            <h4 className={pathname === "/cite_us" ? styles.active : ""}>
               Cite us
             </h4>
           </Link>
           <Link href="/help" onClick={handleClick}>
-            <h4 className={pathname == "/help" ? styles.active : ""}>Help</h4>
+            <h4 className={pathname === "/help" ? styles.active : ""}>Help</h4>
           </Link>
         </div>
       </div>

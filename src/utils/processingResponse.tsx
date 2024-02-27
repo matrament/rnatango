@@ -30,15 +30,15 @@ export function processingResponce(
     let a = JSON.parse(event.data);
     if (
       a.status === "SUCCESS" ||
-      a.status === "WAITING" ||
-      a.status === "PROCESSING"
+      a.status === "FAILED"
+      // a.status === "WAITING" ||
+      // a.status === "PROCESSING"
     ) {
       clearInterval(timer);
       fetch(config.SERVER_URL + "/single/" + taskId + "/result", requestOptions)
         .then((response: any) => response.json())
         .then((response: any) => {
           setGetResultFile(response);
-
           setGetStatus(a.status);
           socket.close();
         })
@@ -49,9 +49,6 @@ export function processingResponce(
         });
     } else {
       setGetStatus(a.status);
-      if (a.status === "FAILED") {
-        //setLoading(false);
-      }
     }
   };
   socket.onclose = socket.onerror = () => {

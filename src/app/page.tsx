@@ -25,10 +25,8 @@ const Home = () => {
   const buttons = ["Single model", "Model(s) vs Target", "Model vs Model"];
   return (
     <>
+      <p style={{ textAlign: "center" }}>Select a scenario</p>
       <div className={styles.scenario}>
-        <p style={{ textAlign: "left", paddingLeft: "40px" }}>
-          Choose one scenario:
-        </p>
         <div className={styles.buttond}>
           {buttons.map((button: string, index: number) => (
             <ScenarioButton
