@@ -30,3 +30,14 @@
   text-align: center;
   padding: 0px 15px 0px 15px;
 }
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media screen and (min-width: 1600px) {
+    width: 900px;
+  }
+  @media screen and (min-width: 1200px) and (max-width: 1600px) {
+    width: 750px;
+  }
+}

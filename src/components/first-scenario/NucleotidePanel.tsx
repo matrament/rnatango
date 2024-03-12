@@ -8,7 +8,7 @@ import {
   CloseOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import { single_scenario_request_selection_chain } from "@/types/modelsType";
+import { single_scenario_request_selection_chain } from "../../types/modelsType";
 
 const Nucleobases = (props: {
   name: string;
@@ -48,6 +48,11 @@ const NucleotidePanel = (props: {
   deleteChainRange: any;
 }) => {
   const [selectSequence, setSelectSequence] = useState<number[]>([]);
+
+  useEffect(() => {
+    setSelectSequence(range(0, props.arrayChain.length, 1));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     let start = props.currentSequence.nucleotideRange.fromInclusive;
@@ -196,7 +201,7 @@ const NucleotidePanel = (props: {
       <div
         style={{ padding: "15px", marginBottom: "10px", fontWeight: "bold" }}
       >
-        Nucleotide range: from {selectSequence[0]} to{" "}
+        Nucleotide range: {selectSequence[0]}-
         {selectSequence[selectSequence.length - 1]} nucleobases
       </div>
     </>

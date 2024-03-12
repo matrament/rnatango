@@ -22,9 +22,8 @@
 .scenario {
   border: 1px solid #dcdcdc;
   border-radius: 40px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
-
   width: 100%;
   display: flex;
   align-items: center;
@@ -51,7 +50,7 @@
   flex-direction: column;
   justify-content: center;
   text-align: left;
-  max-width: 50em;
+  max-width: 70em;
   word-wrap: break-word;
   margin-bottom: 20px;
   border: 1px solid #dcdcdc;
@@ -75,6 +74,16 @@
   flex-wrap: wrap;
   padding-left: 15px;
   padding-right: 15px;
+  width: 63em;
+  @media screen and (max-width: 1850px) and (min-width: 1200px) {
+    width: 50em;
+  }
+  @media screen and (max-width: 1200px) and (min-width: 750px) {
+    width: 38em;
+  }
+  @media screen and (max-width: 750px) {
+    width: 25em;
+  }
 }
 
 .index {
@@ -210,7 +219,7 @@
   border-radius: 20px 20px 0px 0px;
   display: flex;
   align-items: center;
-  padding-left: 15px;
+  padding: 10px 0px 10px 15px;
 }
 
 .angle {
@@ -255,4 +264,15 @@
   font-family: "Roboto Mono", monospace;
   font-weight: bold;
   letter-spacing: 3px;
+}
+
+.line {
+  border-bottom: 1px solid #dcdcdc;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }

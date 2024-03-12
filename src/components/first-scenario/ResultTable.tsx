@@ -2,10 +2,10 @@
 import styles from "./first-scenario.module.css";
 import { useState, useEffect } from "react";
 import { Table, Collapse, Select, Button } from "antd";
-import { torsion_angles_residue } from "@/types/modelsType";
+import { torsion_angles_residue } from "../../types/modelsType";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
-import { exportDataToCSV } from "@/utils/exportDataToCSV";
+import { exportDataToCSV } from "../../utils/exportDataToCSV";
 
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
@@ -161,10 +161,10 @@ const ResultTable = (props: {
             key: "1",
             label: (
               <>
-                <p className={styles.chainTitle}>Chain: {props.chain}</p>
-                <p className={styles.sequenceText}>
+                <div className={styles.chainTitle}>Chain: {props.chain}</div>
+                <div className={styles.sequenceText}>
                   {props.sequence.toUpperCase()}
-                </p>
+                </div>
               </>
             ),
             children: (

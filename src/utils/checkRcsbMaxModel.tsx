@@ -18,7 +18,8 @@ export function checkRcsbMaxModel(
       if (!response.rcsb_entry_container_identifiers) {
         setPdbError(true);
         message.error(lang.rcsb_error_with_name + "'" + pdbId + "'");
+      } else {
+        setModelQuery(false);
       }
-      setModelQuery(false);
     });
 }

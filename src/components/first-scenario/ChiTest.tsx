@@ -6,11 +6,13 @@ import { AngleIcon } from "../icons/Icons";
 import anglesnames from "../../angles.json";
 import styles from "./first-scenario.module.css";
 
-const HistogramAngles = (props: {
-  angle: (number | null)[];
-  title: string;
-}) => {
+const ChiTest = (props: { angle: (number | null)[]; title: string }) => {
   const [angleResult, setAngleResult] = useState<[number, number][]>([]);
+  const [syn, setSyn] = useState<[number, number][]>([[2, 167.5]]);
+  const [anti, setAnti] = useState<[number, number][]>([
+    [2, 27.5],
+    [4, -32.25],
+  ]);
 
   useEffect(() => {
     let x: number[] = props.angle.filter(
@@ -25,12 +27,10 @@ const HistogramAngles = (props: {
       counts[x][0] = (counts[x][0] || 0) + 1;
     });
     setAngleResult(Object.values(counts).map((e) => [Math.sqrt(e[0]), e[1]]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.angle]);
 
   const option: ReactEChartsProps["option"] = {
-    dataset: {
-      source: angleResult,
-    },
     polar: {},
     toolbox: {
       show: true,
@@ -96,6 +96,7 @@ const HistogramAngles = (props: {
 
     series: [
       {
+        name: "syn",
         type: "bar",
         itemStyle: {
           color: "#04afa4",
@@ -103,6 +104,18 @@ const HistogramAngles = (props: {
         z: 1,
         coordinateSystem: "polar",
         barWidth: "15",
+        data: syn,
+      },
+      {
+        name: "anti",
+        type: "bar",
+        itemStyle: {
+          color: "#ed6a5a",
+        },
+        z: 1,
+        coordinateSystem: "polar",
+        barWidth: "15",
+        data: anti,
       },
     ],
   };
@@ -115,8 +128,7 @@ const HistogramAngles = (props: {
             display: "flex",
             flexDirection: "row",
             gap: "10px",
-            paddingTop: "15px",
-            paddingBottom: "15px",
+            padding: "15px",
           }}
         >
           <AngleIcon style={{ fontSize: "16px", color: "#ed6a5a" }} />
@@ -127,4 +139,4 @@ const HistogramAngles = (props: {
     </div>
   );
 };
-export default HistogramAngles;
+export default ChiTest;

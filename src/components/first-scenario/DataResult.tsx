@@ -5,16 +5,21 @@ import {
   single_result_angle,
   torsion_angles,
   torsion_angles_residue,
-} from "@/types/modelsType";
-import { Button, Select } from "antd";
+} from "../../types/modelsType";
+import { Alert, Select } from "antd";
 import dynamic from "next/dynamic";
-const HistogramAngles = dynamic(
-  () => import("@/components/first-scenario/HistogramAngles")
-);
-const ResultTable = dynamic(() => import("./ResultTable"));
-const ChiStatistics = dynamic(
-  () => import("@/components/first-scenario/ChiStatistics")
-);
+import ChiTest from "./ChiTest";
+// const HistogramAngles = dynamic(
+//   () => import("@/components/first-scenario/HistogramAngles")
+// );
+// const ResultTable = dynamic(() => import("./ResultTable"));
+// const ChiStatistics = dynamic(
+//   () => import("@/components/first-scenario/ChiStatistics")
+// );
+
+import HistogramAngles from "./HistogramAngles";
+import ResultTable from "./ResultTable";
+import ChiStatistics from "./ChiStatistics";
 
 const angleName = {
   alpha: "alpha (\u03B1)",
@@ -138,7 +143,7 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
             props.getResultFile.torsionAngles[i].residues[j].torsionAngles[
               k
             ].angle.toLowerCase()
-          ] = a == null ? a : Number(a.toFixed(4));
+          ] = a == null ? a : Number(a.toFixed(2));
         }
         x[i].residues[j] = { ...x[i].residues[j], ...z };
       }
@@ -163,6 +168,10 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
   return (
     <div style={{ width: "100%" }}>
       <div className={styles.scenario}>
+        <div className={styles.line}>
+          <h1>file ID</h1>
+          <h3>...</h3>
+        </div>
         <div
           style={{
             display: "flex",
@@ -181,12 +190,16 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
               alignItems: "center",
             }}
           >
-            <h2>Angle Torsion Table</h2>
+            <h2>Torsion Angle Table</h2>
+            {/* <Alert
+              message="The chain is discontinuous. Data are shown for each continuous
+            fragment separately."
+              type="info"
+              showIcon
+            /> */}
+
             {resultTorsionAngle.map((el, index) => (
-              <div
-                style={{ paddingBottom: "25px", width: "100%" }}
-                key={el.chain.name}
-              >
+              <div style={{ paddingBottom: "25px", width: "100%" }} key={index}>
                 <ResultTable
                   dataAngle={el.residues}
                   chain={el.chain.name}
@@ -200,7 +213,7 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
           </div>
 
           <div className={styles.section}>
-            <h2 style={{ textAlign: "center" }}>Angle Torsion Histograms</h2>
+            <h2 style={{ textAlign: "center" }}>Torsion Angle Histograms</h2>
             <div style={{ padding: "10px" }}>
               Show/hide histograms:
               <Select
@@ -228,6 +241,10 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
             <h2>Statistics of Chi Angle</h2>
             <div className={styles.angle}>
               <ChiStatistics angle={concatResidues.map((el) => el.chi)} />
+              <ChiTest
+                title={angleName.chi}
+                angle={concatResidues.map((el) => el.chi)}
+              />
             </div>
           </div>
         </div>

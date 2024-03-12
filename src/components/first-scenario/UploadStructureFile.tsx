@@ -32,6 +32,8 @@ interface UploadFileArguments {
   setGetStructure: any;
   setIsUpload: any;
   setLoading: any;
+  setShowResult: any;
+  setFileName: any;
 }
 
 const UploadStructureFile = (props: UploadFileArguments) => {
@@ -44,7 +46,9 @@ const UploadStructureFile = (props: UploadFileArguments) => {
     beforeUpload: (file: File) => {
       let fileName = file.name.split(".");
       let fileNameLength = file.name.split(".").length;
+      props.setIsUpload(false);
       props.setUploadStructure(undefined);
+      props.setShowResult(false);
       props.setPdbId({
         name: "",
       });
@@ -60,6 +64,7 @@ const UploadStructureFile = (props: UploadFileArguments) => {
         return false;
       } else {
         message.info(lang.uploading_file + `${file.name}`);
+        props.setFileName(file.name);
       }
       return isCifOrPdb;
     },

@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import styles from "./page.module.css";
-import SecondScenarioUpload from "@/components/second-scenario/SecondScenario";
-import ThirdScenarioUpload from "@/components/third-scenario/ThirdScenarioUpload";
+import SecondScenarioUpload from "../components/second-scenario/SecondScenario";
+import ThirdScenarioUpload from "../components/third-scenario/ThirdScenarioUpload";
 import RequestForm from "../components/first-scenario/RequestForm";
 
 const ScenarioButton = (props: {
@@ -25,7 +25,9 @@ const Home = () => {
   const buttons = ["Single model", "Model(s) vs Target", "Model vs Model"];
   return (
     <>
-      <p style={{ textAlign: "center" }}>Select a scenario</p>
+      <p style={{ textAlign: "center", marginBottom: "10px" }}>
+        Select a scenario
+      </p>
       <div className={styles.scenario}>
         <div className={styles.buttond}>
           {buttons.map((button: string, index: number) => (

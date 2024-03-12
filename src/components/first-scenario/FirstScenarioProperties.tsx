@@ -10,7 +10,7 @@ import {
   single_scenario_request,
   single_scenario_request_selection_chain,
 } from "../../types/modelsType";
-import { GetTaskId } from "@/utils/getTaskId";
+import { GetTaskId } from "../../utils/getTaskId";
 import SequenceCard from "./SequenceCard";
 
 type seqtest = {
@@ -26,7 +26,10 @@ const filterOption = (
   option?: { label: string; value: string }
 ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
-const FirstScenarioProperties = (props: { getStructure: structure }) => {
+const FirstScenarioProperties = (props: {
+  getStructure: structure;
+  fileName: string;
+}) => {
   const [resultModel, setResultModel] = useState<single_scenario_request>({
     fileId: "",
     selections: [],
@@ -36,7 +39,7 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
   const [modelArray, setModelArray] = useState<Models>({});
   const [selectedChains, setSelectedChains] = useState<{
     [key: string]: string[];
-  }>({});
+  }>({ "1": [] });
   const [concatRange, setConcatRange] = useState<seqtest[][]>([]);
   const router = useRouter();
 
@@ -102,21 +105,27 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
       x.push([]);
     }
     setConcatRange(x);
+    console.log(selectedChains);
     // setSelectedChains({});
     handleChooseChain([]);
   };
 
   const handleChooseChain = (value: string[]) => {
     setSelectedChains({ [Object.keys(allChains)[0]]: value });
+    console.log(Object.values(allChains)[0][0]);
   };
 
   return (
     <div className={styles.scenario}>
       <div className={styles.header}>
-        <h2>{props.getStructure.fileHashId.toUpperCase()}</h2>
+        <h2>
+          {props.getStructure.fileHashId.length < 5
+            ? props.getStructure.fileHashId.toUpperCase()
+            : props.fileName}
+        </h2>
       </div>
       <div className={styles.select}>
-        <p>Choose model for analyse:</p>
+        <p>Select model for analysis</p>
         <Select
           showSearch
           style={{ width: 200 }}
@@ -128,11 +137,17 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
             return { value: num, label: num };
           })}
         />
-        <p>Choose chain(s):</p>
+        <p>Select chain(s)</p>
         <Select
           mode="multiple"
           // allowClear
           style={{ width: 200 }}
+          // defaultValue={
+          //   Object.values(selectedChains)[0]?.length
+          //     ? [Object.values(allChains)[0][0]]
+          //     : null
+          // }
+          value={Object.values(selectedChains)[0]}
           placeholder="Please select"
           onChange={handleChooseChain}
           options={Object.values(allChains)[0]?.map((el) => {
@@ -169,7 +184,7 @@ const FirstScenarioProperties = (props: { getStructure: structure }) => {
         onClick={submit}
         disabled={Object.values(selectedChains)[0]?.length === 0}
       >
-        Submit a task
+        Submit
       </Button>
     </div>
   );

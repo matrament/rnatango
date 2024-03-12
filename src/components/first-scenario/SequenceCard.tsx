@@ -3,7 +3,7 @@ import styles from "./first-scenario.module.css";
 import { useEffect, useState } from "react";
 import { Button, Tooltip } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { single_scenario_request_selection_chain } from "@/types/modelsType";
+import { single_scenario_request_selection_chain } from "../../types/modelsType";
 import NucleotidePanel from "./NucleotidePanel";
 
 const SequenceCard = (props: {

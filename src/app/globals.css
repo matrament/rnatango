@@ -63,11 +63,15 @@ h4 {
 h2 {
   color: #ed6a5a;
   font-weight: 600;
-  font-size: 26px;
+  font-size: 24px;
   margin: 25px;
 }
 h1 {
   color: #04afa4;
   font-weight: bold;
-  font-size: 28px;
+  font-size: 26px;
+}
+
+h3 {
+  margin: 0;
 }

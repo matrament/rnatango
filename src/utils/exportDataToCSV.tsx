@@ -1,6 +1,6 @@
 "use client";
 import Papa from "papaparse";
-import { torsion_angles_residue } from "@/types/modelsType";
+import { torsion_angles_residue } from "../types/modelsType";
 
 type angleObject = { [key: string]: number | string | null };
 
