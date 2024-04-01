@@ -50,7 +50,7 @@ const NucleotidePanel = (props: {
   const [selectSequence, setSelectSequence] = useState<number[]>([]);
 
   useEffect(() => {
-    setSelectSequence(range(0, props.arrayChain.length, 1));
+    setSelectSequence(range(0, props.arrayChain.length - 1, 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -129,7 +129,7 @@ const NucleotidePanel = (props: {
   };
 
   const handleSelectAll = () => {
-    setSelectSequence(range(0, props.arrayChain.length, 1));
+    setSelectSequence(range(0, props.arrayChain.length - 1, 1));
   };
   const handleDeleteAll = () => {
     setSelectSequence([]);
@@ -158,7 +158,7 @@ const NucleotidePanel = (props: {
             <InputNumber
               style={{ width: 75 }}
               min={0}
-              max={props.arrayChain.length}
+              max={props.arrayChain.length - 1}
               value={selectSequence[0]}
               placeholder={"from"}
               onChange={inputFirstNucleotyde}
@@ -167,7 +167,7 @@ const NucleotidePanel = (props: {
               className={styles.input}
               style={{ width: 75 }}
               min={0}
-              max={props.arrayChain.length}
+              max={props.arrayChain.length - 1}
               value={selectSequence[selectSequence.length - 1]}
               placeholder={"to"}
               onChange={inputLastNucleotyde}
@@ -177,7 +177,7 @@ const NucleotidePanel = (props: {
         <div style={{ padding: "15px" }}>
           <Popconfirm
             title="Delete pot"
-            description="Are you sure to delete this pot?"
+            description="Are you sure to delete this chain?"
             icon={<QuestionCircleOutlined />}
             onConfirm={() => props.deleteChainRange(props.indexRange)}
           >

@@ -10,32 +10,32 @@ import { exportDataToCSV } from "../../utils/exportDataToCSV";
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
 const angleName: { [key: string]: string } = {
-  ["alpha"]: "alpha (\u03B1)",
+  ["1-alpha"]: "alpha (\u03B1)",
 
-  ["beta"]: "beta (\u03B2)",
+  ["2-beta"]: "beta (\u03B2)",
 
-  ["gamma"]: "gamma (\u03B3)",
+  ["3-gamma"]: "gamma (\u03B3)",
 
-  ["delta"]: "delta (\u03B4)",
+  ["4-delta"]: "delta (\u03B4)",
 
-  ["epsilon"]: "epsilon (\u03B5)",
+  ["5-epsilon"]: "epsilon (\u03B5)",
 
-  ["zeta"]: "zeta (\u03B6)",
+  ["6-zeta"]: "zeta (\u03B6)",
 
-  ["eta"]: "eta (\u03B7)",
+  ["7-eta"]: "eta (\u03B7)",
 
-  ["theta"]: "theta (\u03B8)",
+  ["8-theta"]: "theta (\u03B8)",
 
-  ["eta_prim"]: "eta prim (\u03B7')",
+  ["9-eta_prim"]: "eta prim (\u03B7')",
 
-  ["theta_prim"]: "theta prim (\u03B8')",
+  ["10-theta_prim"]: "theta prim (\u03B8')",
 
-  ["chi"]: "chi (\u03C7)",
+  ["11-chi"]: "chi (\u03C7)",
 };
 
 interface tableAngle {
   title: string;
-  key: string;
+  key: number;
   dataIndex: string;
   width: number;
   fixed: any;
@@ -49,47 +49,47 @@ interface ItemProps {
 const options: ItemProps[] = [
   {
     label: "alpha (\u03B1)",
-    value: "alpha",
+    value: "1-alpha",
   },
   {
     label: "beta (\u03B2)",
-    value: "beta",
+    value: "2-beta",
   },
   {
     label: "gamma (\u03B3)",
-    value: "gamma",
+    value: "3-gamma",
   },
   {
     label: "delta (\u03B4)",
-    value: "delta",
+    value: "4-delta",
   },
   {
     label: "epsilon (\u03B5)",
-    value: "epsilon",
+    value: "5-epsilon",
   },
   {
     label: "zeta (\u03B6)",
-    value: "zeta",
+    value: "6-zeta",
   },
   {
     label: "eta (\u03B7)",
-    value: "eta",
+    value: "7-eta",
   },
   {
     label: "theta (\u03B8)",
-    value: "theta",
+    value: "8-theta",
   },
   {
     label: "eta prim (\u03B7')",
-    value: "eta_prim",
+    value: "9-eta_prim",
   },
   {
     label: "theta prim (\u03B8')",
-    value: "theta_prim",
+    value: "10-theta_prim",
   },
   {
     label: "chi (\u03C7)",
-    value: "chi",
+    value: "11-chi",
   },
 ];
 
@@ -109,30 +109,29 @@ const ResultTable = (props: {
     handleChange(Object.keys(angleName));
     setCsvData(props.dataAngle);
     setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
+    console.log(props.dataAngle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (value: string[]) => {
     let x: TableColumnsType<tableAngle> = value.map((e) => ({
       title: angleName[e],
-      key: e,
-      dataIndex: e,
+      key: parseInt(e.split("-")[0]),
+      dataIndex: e.split("-")[1],
       width: 30,
       fixed: false,
-      render: (e) => <p className={styles.tableAngleMono}>{e}</p>,
+      render: (e: string) => <p className={styles.tableAngleMono}>{e}</p>,
     }));
     x.splice(0, 0, {
       title: "Residue",
-      key: "name",
+      key: 0,
       dataIndex: "name",
       width: 30,
       fixed: "left",
-      render: (name) => <p className={styles.tableAngleResidue}>{name}</p>,
+      render: (name: any) => <p className={styles.tableAngleResidue}>{name}</p>,
     });
-    setAngleColumn(x);
+    setAngleColumn(x.sort((a: any, b: any) => a.key - b.key));
   };
-  // FIXME: zmienic zawartosc tabeli na monospace i tam gdzie nie ma minusa dac spacje
-  // TODO: czy kolejnosc katow w tabeli jest istotna? jesli tak poprawic przy selekcie
 
   const handleOnChange = (
     newSelectedRowKeys: React.Key[],
@@ -143,6 +142,8 @@ const ResultTable = (props: {
       ...props.selectRows,
       [props.indexChain]: selectedRows,
     });
+    console.log(csvData);
+    console.log(angleColumn);
     setCsvData(selectedRows);
   };
 
@@ -196,7 +197,12 @@ const ResultTable = (props: {
                     type="primary"
                     shape="round"
                     icon={<DownloadOutlined />}
-                    onClick={() => exportDataToCSV(csvData, angleColumn)}
+                    onClick={() =>
+                      exportDataToCSV(
+                        csvData.sort((a: any, b: any) => a.key - b.key),
+                        angleColumn
+                      )
+                    }
                   >
                     Download .csv
                   </Button>

@@ -13,14 +13,6 @@ import {
 import { GetTaskId } from "../../utils/getTaskId";
 import SequenceCard from "./SequenceCard";
 
-type seqtest = {
-  name: string;
-  nucleotideRange: {
-    fromInclusive: number;
-    toInclusive: number;
-  };
-};
-
 const filterOption = (
   input: string,
   option?: { label: string; value: string }
@@ -40,7 +32,9 @@ const FirstScenarioProperties = (props: {
   const [selectedChains, setSelectedChains] = useState<{
     [key: string]: string[];
   }>({ "1": [] });
-  const [concatRange, setConcatRange] = useState<seqtest[][]>([]);
+  const [concatRange, setConcatRange] = useState<
+    single_scenario_request_selection_chain[][]
+  >([]);
   const router = useRouter();
 
   const submit = () => {
@@ -66,15 +60,12 @@ const FirstScenarioProperties = (props: {
       y.push([]);
     }
     setConcatRange(y);
-  }, [props.getStructure.models]);
-
-  useEffect(() => {
     setResultModel({
       ...resultModel,
       fileId: props.getStructure.fileHashId,
       selections: [{ ...resultModel.selections, modelName: "1", chains: [] }],
     });
-  }, []);
+  }, [props.getStructure.models]);
 
   useEffect(() => {
     if (concatRange.length != 0) {
@@ -91,6 +82,20 @@ const FirstScenarioProperties = (props: {
           },
         ],
       });
+      console.log(
+        setResultModel({
+          ...resultModel,
+          selections: [
+            {
+              modelName:
+                resultModel.selections.length > 0
+                  ? resultModel.selections[0].modelName
+                  : "1",
+              chains: newState,
+            },
+          ],
+        })
+      );
     }
   }, [concatRange]);
 
@@ -105,14 +110,13 @@ const FirstScenarioProperties = (props: {
       x.push([]);
     }
     setConcatRange(x);
-    console.log(selectedChains);
+
     // setSelectedChains({});
     handleChooseChain([]);
   };
 
   const handleChooseChain = (value: string[]) => {
     setSelectedChains({ [Object.keys(allChains)[0]]: value });
-    console.log(Object.values(allChains)[0][0]);
   };
 
   return (
@@ -140,13 +144,7 @@ const FirstScenarioProperties = (props: {
         <p>Select chain(s)</p>
         <Select
           mode="multiple"
-          // allowClear
           style={{ width: 200 }}
-          // defaultValue={
-          //   Object.values(selectedChains)[0]?.length
-          //     ? [Object.values(allChains)[0][0]]
-          //     : null
-          // }
           value={Object.values(selectedChains)[0]}
           placeholder="Please select"
           onChange={handleChooseChain}

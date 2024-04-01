@@ -1,8 +1,8 @@
 "use client";
 import styles from "./first-scenario.module.css";
 import { useEffect, useState } from "react";
-import { Button, Tooltip } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, Tooltip, Modal } from "antd";
+import { PlusOutlined, QuestionOutlined } from "@ant-design/icons";
 import { single_scenario_request_selection_chain } from "../../types/modelsType";
 import NucleotidePanel from "./NucleotidePanel";
 
@@ -51,14 +51,37 @@ const SequenceCard = (props: {
   };
 
   const deleteChainRange = (index: number) => {
-    // console.log(multipleSequence.slice(index + 1, multipleSequence.length));
-    let newArray: single_scenario_request_selection_chain[] = [];
-    setMultipleSequence(
-      newArray.concat(
-        multipleSequence.slice(0, index),
-        multipleSequence.slice(index + 1, multipleSequence.length)
-      )
-    );
+    let newArray: single_scenario_request_selection_chain[] = multipleSequence;
+    newArray.splice(index, 1);
+    setMultipleSequence([
+      {
+        name: props.name,
+        nucleotideRange: {
+          fromInclusive: 0,
+          toInclusive: 0,
+        },
+      },
+    ]);
+    // console.log(newArray);
+    console.log(multipleSequence);
+    console.log(index);
+  };
+
+  const info = () => {
+    Modal.info({
+      title: "How to submit a task?",
+      content: (
+        <div>
+          <p>
+            Select at least one chain. By default, the entire range of
+            nucleotides is selected. If you want to change the range, be sure to
+            mark at least 3 nucleobases. Otherwise the submit button will be
+            unavailable.
+          </p>
+        </div>
+      ),
+      onOk() {},
+    });
   };
 
   return (
@@ -75,6 +98,7 @@ const SequenceCard = (props: {
               />
             </Tooltip>
             <h3>Chain: {props.name}</h3>
+            <Button size="small" onClick={info} icon={<QuestionOutlined />} />
           </div>
           {multipleSequence.map((e, index) => (
             <NucleotidePanel

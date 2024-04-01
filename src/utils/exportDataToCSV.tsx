@@ -9,10 +9,9 @@ export function exportDataToCSV(
   angleColumn: [any]
 ) {
   let filterAngle = angleColumn.map((el) => {
-    return el.key;
+    return el.dataIndex;
   });
 
-  // let x = Object.values(selectRows).flat();
   let y: angleObject[] = csvData.map((residue: angleObject) =>
     Object.keys(residue)
       .filter((objKey) => filterAngle.includes(objKey))

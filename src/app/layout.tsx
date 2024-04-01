@@ -42,6 +42,8 @@ export default function RootLayout({
                 textHoverBg: "#f9f9f9",
                 fontFamily: openSansBold.style.fontFamily,
                 contentFontSize: 16,
+                defaultBg: "rgba(0,0,0,0)",
+                borderRadiusSM: 12,
               },
               Upload: {
                 lineWidth: 0,
@@ -57,6 +59,7 @@ export default function RootLayout({
                 contentPadding: "0px 0px",
                 fontFamily: openSansBold.style.fontFamily,
                 colorBorder: "#dcdcdc",
+                borderRadiusLG: 30,
               },
               Input: {
                 fontFamily: openSansBold.style.fontFamily,
@@ -67,6 +70,9 @@ export default function RootLayout({
               Select: {
                 fontFamily: openSansBold.style.fontFamily,
                 // optionFontSize: 16,
+              },
+              Modal: {
+                borderRadiusLG: 30,
               },
             },
           }}

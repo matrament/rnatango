@@ -53,47 +53,47 @@ interface ItemProps {
 const options: ItemProps[] = [
   {
     label: "alpha (\u03B1)",
-    value: "alpha",
+    value: "1-alpha",
   },
   {
     label: "beta (\u03B2)",
-    value: "beta",
+    value: "2-beta",
   },
   {
     label: "gamma (\u03B3)",
-    value: "gamma",
+    value: "3-gamma",
   },
   {
     label: "delta (\u03B4)",
-    value: "delta",
+    value: "4-delta",
   },
   {
     label: "epsilon (\u03B5)",
-    value: "epsilon",
+    value: "5-epsilon",
   },
   {
     label: "zeta (\u03B6)",
-    value: "zeta",
+    value: "6-zeta",
   },
   {
     label: "eta (\u03B7)",
-    value: "eta",
+    value: "7-eta",
   },
   {
     label: "theta (\u03B8)",
-    value: "theta",
+    value: "8-theta",
   },
   {
     label: "eta prim (\u03B7')",
-    value: "eta_prim",
+    value: "9-eta_prim",
   },
   {
     label: "theta prim (\u03B8')",
-    value: "theta_prim",
+    value: "10-theta_prim",
   },
   {
     label: "chi (\u03C7)",
-    value: "chi",
+    value: "11-chi",
   },
 ];
 
@@ -162,7 +162,11 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
   type ObjectKey = keyof typeof angleName;
 
   const handleChange = (value: string[]) => {
-    setShowAngleHistogram(value);
+    let x: string[][] = value.map((e: string) => e.split("-"));
+    // x.sort(function (a, b) {
+    //   return a[0].localeCompare(b[0]);
+    // });
+    console.log(value);
   };
 
   return (
