@@ -39,39 +39,32 @@ const Nucleobases = (props: {
 };
 
 const NucleotidePanel = (props: {
-  multipleSequence: single_scenario_request_selection_chain[];
-  currentSequence: single_scenario_request_selection_chain;
-  indexRange: number;
+  multipleSequence: number[][];
+  indexSequence: number;
   setMultipleSequence: any;
   arrayChain: string[];
   residuesWithoutAtoms: number[];
   deleteChainRange: any;
 }) => {
-  const [selectSequence, setSelectSequence] = useState<number[]>([]);
+  const [selectSequence, setSelectSequence] = useState<number[]>([0, 0]);
 
   useEffect(() => {
-    setSelectSequence(range(0, props.arrayChain.length - 1, 1));
+    let rangeSequence = range(0, props.arrayChain.length - 1, 1);
+    setSelectSequence(rangeSequence);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    let start = props.currentSequence.nucleotideRange.fromInclusive;
-  }, [props.currentSequence]);
-
-  useEffect(() => {
-    let newState = props.multipleSequence.map((e, index) => {
-      if (index === props.indexRange) {
-        return {
-          ...e,
-          nucleotideRange: {
-            fromInclusive: selectSequence[0],
-            toInclusive: selectSequence[selectSequence.length - 1],
-          },
-        };
-      }
-      return e;
-    });
-    props.setMultipleSequence(newState);
+    let temp = props.multipleSequence;
+    if (selectSequence.length != 0) {
+      temp[props.indexSequence] = [
+        selectSequence[0],
+        selectSequence[selectSequence.length - 1],
+      ];
+    } else {
+      temp[props.indexSequence] = [];
+    }
+    props.setMultipleSequence(temp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectSequence]);
 
@@ -179,7 +172,7 @@ const NucleotidePanel = (props: {
             title="Delete pot"
             description="Are you sure to delete this chain?"
             icon={<QuestionCircleOutlined />}
-            onConfirm={() => props.deleteChainRange(props.indexRange)}
+            onConfirm={() => props.deleteChainRange(props.indexSequence)}
           >
             <Button type="text" shape="circle" icon={<CloseOutlined />} />
           </Popconfirm>
@@ -202,7 +195,7 @@ const NucleotidePanel = (props: {
         style={{ padding: "15px", marginBottom: "10px", fontWeight: "bold" }}
       >
         Nucleotide range: {selectSequence[0]}-
-        {selectSequence[selectSequence.length - 1]} nucleobases
+        {selectSequence[selectSequence.length - 1]}
       </div>
     </>
   );

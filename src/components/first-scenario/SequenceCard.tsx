@@ -1,7 +1,7 @@
 "use client";
 import styles from "./first-scenario.module.css";
 import { useEffect, useState } from "react";
-import { Button, Tooltip, Modal } from "antd";
+import { Button, Tooltip, Modal, Result } from "antd";
 import { PlusOutlined, QuestionOutlined } from "@ant-design/icons";
 import { single_scenario_request_selection_chain } from "../../types/modelsType";
 import NucleotidePanel from "./NucleotidePanel";
@@ -9,62 +9,30 @@ import NucleotidePanel from "./NucleotidePanel";
 const SequenceCard = (props: {
   name: string;
   sequence: string;
-  indexChain: number;
+  resultModel: any;
+  setResultModel: any;
   residuesWithoutAtoms: number[];
-  setConcatRange: any;
-  concatRange: single_scenario_request_selection_chain[][];
 }) => {
   let arrayChain = props.sequence.toUpperCase().split("");
 
-  const [multipleSequence, setMultipleSequence] = useState<
-    single_scenario_request_selection_chain[]
-  >([
-    {
-      name: props.name,
-      nucleotideRange: {
-        fromInclusive: 0,
-        toInclusive: 0,
-      },
-    },
+  const [multipleSequence, setMultipleSequence] = useState<number[][]>([
+    [0, 0],
   ]);
 
   useEffect(() => {
-    let newState = props.concatRange.map((e, index) => {
-      if (index === props.indexChain) {
-        return multipleSequence;
-      }
-      return e;
+    props.setResultModel({
+      ...props.resultModel,
+      [props.name]: multipleSequence,
     });
-    props.setConcatRange(newState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [multipleSequence]);
 
   const addNewRange = () => {
-    let x: single_scenario_request_selection_chain = {
-      name: props.name,
-      nucleotideRange: {
-        fromInclusive: 0,
-        toInclusive: 0,
-      },
-    };
-    setMultipleSequence([...multipleSequence, x]);
+    setMultipleSequence([...multipleSequence, [0, 0]]);
   };
 
-  const deleteChainRange = (index: number) => {
-    let newArray: single_scenario_request_selection_chain[] = multipleSequence;
-    newArray.splice(index, 1);
-    setMultipleSequence([
-      {
-        name: props.name,
-        nucleotideRange: {
-          fromInclusive: 0,
-          toInclusive: 0,
-        },
-      },
-    ]);
-    // console.log(newArray);
-    console.log(multipleSequence);
-    console.log(index);
+  const deleteChainRange = (i: number) => {
+    setMultipleSequence(multipleSequence.filter((e, index) => index != i));
   };
 
   const info = () => {
@@ -105,8 +73,7 @@ const SequenceCard = (props: {
               multipleSequence={multipleSequence}
               setMultipleSequence={setMultipleSequence}
               deleteChainRange={deleteChainRange}
-              currentSequence={e}
-              indexRange={index}
+              indexSequence={index}
               arrayChain={arrayChain}
               residuesWithoutAtoms={props.residuesWithoutAtoms}
               key={index}

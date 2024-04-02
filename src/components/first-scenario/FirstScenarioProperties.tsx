@@ -18,31 +18,54 @@ const filterOption = (
   option?: { label: string; value: string }
 ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
+type resultType = {
+  [key: string]: number[][];
+};
+
+type multipleChain = {
+  [key: string]: {};
+};
+
 const FirstScenarioProperties = (props: {
   getStructure: structure;
   fileName: string;
 }) => {
-  const [resultModel, setResultModel] = useState<single_scenario_request>({
-    fileId: "",
-    selections: [],
-  });
-  const [allModels, setAllModels] = useState<string[]>([]);
-  const [allChains, setAllChains] = useState<{ [key: string]: string[] }>({});
-  const [modelArray, setModelArray] = useState<Models>({});
-  const [selectedChains, setSelectedChains] = useState<{
-    [key: string]: string[];
-  }>({ "1": [] });
-  const [concatRange, setConcatRange] = useState<
-    single_scenario_request_selection_chain[][]
-  >([]);
+  const [resultModel, setResultModel] = useState<resultType>({});
+  const [selectedModel, setSelectedModel] = useState<string>("1");
+  const [selectedChains, setSelectedChains] = useState<string[] | []>([]);
+  const [startingModels, setStartingModels] = useState<any>([]);
+  const [optionsChains, setOptionsChains] = useState<string[]>([]);
   const router = useRouter();
 
   const submit = () => {
-    GetTaskId(resultModel, router);
+    let y: any = [];
+    selectedChains.forEach((chain) =>
+      y.push(
+        resultModel[chain].map((num) => {
+          return {
+            ["name"]: chain,
+            ["nucleotideRange"]: {
+              ["fromInclusive"]: num[0],
+              ["toInclusive"]: num[1],
+            },
+          };
+        })
+      )
+    );
+    y = y.flat();
+    let result = {
+      fileId: props.getStructure.fileHashId,
+      selections: [
+        {
+          modelName: selectedModel,
+          chains: y,
+        },
+      ],
+    };
+    GetTaskId(result, router);
   };
 
   useEffect(() => {
-    setAllModels([]);
     let x: Models = {};
     for (let i = 0; i < props.getStructure.models.length; i++) {
       x[i + 1] = {};
@@ -51,72 +74,47 @@ const FirstScenarioProperties = (props: {
           props.getStructure.models[i].chains[j];
       }
     }
-    setModelArray(x);
-    setAllModels(Object.keys(x));
-    setAllChains({ ["1"]: Object.keys(x["1"]) });
+    setStartingModels(x);
+    let y = Object.fromEntries(Object.keys(x["1"]).map((chain) => [chain, []]));
 
-    let y = [];
-    for (let i = 0; i < props.getStructure.models[0].chains.length; i++) {
-      y.push([]);
-    }
-    setConcatRange(y);
-    setResultModel({
-      ...resultModel,
-      fileId: props.getStructure.fileHashId,
-      selections: [{ ...resultModel.selections, modelName: "1", chains: [] }],
-    });
+    setResultModel(y);
+    setOptionsChains(Object.keys(x["1"]));
+    setSelectedChains([Object.keys(x["1"])[0]]);
   }, [props.getStructure.models]);
 
-  useEffect(() => {
-    if (concatRange.length != 0) {
-      let newState = concatRange.flat();
-      setResultModel({
-        ...resultModel,
-        selections: [
-          {
-            modelName:
-              resultModel.selections.length > 0
-                ? resultModel.selections[0].modelName
-                : "1",
-            chains: newState,
-          },
-        ],
-      });
-      console.log(
-        setResultModel({
-          ...resultModel,
-          selections: [
-            {
-              modelName:
-                resultModel.selections.length > 0
-                  ? resultModel.selections[0].modelName
-                  : "1",
-              chains: newState,
-            },
-          ],
-        })
-      );
-    }
-  }, [concatRange]);
-
-  const chooseModels = (value: string) => {
-    setAllChains({ [value]: Object.keys(modelArray[value]) });
-    setResultModel({
-      ...resultModel,
-      selections: [{ ...resultModel.selections, modelName: value, chains: [] }],
-    });
-    let x = [];
-    for (let i = 0; i < Object.keys(modelArray[value]).length; i++) {
-      x.push([]);
-    }
-    setConcatRange(x);
-
-    // setSelectedChains({});
-    handleChooseChain([]);
+  const chooseModel = (model: string) => {
+    let availableChain = Object.fromEntries(
+      Object.keys(startingModels[model]).map((e) => [e, []])
+    );
+    setResultModel(availableChain);
+    setOptionsChains(Object.keys(availableChain));
+    setSelectedModel(model);
+    setSelectedChains([]);
   };
 
-  const handleChooseChain = (value: string[]) => {
-    setSelectedChains({ [Object.keys(allChains)[0]]: value });
+  const chooseChains = (newChains: string[]) => {
+    let choosedChains: string[] = [];
+    for (let [key, value] of Object.entries(resultModel)) {
+      if (Object.keys(value).length != 0) {
+        choosedChains.push(key);
+      }
+    }
+    let tempResult = resultModel;
+    // add chain
+    newChains
+      .filter((x) => !choosedChains.includes(x))
+      .forEach((diff) => {
+        tempResult[diff] = [[0, 0]];
+      });
+
+    // delete chain
+    choosedChains
+      .filter((x) => !newChains.includes(x))
+      .forEach((diff) => {
+        tempResult[diff] = [];
+      });
+    setResultModel(tempResult);
+    setSelectedChains(newChains);
   };
 
   return (
@@ -133,54 +131,49 @@ const FirstScenarioProperties = (props: {
         <Select
           showSearch
           style={{ width: 200 }}
-          defaultValue={"1"}
+          defaultValue={selectedModel}
           optionFilterProp="children"
-          onChange={chooseModels}
+          onChange={chooseModel}
           filterOption={filterOption}
-          options={allModels?.map((num) => {
-            return { value: num, label: num };
+          options={Object.keys(startingModels).map((e) => {
+            return { value: e, label: e };
           })}
         />
         <p>Select chain(s)</p>
         <Select
           mode="multiple"
           style={{ width: 200 }}
-          value={Object.values(selectedChains)[0]}
+          value={selectedChains}
           placeholder="Please select"
-          onChange={handleChooseChain}
-          options={Object.values(allChains)[0]?.map((el) => {
-            return { value: el, label: el };
+          onChange={chooseChains}
+          options={optionsChains.map((chain: string) => {
+            return { value: chain, label: chain };
           })}
         />
       </div>
-      {Object.values(selectedChains)[0]?.length != 0 ? (
-        <>
-          {Object.values(selectedChains)[0]?.map((el) => (
-            <SequenceCard
-              key={el}
-              name={el}
-              indexChain={Object.values(selectedChains)[0].indexOf(el)}
-              sequence={
-                modelArray[Object.keys(selectedChains)[0]][el]["sequence"]
-              }
-              residuesWithoutAtoms={
-                modelArray[Object.keys(selectedChains)[0]][el][
-                  "residuesWithoutAtoms"
-                ]
-              }
-              setConcatRange={setConcatRange}
-              concatRange={concatRange}
-            />
-          ))}
-        </>
-      ) : null}
+
+      <>
+        {selectedChains.map((chain) => (
+          <SequenceCard
+            key={chain}
+            name={chain}
+            sequence={startingModels[selectedModel][chain]["sequence"]}
+            residuesWithoutAtoms={
+              startingModels[selectedModel][chain]["residuesWithoutAtoms"]
+            }
+            resultModel={resultModel}
+            setResultModel={setResultModel}
+          />
+        ))}
+      </>
+
       <Button
         size="large"
         style={{ marginBottom: "25px" }}
         type="primary"
         shape="round"
         onClick={submit}
-        disabled={Object.values(selectedChains)[0]?.length === 0}
+        // disabled={Object.values(selectedChains)[0]?.length === 0}
       >
         Submit
       </Button>
