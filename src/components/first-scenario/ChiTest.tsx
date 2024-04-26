@@ -110,7 +110,7 @@ const ChiTest = (props: { angle: (number | null)[]; title: string }) => {
         name: "anti",
         type: "bar",
         itemStyle: {
-          color: "#ed6a5a",
+          color: "#fb5f4c",
         },
         z: 1,
         coordinateSystem: "polar",
@@ -121,20 +121,7 @@ const ChiTest = (props: { angle: (number | null)[]; title: string }) => {
   };
 
   return (
-    <div className={styles.histogram}>
-      <div className={styles.histogramtitle}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "10px",
-            padding: "15px",
-          }}
-        >
-          <AngleIcon style={{ fontSize: "16px", color: "#ed6a5a" }} />
-          <h3>{props.title}</h3>
-        </div>
-      </div>
+    <div>
       <ReactECharts option={option} />
     </div>
   );

@@ -9,6 +9,7 @@ import styles from "./first-scenario.module.css";
 const HistogramAngles = (props: {
   angle: (number | null)[];
   title: string;
+  fileName: string;
 }) => {
   const [angleResult, setAngleResult] = useState<[number, number][]>([]);
 
@@ -36,7 +37,7 @@ const HistogramAngles = (props: {
       show: true,
       feature: {
         saveAsImage: {
-          name: `${props.title}`,
+          name: `${props.fileName.toLowerCase()}_${props.title}`,
         },
       },
       right: "15px",
@@ -119,7 +120,7 @@ const HistogramAngles = (props: {
             paddingBottom: "15px",
           }}
         >
-          <AngleIcon style={{ fontSize: "16px", color: "#ed6a5a" }} />
+          <AngleIcon style={{ fontSize: "16px", color: "#fb5f4c" }} />
           <h3>{props.title}</h3>
         </div>
       </div>

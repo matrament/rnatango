@@ -15,9 +15,9 @@
 
 .foot {
   display: flex;
+  border-top: solid 1px #dcdcdc;
   justify-content: center;
   align-items: center;
-  background-color: #f8f8f8;
   width: 100%;
   margin-top: auto;
   height: 100px;
@@ -30,7 +30,7 @@
 }
 
 .active {
-  text-decoration-color: #ed6a5a;
+  text-decoration-color: #fb5f4c;
   text-decoration-line: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 3px;
@@ -74,7 +74,7 @@
 .flyoutMenu {
   width: 100vw;
   height: 100vh;
-  background-color: #f8f8f8;
+  background-color: #edeeee;
   position: fixed;
   top: 0;
   left: 0;

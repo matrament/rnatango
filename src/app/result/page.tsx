@@ -12,6 +12,10 @@ import { useMediaQuery } from "react-responsive";
 
 let emptyResult: single_result_angle = {
   torsionAngles: [],
+  containDiscontinuousSequences: false,
+  resultRemovedAfter: "",
+  structureMolecule: "",
+  structureName: "",
 };
 
 const ResultPage = (props: any) => {
@@ -31,7 +35,9 @@ const ResultPage = (props: any) => {
     {
       title: "Success",
       description: `${
-        stepsNumber === 4 ? "Results will be stored until ..." : ""
+        stepsNumber === 4
+          ? "Results will be stored until " + getResultFile.resultRemovedAfter
+          : ""
       }`,
     },
   ];

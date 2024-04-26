@@ -149,6 +149,8 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
       }
     }
     setResultTorsionAngle(x);
+    console.log(x);
+    console.log(props.getResultFile);
     setSelectRows(x.map((chain: torsion_angles) => chain.residues));
     setConcatResidues(x.map((chain: torsion_angles) => chain.residues).flat());
   }, [props.getResultFile]);
@@ -171,88 +173,103 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
 
   return (
     <div style={{ width: "100%" }}>
-      <div className={styles.scenario}>
-        <div className={styles.line}>
-          <h1>file ID</h1>
-          <h3>...</h3>
-        </div>
-        <div
-          style={{
-            display: "flex",
-
-            flexDirection: "column",
-            width: "100%",
-          }}
-        >
+      {resultTorsionAngle.length != 0 ? (
+        <div className={styles.scenario}>
+          <div className={styles.line}>
+            <h1>{props.getResultFile.structureName}</h1>
+            <p style={{ marginTop: 0, color: "#8c8c8c" }}>
+              {props.getResultFile.structureMolecule}
+            </p>
+          </div>
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              paddingLeft: "30px",
-              paddingRight: "30px",
 
-              alignItems: "center",
+              flexDirection: "column",
+              width: "100%",
             }}
           >
-            <h2>Torsion Angle Table</h2>
-            {/* <Alert
-              message="The chain is discontinuous. Data are shown for each continuous
-            fragment separately."
-              type="info"
-              showIcon
-            /> */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                paddingLeft: "30px",
+                paddingRight: "30px",
 
-            {resultTorsionAngle.map((el, index) => (
-              <div style={{ paddingBottom: "25px", width: "100%" }} key={index}>
-                <ResultTable
-                  dataAngle={el.residues}
-                  chain={el.chain.name}
-                  sequence={el.chain.sequence}
-                  indexChain={index}
-                  selectRows={selectRows}
-                  setSelectRows={setSelectRows}
+                alignItems: "center",
+              }}
+            >
+              <h2>Torsion Angle Table</h2>
+
+              {resultTorsionAngle.map((el, index) => (
+                <div
+                  style={{ paddingBottom: "25px", width: "100%" }}
+                  key={index}
+                >
+                  <ResultTable
+                    dataAngle={el.residues}
+                    chain={el.chain.name}
+                    sequence={el.chain.sequence}
+                    indexChain={index}
+                    selectRows={selectRows}
+                    setSelectRows={setSelectRows}
+                    fileName={props.getResultFile.structureName}
+                  />
+                </div>
+              ))}
+              {props.getResultFile.containDiscontinuousSequences ? (
+                <div style={{ marginBottom: "25px" }}>
+                  <Alert
+                    message="The chain is discontinuous. Data are shown for each continuous
+                  fragment separately."
+                    type="info"
+                    showIcon
+                  />
+                </div>
+              ) : null}
+            </div>
+
+            <div className={styles.section}>
+              <h2 style={{ textAlign: "center" }}>Torsion Angle Histograms</h2>
+              <div style={{ padding: "10px" }}>
+                Show/hide histograms:
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  options={options}
+                  defaultValue={Object.keys(angleName)}
+                  onChange={handleChange}
+                  placeholder="Select angle(s) to display histogram(s)"
+                  maxTagCount="responsive"
                 />
               </div>
-            ))}
-          </div>
 
-          <div className={styles.section}>
-            <h2 style={{ textAlign: "center" }}>Torsion Angle Histograms</h2>
-            <div style={{ padding: "10px" }}>
-              Show/hide histograms:
-              <Select
-                mode="multiple"
-                style={{ width: "100%" }}
-                options={options}
-                defaultValue={Object.keys(angleName)}
-                onChange={handleChange}
-                placeholder="Select angle(s) to display histogram(s)"
-                maxTagCount="responsive"
-              />
+              <div className={styles.angle}>
+                {showAngleHistogram.map((angleName) => (
+                  <HistogramAngles
+                    key={angleName}
+                    title={angleName}
+                    angle={concatResidues.map(
+                      (el) => el[angleName as ObjectKey]
+                    )}
+                    fileName={props.getResultFile.structureName}
+                  />
+                ))}
+              </div>
             </div>
-
-            <div className={styles.angle}>
-              {showAngleHistogram.map((angleName) => (
-                <HistogramAngles
-                  key={angleName}
-                  title={angleName}
-                  angle={concatResidues.map((el) => el[angleName as ObjectKey])}
-                />
-              ))}
-            </div>
-          </div>
-          <div className={styles.section}>
-            <h2>Statistics of Chi Angle</h2>
-            <div className={styles.angle}>
-              <ChiStatistics angle={concatResidues.map((el) => el.chi)} />
-              <ChiTest
+            <div className={styles.section}>
+              <h2>Statistics of Chi Angle</h2>
+              <div className={styles.angle}>
+                <ChiStatistics angle={concatResidues.map((el) => el.chi)} />
+                {/* <ChiTest
                 title={angleName.chi}
                 angle={concatResidues.map((el) => el.chi)}
-              />
+              /> */}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 };

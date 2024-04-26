@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./first-scenario.module.css";
-import { Select, Button } from "antd";
+import { Select, Button, Modal } from "antd";
 import {
   Models,
   structure,
   single_scenario_request,
   single_scenario_request_selection_chain,
 } from "../../types/modelsType";
+import { QuestionOutlined } from "@ant-design/icons";
 import { GetTaskId } from "../../utils/getTaskId";
 import SequenceCard from "./SequenceCard";
 
@@ -20,10 +21,6 @@ const filterOption = (
 
 type resultType = {
   [key: string]: number[][];
-};
-
-type multipleChain = {
-  [key: string]: {};
 };
 
 const FirstScenarioProperties = (props: {
@@ -92,6 +89,16 @@ const FirstScenarioProperties = (props: {
     setSelectedChains([]);
   };
 
+  const isTooShort = () => {
+    let z: any = [];
+    z = z.flat(
+      selectedChains.forEach((chain) =>
+        z.push(resultModel[chain].map((e) => e[1] - e[0] > 1))
+      )
+    );
+    return z.includes(true);
+  };
+
   const chooseChains = (newChains: string[]) => {
     let choosedChains: string[] = [];
     for (let [key, value] of Object.entries(resultModel)) {
@@ -114,7 +121,25 @@ const FirstScenarioProperties = (props: {
         tempResult[diff] = [];
       });
     setResultModel(tempResult);
+
     setSelectedChains(newChains);
+  };
+
+  const info = () => {
+    Modal.info({
+      title: "How to submit a task?",
+      content: (
+        <div>
+          <p>
+            Select at least one chain. By default, the entire range of
+            nucleotides is selected. If you want to change the range, be sure to
+            mark at least 3 nucleobases. Otherwise the submit button will be
+            unavailable.
+          </p>
+        </div>
+      ),
+      onOk() {},
+    });
   };
 
   return (
@@ -139,7 +164,17 @@ const FirstScenarioProperties = (props: {
             return { value: e, label: e };
           })}
         />
-        <p>Select chain(s)</p>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <p>Select chain(s)</p>
+          <Button size="small" onClick={info} icon={<QuestionOutlined />} />
+        </div>
         <Select
           mode="multiple"
           style={{ width: 200 }}
@@ -163,6 +198,8 @@ const FirstScenarioProperties = (props: {
             }
             resultModel={resultModel}
             setResultModel={setResultModel}
+            setSelectedChains={setSelectedChains}
+            selectedChains={selectedChains}
           />
         ))}
       </>
@@ -173,7 +210,7 @@ const FirstScenarioProperties = (props: {
         type="primary"
         shape="round"
         onClick={submit}
-        // disabled={Object.values(selectedChains)[0]?.length === 0}
+        disabled={selectedChains.length === 0}
       >
         Submit
       </Button>

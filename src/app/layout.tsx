@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 const openSans = Montserrat({
   style: "normal",
-  weight: "300",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -29,11 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={openSans.className}>
       <body>
-        {/* <script>0</script> */}
         <ConfigProvider
           theme={{
             token: {
-              colorPrimary: "#ED6A5A",
+              colorPrimary: "#fb5f4c",
               borderRadius: 16,
               fontFamily: openSans.style.fontFamily,
             },

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import styles from "./first-scenario.module.css";
-import { Button, Form, Input, Space, Tooltip, Alert } from "antd";
+import { Button, Form, Input, Space, Tooltip} from "antd";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { UploadFile } from "antd/lib/upload/interface";
 import { pdb_id, structure } from "../../types/modelsType";

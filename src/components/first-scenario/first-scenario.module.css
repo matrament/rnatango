@@ -87,7 +87,7 @@
 }
 
 .index {
-  color: #ed6a5a;
+  color: #fb5f4c;
   font-size: 12px;
   padding-top: 0.1em;
   margin-left: 1em;
@@ -117,7 +117,7 @@
 }
 
 .activeC {
-  background: #ed6a5a;
+  background: #fb5f4c;
   color: #f8f8f8;
 }
 
@@ -253,7 +253,7 @@
 }
 
 .chainTitle {
-  color: #ed6a5a;
+  color: #fb5f4c;
   margin: 0;
   font-weight: bold;
 }

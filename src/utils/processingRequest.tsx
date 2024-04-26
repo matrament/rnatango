@@ -1,4 +1,3 @@
-"use client";
 import { message } from "antd";
 import lang from "./lang.json";
 import config from "../config.json";

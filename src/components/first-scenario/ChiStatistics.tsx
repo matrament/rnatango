@@ -104,7 +104,7 @@ const ChiStatistics = (props: { angle: any[] }) => {
         name: "anti",
         type: "bar",
         itemStyle: {
-          color: "#ed6a5a",
+          color: "#fb5f4c",
         },
         z: 1,
         coordinateSystem: "polar",

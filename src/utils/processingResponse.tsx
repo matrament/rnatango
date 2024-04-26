@@ -1,4 +1,3 @@
-"use client";
 import { message } from "antd";
 import lang from "./lang.json";
 import config from "../config.json";
@@ -32,7 +31,6 @@ export function processingResponce(
   socket.onmessage = (event) => {
     if (getStatus != "SUCCESS") {
       let a = JSON.parse(event.data);
-      console.log(a);
       if (
         (a.status === "SUCCESS" || a.status === "FAILED") &&
         getStatus != "SUCCESS"

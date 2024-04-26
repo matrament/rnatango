@@ -1,4 +1,3 @@
-"use client";
 import { message } from "antd";
 import lang from "./lang.json";
 import { single_scenario_request } from "../types/modelsType";

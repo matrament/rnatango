@@ -35,15 +35,15 @@
 }
 
 .nonactive {
-  background-color: #f8f8f8;
-  color: #ed6a5a;
+  background-color: #eeeeee;
+  color: #fb5f4c;
 }
 
 .nonactive:hover {
-  background: #f8f0ef;
+  background: #f2e9e8;
 }
 
 .active {
-  background: #ed6a5a;
+  background: #fb5f4c;
   color: #f8f8f8;
 }

@@ -100,6 +100,7 @@ const ResultTable = (props: {
   indexChain: number;
   selectRows: any;
   setSelectRows: any;
+  fileName: string;
 }) => {
   const [angleColumn, setAngleColumn] = useState<any>();
   const [csvData, setCsvData] = useState<torsion_angles_residue[]>([]);
@@ -200,7 +201,9 @@ const ResultTable = (props: {
                     onClick={() =>
                       exportDataToCSV(
                         csvData.sort((a: any, b: any) => a.key - b.key),
-                        angleColumn
+                        angleColumn,
+                        props.fileName,
+                        props.chain
                       )
                     }
                   >

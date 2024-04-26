@@ -2,7 +2,7 @@
 import styles from "./first-scenario.module.css";
 import { useEffect, useState } from "react";
 import { Button, Tooltip, Modal, Result } from "antd";
-import { PlusOutlined, QuestionOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { single_scenario_request_selection_chain } from "../../types/modelsType";
 import NucleotidePanel from "./NucleotidePanel";
 
@@ -12,6 +12,8 @@ const SequenceCard = (props: {
   resultModel: any;
   setResultModel: any;
   residuesWithoutAtoms: number[];
+  setSelectedChains: any;
+  selectedChains: string[];
 }) => {
   let arrayChain = props.sequence.toUpperCase().split("");
 
@@ -24,7 +26,9 @@ const SequenceCard = (props: {
       ...props.resultModel,
       [props.name]: multipleSequence,
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log(multipleSequence);
   }, [multipleSequence]);
 
   const addNewRange = () => {
@@ -32,24 +36,14 @@ const SequenceCard = (props: {
   };
 
   const deleteChainRange = (i: number) => {
+    console.log(i);
+    console.log(multipleSequence.filter((e, index) => index != i));
     setMultipleSequence(multipleSequence.filter((e, index) => index != i));
-  };
-
-  const info = () => {
-    Modal.info({
-      title: "How to submit a task?",
-      content: (
-        <div>
-          <p>
-            Select at least one chain. By default, the entire range of
-            nucleotides is selected. If you want to change the range, be sure to
-            mark at least 3 nucleobases. Otherwise the submit button will be
-            unavailable.
-          </p>
-        </div>
-      ),
-      onOk() {},
-    });
+    if (i === 0 && multipleSequence.length === 1) {
+      props.setSelectedChains(
+        props.selectedChains.filter((e: string) => e !== props.name)
+      );
+    }
   };
 
   return (
@@ -66,7 +60,6 @@ const SequenceCard = (props: {
               />
             </Tooltip>
             <h3>Chain: {props.name}</h3>
-            <Button size="small" onClick={info} icon={<QuestionOutlined />} />
           </div>
           {multipleSequence.map((e, index) => (
             <NucleotidePanel

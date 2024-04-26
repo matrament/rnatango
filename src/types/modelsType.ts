@@ -71,6 +71,10 @@ export type single_result_angle_chain = {
 
 export type single_result_angle = {
   torsionAngles: single_result_angle_chain[];
+  containDiscontinuousSequences: boolean;
+  resultRemovedAfter: string;
+  structureMolecule: string;
+  structureName: string;
 };
 //................................
 export type torsion_angles_residue = {
