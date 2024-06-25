@@ -1,10 +1,10 @@
 "use client";
-import styles from "./first-scenario.module.css";
+import styles from "../first-scenario.module.css";
 import { useEffect, useState } from "react";
-import { Button, Tooltip, Modal, Result } from "antd";
+import { Button, Tooltip} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { single_scenario_request_selection_chain } from "../../types/modelsType";
-import NucleotidePanel from "./NucleotidePanel";
+
+import NucleotidePanel from "../NucleotidePanel";
 
 const SequenceCard = (props: {
   name: string;
@@ -17,29 +17,30 @@ const SequenceCard = (props: {
 }) => {
   let arrayChain = props.sequence.toUpperCase().split("");
 
-  const [multipleSequence, setMultipleSequence] = useState<number[][]>([
-    [0, 0],
-  ]);
+  const [multipleSequence, setMultipleSequence] = useState<
+    { id: number; chain: number[] }[]
+  >([{ id: 0, chain: [0, 0] }]);
+  const [indexChain, setIndexChain] = useState<number>(0);
 
   useEffect(() => {
     props.setResultModel({
       ...props.resultModel,
-      [props.name]: multipleSequence,
+      [props.name]: multipleSequence.map((item) => item.chain),
     });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    console.log(multipleSequence);
   }, [multipleSequence]);
 
   const addNewRange = () => {
-    setMultipleSequence([...multipleSequence, [0, 0]]);
+    setMultipleSequence([
+      ...multipleSequence,
+      { id: indexChain + 1, chain: [0, 0] },
+    ]);
+    setIndexChain(indexChain + 1);
   };
 
-  const deleteChainRange = (i: number) => {
-    console.log(i);
-    console.log(multipleSequence.filter((e, index) => index != i));
-    setMultipleSequence(multipleSequence.filter((e, index) => index != i));
-    if (i === 0 && multipleSequence.length === 1) {
+  const deleteChainRange = (id: number) => {
+    setMultipleSequence(multipleSequence.filter((seq) => seq.id != id));
+    if (multipleSequence.length === 1) {
       props.setSelectedChains(
         props.selectedChains.filter((e: string) => e !== props.name)
       );
@@ -61,15 +62,15 @@ const SequenceCard = (props: {
             </Tooltip>
             <h3>Chain: {props.name}</h3>
           </div>
-          {multipleSequence.map((e, index) => (
+          {multipleSequence.map((sequence) => (
             <NucleotidePanel
               multipleSequence={multipleSequence}
               setMultipleSequence={setMultipleSequence}
               deleteChainRange={deleteChainRange}
-              indexSequence={index}
+              indexSequence={sequence.id}
               arrayChain={arrayChain}
               residuesWithoutAtoms={props.residuesWithoutAtoms}
-              key={index}
+              key={sequence.id}
             />
           ))}
         </div>

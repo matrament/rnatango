@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { ReactECharts } from "../echarts/ReactECharts";
 import { ReactEChartsProps } from "../echarts/ReactECharts";
 import { AngleIcon } from "../icons/Icons";
-import anglesnames from "../../angles.json";
 import styles from "./first-scenario.module.css";
 
 const HistogramAngles = (props: {
@@ -14,19 +13,36 @@ const HistogramAngles = (props: {
   const [angleResult, setAngleResult] = useState<[number, number][]>([]);
 
   useEffect(() => {
-    let x: number[] = props.angle.filter(
-      (element): element is number => element !== null
-    );
-    x = x.map((e) => Math.floor((e + 180) / 15));
-    let counts: { [key: number]: [number, number] } = {};
-    for (let i = 0; i < 24; i++) {
-      counts[i] = [0, -172.5 + 15 * i];
+    if (angleResult.length === 0) {
+      dataProcess();
     }
-    x.forEach(function (x) {
-      counts[x][0] = (counts[x][0] || 0) + 1;
-    });
-    setAngleResult(Object.values(counts).map((e) => [Math.sqrt(e[0]), e[1]]));
   }, [props.angle]);
+
+  const dataProcess = () => {
+    let counts: { [key: number]: number } = {};
+
+    props.angle.reduce((acc, element) => {
+      if (element !== null) {
+        let index = 23;
+        if (element != 180) {
+          index = Math.floor((element + 180) / 15);
+        }
+        acc[index] = (acc[index] || 0) + 1;
+      }
+      return acc;
+    }, counts);
+
+    let histogramData: [number, number][] = [];
+
+    for (let i = 0; i < 24; i++) {
+      histogramData.push([
+        Math.sqrt(counts[i] ? counts[i] : 0),
+        -172.5 + 15 * i,
+      ]);
+    }
+
+    setAngleResult(histogramData);
+  };
 
   const option: ReactEChartsProps["option"] = {
     dataset: {

@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { ReactECharts } from "../echarts/ReactECharts";
 import { ReactEChartsProps } from "../echarts/ReactECharts";
-import styles from "./first-scenario.module.css";
 
 const ChiStatistics = (props: { angle: any[] }) => {
   const [syn, setSyn] = useState<[number, number][]>([[0, 172.5]]);

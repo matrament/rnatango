@@ -1,9 +1,11 @@
 import { message } from "antd";
 import lang from "./lang.json";
 import config from "../config.json";
+import { single_result_angle } from "../types/modelsType";
 
 export function processingResponce(
   taskId: string,
+  getResultFile: single_result_angle,
   setGetResultFile: any,
   setGetStatus: any,
   getStatus: any
@@ -17,25 +19,26 @@ export function processingResponce(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  fetch(config.SERVER_URL + "/single/" + taskId + "/result", requestOptions);
-
   let socket = new WebSocket(config.SERVER_WEB_SOCKET_URL + `/single`);
   let timer: any = null;
+
   const request = { hashId: taskId };
   socket.onopen = () => {
     socket.send(JSON.stringify(request));
     timer = setInterval(() => {
       socket.send(JSON.stringify(request));
-    }, 1000);
+    }, 2000);
   };
   socket.onmessage = (event) => {
-    if (getStatus != "SUCCESS") {
-      let a = JSON.parse(event.data);
-      if (
-        (a.status === "SUCCESS" || a.status === "FAILED") &&
-        getStatus != "SUCCESS"
-      ) {
-        clearInterval(timer);
+    let a = JSON.parse(event.data);
+    setGetStatus(a.status);
+
+    if (
+      (a.status === "SUCCESS" || a.status === "FAILED") &&
+      getResultFile.structureName == ""
+    ) {
+      clearInterval(timer);
+      if (a.status === "SUCCESS") {
         fetch(
           config.SERVER_URL + "/single/" + taskId + "/result",
           requestOptions
@@ -43,22 +46,18 @@ export function processingResponce(
           .then((response: any) => response.json())
           .then((response: any) => {
             setGetResultFile(response);
-            setGetStatus(a.status);
-            clearInterval(timer);
-            socket.close();
+
+            // clearInterval(timer);
           })
           .catch((error: any) => {
             message.error("Processing error");
-            clearInterval(timer);
-            socket.close();
+            // clearInterval(timer);
           });
-      } else {
-        setGetStatus(a.status);
+        socket.close();
       }
     }
   };
   socket.onclose = socket.onerror = () => {
     clearInterval(timer);
-    console.log("disconnected");
   };
 }

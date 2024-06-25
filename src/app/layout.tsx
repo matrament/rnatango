@@ -43,6 +43,7 @@ export default function RootLayout({
                 contentFontSize: 16,
                 defaultBg: "rgba(0,0,0,0)",
                 borderRadiusSM: 12,
+                defaultBorderColor: "black",
               },
               Upload: {
                 lineWidth: 0,

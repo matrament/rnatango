@@ -23,15 +23,19 @@ const DesktopHeader = () => {
         <Link href="/">
           <Image src={Logo} alt="RNAtango" height={40} />
         </Link>
-        <Link href="/about">
-          <p className={pathname == "/about" ? styles.active : ""}>About</p>
-        </Link>
-        <Link href="/cite_us">
-          <p className={pathname == "/cite_us" ? styles.active : ""}>Cite us</p>
-        </Link>
-        <Link href="/help">
-          <p className={pathname == "/help" ? styles.active : ""}>Help</p>
-        </Link>
+        <div className={styles.pages}>
+          <Link href="/about">
+            <p className={pathname == "/about" ? styles.active : ""}>About</p>
+          </Link>
+          <Link href="/cite_us">
+            <p className={pathname == "/cite_us" ? styles.active : ""}>
+              Cite us
+            </p>
+          </Link>
+          <Link href="/help">
+            <p className={pathname == "/help" ? styles.active : ""}>Help</p>
+          </Link>
+        </div>
       </div>
     </div>
   );

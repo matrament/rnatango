@@ -8,13 +8,12 @@ import {
   CloseOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import { single_scenario_request_selection_chain } from "../../types/modelsType";
 
 const Nucleobases = (props: {
   name: string;
   index: number;
   onClick: any;
-  selectSequence: any;
+  selectedSequence: any;
   residuesWithoutAtoms: number[];
 }) => {
   return (
@@ -24,7 +23,7 @@ const Nucleobases = (props: {
       </div>
       <div
         className={`${styles.residue} ${
-          props.selectSequence.includes(props.index)
+          props.selectedSequence.includes(props.index)
             ? styles.activeC
             : styles.nonactiveC
         }
@@ -39,34 +38,44 @@ const Nucleobases = (props: {
 };
 
 const NucleotidePanel = (props: {
-  multipleSequence: number[][];
+  multipleSequence: { id: number; chain: number[] }[];
   indexSequence: number;
   setMultipleSequence: any;
   arrayChain: string[];
   residuesWithoutAtoms: number[];
   deleteChainRange: any;
 }) => {
-  const [selectSequence, setSelectSequence] = useState<number[]>([0, 0]);
+  const [selectedSequence, setSelectedSequence] = useState<number[]>([0, 0]);
 
   useEffect(() => {
     let rangeSequence = range(0, props.arrayChain.length - 1, 1);
-    setSelectSequence(rangeSequence);
+    setSelectedSequence(rangeSequence);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    let temp = props.multipleSequence;
-    if (selectSequence.length != 0) {
-      temp[props.indexSequence] = [
-        selectSequence[0],
-        selectSequence[selectSequence.length - 1],
-      ];
+    let newSequence = [
+      selectedSequence[0],
+      selectedSequence[selectedSequence.length - 1],
+    ];
+
+    if (selectedSequence.length != 0) {
+      props.setMultipleSequence(
+        props.multipleSequence.map((item: any) =>
+          item.id === props.indexSequence
+            ? { ...item, chain: newSequence }
+            : item
+        )
+      );
     } else {
-      temp[props.indexSequence] = [];
+      props.setMultipleSequence(
+        props.multipleSequence.map((item: any) =>
+          item.id === props.indexSequence ? { ...item, chain: [] } : item
+        )
+      );
     }
-    props.setMultipleSequence(temp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectSequence]);
+  }, [selectedSequence]);
 
   const range = (start: number, stop: number, step: number): number[] => {
     return Array.from(
@@ -76,14 +85,14 @@ const NucleotidePanel = (props: {
   };
 
   const handleAddSequence = (index: number) => {
-    if (selectSequence.length < 1) {
-      setSelectSequence(() => [index]);
+    if (selectedSequence.length < 1) {
+      setSelectedSequence(() => [index]);
     } else {
-      if (selectSequence[0] < index) {
-        setSelectSequence(range(selectSequence[0], index, 1));
+      if (selectedSequence[0] < index) {
+        setSelectedSequence(range(selectedSequence[0], index, 1));
       } else {
-        setSelectSequence(
-          range(index, selectSequence[selectSequence.length - 1], 1)
+        setSelectedSequence(
+          range(index, selectedSequence[selectedSequence.length - 1], 1)
         );
       }
     }
@@ -92,40 +101,40 @@ const NucleotidePanel = (props: {
   const inputFirstNucleotyde = (value: number | null) => {
     if (value != null) {
       if (
-        value < selectSequence[selectSequence.length - 1] &&
-        selectSequence.length > 0
+        value < selectedSequence[selectedSequence.length - 1] &&
+        selectedSequence.length > 0
       ) {
-        setSelectSequence(
-          range(value, selectSequence[selectSequence.length - 1], 1)
+        setSelectedSequence(
+          range(value, selectedSequence[selectedSequence.length - 1], 1)
         );
       } else {
-        setSelectSequence(() => [value]);
+        setSelectedSequence(() => [value]);
       }
     } else {
-      setSelectSequence([selectSequence[selectSequence.length - 1]]);
+      setSelectedSequence([selectedSequence[selectedSequence.length - 1]]);
     }
   };
 
   const inputLastNucleotyde = (value: number | null) => {
-    if (value != null && value > selectSequence[0]) {
-      setSelectSequence(range(selectSequence[0], value, 1));
+    if (value != null && value > selectedSequence[0]) {
+      setSelectedSequence(range(selectedSequence[0], value, 1));
     }
-    if (value != null && selectSequence.length == 0) {
-      setSelectSequence(range(1, value, 1));
+    if (value != null && selectedSequence.length == 0) {
+      setSelectedSequence(range(1, value, 1));
     }
     if (
       value == null ||
-      (value < selectSequence[0] && selectSequence.length == 1)
+      (value < selectedSequence[0] && selectedSequence.length == 1)
     ) {
-      setSelectSequence([selectSequence[0]]);
+      setSelectedSequence([selectedSequence[0]]);
     }
   };
 
   const handleSelectAll = () => {
-    setSelectSequence(range(0, props.arrayChain.length - 1, 1));
+    setSelectedSequence(range(0, props.arrayChain.length - 1, 1));
   };
   const handleDeleteAll = () => {
-    setSelectSequence([]);
+    setSelectedSequence([]);
   };
 
   return (
@@ -152,7 +161,7 @@ const NucleotidePanel = (props: {
               style={{ width: 75 }}
               min={0}
               max={props.arrayChain.length - 1}
-              value={selectSequence[0]}
+              value={selectedSequence[0]}
               placeholder={"from"}
               onChange={inputFirstNucleotyde}
             />
@@ -161,7 +170,7 @@ const NucleotidePanel = (props: {
               style={{ width: 75 }}
               min={0}
               max={props.arrayChain.length - 1}
-              value={selectSequence[selectSequence.length - 1]}
+              value={selectedSequence[selectedSequence.length - 1]}
               placeholder={"to"}
               onChange={inputLastNucleotyde}
             />
@@ -169,7 +178,7 @@ const NucleotidePanel = (props: {
         </div>
         <div style={{ padding: "15px" }}>
           <Popconfirm
-            title="Delete pot"
+            title="Delete chain"
             description="Are you sure to delete this chain?"
             icon={<QuestionCircleOutlined />}
             onConfirm={() => props.deleteChainRange(props.indexSequence)}
@@ -186,7 +195,7 @@ const NucleotidePanel = (props: {
             index={index}
             name={el}
             onClick={() => handleAddSequence(index)}
-            selectSequence={selectSequence}
+            selectedSequence={selectedSequence}
             residuesWithoutAtoms={props.residuesWithoutAtoms}
           />
         ))}
@@ -194,8 +203,8 @@ const NucleotidePanel = (props: {
       <div
         style={{ padding: "15px", marginBottom: "10px", fontWeight: "bold" }}
       >
-        Nucleotide range: {selectSequence[0]}-
-        {selectSequence[selectSequence.length - 1]}
+        Nucleotide range: {selectedSequence[0]}-
+        {selectedSequence[selectedSequence.length - 1]}
       </div>
     </>
   );

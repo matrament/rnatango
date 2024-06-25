@@ -1,5 +1,4 @@
 .background {
-  background: #f8f8f8;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -11,6 +10,13 @@
   width: 60vw;
   justify-content: space-between;
   align-items: center;
+}
+
+.pages {
+  display: flex;
+  flex-direction: row;
+  width: 40%;
+  justify-content: space-between;
 }
 
 .foot {
@@ -74,7 +80,7 @@
 .flyoutMenu {
   width: 100vw;
   height: 100vh;
-  background-color: #edeeee;
+  background-color: white;
   position: fixed;
   top: 0;
   left: 0;

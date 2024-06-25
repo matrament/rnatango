@@ -1,9 +1,9 @@
 import { message, UploadFile, UploadProps, Upload } from "antd";
-import { pdb_id } from "../../types/modelsType";
-import config from "../../config.json";
-import lang from "../../utils/lang.json";
+import { pdb_id } from "../../../types/modelsType";
+import config from "../../../config.json";
+import lang from "../../../utils/lang.json";
 import { InboxOutlined } from "@ant-design/icons";
-import { structure } from "../../types/modelsType";
+import { structure } from "../../../types/modelsType";
 import { useState } from "react";
 
 const { Dragger } = Upload;
@@ -29,7 +29,7 @@ interface UploadFileArguments {
   setPdbId: any;
   uploadStructure: UploadFile[] | undefined;
   setUploadStructure: any;
-  setGetStructure: any;
+  setStructure: any;
   setIsUpload: any;
   setLoading: any;
   setShowResult: any;
@@ -73,7 +73,7 @@ const UploadStructureFile = (props: UploadFileArguments) => {
       props.setPdbId({ name: "" });
       props.setUploadStructure([] as UploadFile<File>[]);
       props.setIsUpload(false);
-      props.setGetStructure(firstStructure);
+      props.setStructure(firstStructure);
     },
     onChange(event) {
       const { status } = event.file;
@@ -82,7 +82,7 @@ const UploadStructureFile = (props: UploadFileArguments) => {
         props.setPdbId({
           name: "",
         });
-        props.setGetStructure(event.file.response);
+        props.setStructure(event.file.response);
         setFileHashId(event.file.response.fileHashId);
         props.setIsUpload(true);
         props.setLoading(false);
@@ -129,9 +129,6 @@ export function removeFile(fileId: string) {
   fetch(config.SERVER_URL + "/upload/remove/" + fileId, requestOptions)
     .then((response: any) => {
       if (response.status == 200) {
-        console.log(response);
-      } else {
-        console.log(response);
       }
     })
     .then((response: any) => {

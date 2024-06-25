@@ -1,32 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
-import styles from "../first-scenario/first-scenario.module.css";
+import styles from "./first-scenario.module.css";
 import { Button, Form, Input, Space, Tooltip } from "antd";
-import { CloseCircleFilled } from "@ant-design/icons";
+
 import { UploadFile } from "antd/lib/upload/interface";
 import { pdb_id, structure } from "../../types/modelsType";
 import { checkRcsbMaxModel } from "../../utils/checkRcsbMaxModel";
 import { processingRequest } from "../../utils/processingRequest";
-import UploadStructureFile from "../first-scenario/input/UploadStructureFile";
-import SelectChain from "./SelectChain";
-import RequestProperties from "./RequestProperties";
-// import FirstScenarioProperties from "./FirstScenarioProperties";
-
-const Structure: structure = {
-  fileHashId: "1FFK",
-  models: [
-    {
-      name: "0",
-      chains: [
-        {
-          name: "1",
-          sequence: "AAAUUUU",
-          residuesWithoutAtoms: [0],
-        },
-      ],
-    },
-  ],
-};
+import UploadStructureFile from "./input/UploadStructureFile";
+import FirstScenarioProperties from "./RequestForm";
 
 export default function RequestForm() {
   let rcsbPdbId: pdb_id = {
@@ -48,7 +30,7 @@ export default function RequestForm() {
     ],
   };
 
-  const [getStructure, setGetStructure] = useState<structure>(firstStructure);
+  const [structure, setStructure] = useState<structure>(firstStructure);
   const [loading, setLoading] = useState(false);
   const [pdbError, setPdbError] = useState(false);
   const [modelQuery, setModelQuery] = useState(true);
@@ -63,11 +45,11 @@ export default function RequestForm() {
   const submit = () => {
     setLoading(true);
     if (pdbId.name.length === 4) {
-      processingRequest(pdbId, setLoading, setGetStructure);
+      processingRequest(pdbId, setLoading, setStructure);
       setModelQuery(true);
       setShowResult(true);
     }
-    if (isUpload && getStructure.fileHashId != "") {
+    if (isUpload && structure.fileHashId != "") {
       setLoading(false);
       setModelQuery(true);
       setShowResult(true);
@@ -75,7 +57,7 @@ export default function RequestForm() {
   };
   useEffect(() => {
     setIsUpload(false);
-    setGetStructure(firstStructure);
+    setStructure(firstStructure);
     if (pdbId.name.length === 4) {
       checkRcsbMaxModel(setPdbError, pdbId.name, setModelQuery);
     } else {
@@ -92,13 +74,15 @@ export default function RequestForm() {
 
   return (
     <div style={{ marginBottom: "10px", width: "100%" }}>
-      <div style={{ textAlign: "center" }}>Select target</div>
+      <div style={{ textAlign: "center" }}>
+        Select file with 3D RNA structure (PDB/CIF){" "}
+      </div>
       <div className={styles.scenario}>
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            alignItems: "flex-start",
             paddingTop: "20px",
           }}
         >
@@ -106,50 +90,49 @@ export default function RequestForm() {
             style={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
-              width: "100%",
+              alignItems: "flex-start",
             }}
           >
             <p>From example collection:</p>
             <Space.Compact>
-              <Tooltip title=" 1 ">
+              <Tooltip title="A-RNA">
                 <Button
                   onClick={() => {
-                    setGetStructure(firstStructure);
+                    setStructure(firstStructure);
                     setUploadStructure([]);
                     setPdbId({
-                      name: "1",
+                      name: "1PBM",
                     });
                   }}
                 >
-                  1
+                  1PBM
                 </Button>
               </Tooltip>
-              <Tooltip title=" 2 ">
+              <Tooltip title="B-DNA">
                 <Button
                   onClick={() => {
-                    setGetStructure(firstStructure);
+                    setStructure(firstStructure);
 
                     setUploadStructure([]);
                     setPdbId({
-                      name: "2",
+                      name: "1ZEW",
                     });
                   }}
                 >
-                  2
+                  1ZEW
                 </Button>
               </Tooltip>
-              <Tooltip title=" 3 ">
+              <Tooltip title="Z-RNA">
                 <Button
                   onClick={() => {
-                    setGetStructure(firstStructure);
+                    setStructure(firstStructure);
                     setUploadStructure([]);
                     setPdbId({
-                      name: "3",
+                      name: "1T4X",
                     });
                   }}
                 >
-                  3
+                  1T4X
                 </Button>
               </Tooltip>
             </Space.Compact>
@@ -169,7 +152,7 @@ export default function RequestForm() {
                         uploadStructure={uploadStructure}
                         setShowResult={setShowResult}
                         setUploadStructure={setUploadStructure}
-                        setGetStructure={setGetStructure}
+                        setStructure={setStructure}
                         setIsUpload={setIsUpload}
                         setLoading={setLoading}
                         setFileName={setFileName}
@@ -217,6 +200,7 @@ export default function RequestForm() {
                     </div>
                   </div>
                 </div>
+
                 <div
                   style={{
                     display: "flex",
@@ -247,9 +231,12 @@ export default function RequestForm() {
               </Form>
             </div>
           </div>
-          <SelectChain getStructure={Structure} fileName="1ffk" />
-          <RequestProperties />
         </div>
+      </div>
+      <div>
+        {structure.fileHashId != "" && !loading && showResult ? (
+          <FirstScenarioProperties structure={structure} fileName={fileName} />
+        ) : null}
       </div>
     </div>
   );

@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import { ReactECharts } from "../echarts/ReactECharts";
 import { ReactEChartsProps } from "../echarts/ReactECharts";
-import { AngleIcon } from "../icons/Icons";
-import anglesnames from "../../angles.json";
-import styles from "./first-scenario.module.css";
+// import { AngleIcon } from "../icons/Icons";
+// import anglesnames from "../../angles.json";
+// import styles from "./first-scenario.module.css";
 
 const ChiTest = (props: { angle: (number | null)[]; title: string }) => {
   const [angleResult, setAngleResult] = useState<[number, number][]>([]);

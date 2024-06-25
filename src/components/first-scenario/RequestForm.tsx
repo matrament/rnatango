@@ -1,246 +1,221 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./first-scenario.module.css";
-import { Button, Form, Input, Space, Tooltip} from "antd";
-import { CloseCircleFilled } from "@ant-design/icons";
-import { UploadFile } from "antd/lib/upload/interface";
-import { pdb_id, structure } from "../../types/modelsType";
-import { checkRcsbMaxModel } from "../../utils/checkRcsbMaxModel";
-import { processingRequest } from "../../utils/processingRequest";
-import UploadStructureFile from "./UploadStructureFile";
-import FirstScenarioProperties from "./FirstScenarioProperties";
+import { Select, Button, Modal } from "antd";
+import {
+  Models,
+  structure,
+} from "../../types/modelsType";
+import { QuestionOutlined } from "@ant-design/icons";
+import { GetTaskId } from "../../utils/getTaskId";
+import SequenceCard from "./input/SequenceCard";
 
-export default function RequestForm() {
-  let rcsbPdbId: pdb_id = {
-    name: "",
-  };
-  let firstStructure: structure = {
-    fileHashId: "",
-    models: [
-      {
-        name: "",
-        chains: [
-          {
-            name: "",
-            sequence: "",
-            residuesWithoutAtoms: [],
-          },
-        ],
-      },
-    ],
-  };
+const filterOption = (
+  input: string,
+  option?: { label: string; value: string }
+) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
-  const [getStructure, setGetStructure] = useState<structure>(firstStructure);
-  const [loading, setLoading] = useState(false);
-  const [pdbError, setPdbError] = useState(false);
-  const [modelQuery, setModelQuery] = useState(true);
-  const [pdbId, setPdbId] = useState(rcsbPdbId);
-  const [isUpload, setIsUpload] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-  const [fileName, setFileName] = useState("");
-  const [uploadStructure, setUploadStructure] = useState<
-    UploadFile[] | undefined
-  >(undefined);
+type resultType = {
+  [key: string]: number[][];
+};
+
+const FirstScenarioProperties = (props: {
+  structure: structure;
+  fileName: string;
+}) => {
+  const [resultModel, setResultModel] = useState<resultType>({});
+  const [selectedModel, setSelectedModel] = useState<string>("1");
+  const [selectedChains, setSelectedChains] = useState<string[] | []>([]);
+  const [startingModels, setStartingModels] = useState<any>([]);
+  const [optionsChains, setOptionsChains] = useState<string[]>([]);
+  const [correctSubmit, setCorrectSubmit] = useState<boolean>(true);
+  const router = useRouter();
 
   const submit = () => {
-    setLoading(true);
-    if (pdbId.name.length === 4) {
-      processingRequest(pdbId, setLoading, setGetStructure);
-      setModelQuery(true);
-      setShowResult(true);
-    }
-    if (isUpload && getStructure.fileHashId != "") {
-      setLoading(false);
-      setModelQuery(true);
-      setShowResult(true);
-    }
+    let y: any = [];
+    selectedChains.forEach((chain) =>
+      y.push(
+        resultModel[chain].map((num) => {
+          return {
+            ["name"]: chain,
+            ["nucleotideRange"]: {
+              ["fromInclusive"]: num[0],
+              ["toInclusive"]: num[1],
+            },
+          };
+        })
+      )
+    );
+    y = y.flat();
+    let result = {
+      fileId: props.structure.fileHashId,
+      selections: [
+        {
+          modelName: selectedModel,
+          chains: y,
+        },
+      ],
+    };
+    GetTaskId(result, router);
   };
-  useEffect(() => {
-    setIsUpload(false);
-    setGetStructure(firstStructure);
-    if (pdbId.name.length === 4) {
-      checkRcsbMaxModel(setPdbError, pdbId.name, setModelQuery);
-    } else {
-      setPdbError(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pdbId.name]);
 
   useEffect(() => {
-    if (isUpload === true) {
-      setModelQuery(false);
+    let x: Models = {};
+    for (let i = 0; i < props.structure.models.length; i++) {
+      x[i + 1] = {};
+      for (let j = 0; j < props.structure.models[i].chains.length; j++) {
+        x[i + 1][props.structure.models[i].chains[j].name] =
+          props.structure.models[i].chains[j];
+      }
     }
-  }, [isUpload]);
+    setStartingModels(x);
+    let y = Object.fromEntries(Object.keys(x["1"]).map((chain) => [chain, []]));
+
+    setResultModel(y);
+    setOptionsChains(Object.keys(x["1"]));
+    setSelectedChains([Object.keys(x["1"])[0]]);
+  }, [props.structure.models]);
+
+  useEffect(() => {
+    const hasNonEmptyArray = Object.values(resultModel).some(
+      (value) => Array.isArray(value) && isNonEmptyArray(value)
+    );
+    setCorrectSubmit(hasNonEmptyArray);
+  }, [resultModel]);
+
+  const isNonEmptyArray = (array: any[]): boolean => {
+    return array.flat().length > 0;
+  };
+
+  const chooseModel = (model: string) => {
+    let availableChain = Object.fromEntries(
+      Object.keys(startingModels[model]).map((e) => [e, []])
+    );
+    setResultModel(availableChain);
+    setOptionsChains(Object.keys(availableChain));
+    setSelectedModel(model);
+    setSelectedChains([]);
+  };
+
+  const chooseChains = (newChains: string[]) => {
+    let choosedChains: string[] = [];
+    for (let [key, value] of Object.entries(resultModel)) {
+      if (Object.keys(value).length != 0) {
+        choosedChains.push(key);
+      }
+    }
+    let tempResult = resultModel;
+    // add chain
+    newChains
+      .filter((x) => !choosedChains.includes(x))
+      .forEach((diff) => {
+        tempResult[diff] = [[0, 0]];
+      });
+
+    // delete chain
+    choosedChains
+      .filter((x) => !newChains.includes(x))
+      .forEach((diff) => {
+        tempResult[diff] = [];
+      });
+    setResultModel(tempResult);
+
+    setSelectedChains(newChains);
+  };
+
+  const info = () => {
+    Modal.info({
+      title: "How to submit a task?",
+      content: (
+        <div>
+          <p>
+            Select at least one chain. By default, the entire range of
+            nucleotides is selected. If you want to change the range, be sure to
+            mark at least 3 nucleobases. Otherwise the submit button will be
+            unavailable.
+          </p>
+        </div>
+      ),
+      onOk() {},
+    });
+  };
 
   return (
-    <div style={{ marginBottom: "10px", width: "100%" }}>
-      <div style={{ textAlign: "center" }}>
-        Select file with 3D RNA structure (PDB/CIF){" "}
+    <div className={styles.scenario}>
+      <div className={styles.header}>
+        <h2>
+          {props.structure.fileHashId.length < 5
+            ? props.structure.fileHashId.toUpperCase()
+            : props.fileName}
+        </h2>
       </div>
-      <div className={styles.scenario}>
+      <div className={styles.select}>
+        <p>Select model for analysis</p>
+        <Select
+          showSearch
+          style={{ width: 200 }}
+          defaultValue={selectedModel}
+          optionFilterProp="children"
+          onChange={chooseModel}
+          filterOption={filterOption}
+          options={Object.keys(startingModels).map((e) => {
+            return { value: e, label: e };
+          })}
+        />
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            paddingTop: "20px",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "10px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
-          >
-            <p>From example collection:</p>
-            <Space.Compact>
-              <Tooltip title="A-RNA">
-                <Button
-                  onClick={() => {
-                    setGetStructure(firstStructure);
-                    setUploadStructure([]);
-                    setPdbId({
-                      name: "1PBM",
-                    });
-                  }}
-                >
-                  1PBM
-                </Button>
-              </Tooltip>
-              <Tooltip title="B-DNA">
-                <Button
-                  onClick={() => {
-                    setGetStructure(firstStructure);
-
-                    setUploadStructure([]);
-                    setPdbId({
-                      name: "1ZEW",
-                    });
-                  }}
-                >
-                  1ZEW
-                </Button>
-              </Tooltip>
-              <Tooltip title="Z-RNA">
-                <Button
-                  onClick={() => {
-                    setGetStructure(firstStructure);
-                    setUploadStructure([]);
-                    setPdbId({
-                      name: "1T4X",
-                    });
-                  }}
-                >
-                  1T4X
-                </Button>
-              </Tooltip>
-            </Space.Compact>
-          </div>
-          <div className={styles.upload}>
-            <div className={styles.column}>
-              <Form labelCol={{ span: 16 }} wrapperCol={{ span: 32 }}>
-                <div className={styles.requestCard}>
-                  <div>
-                    <div style={{ minWidth: "350px" }}>
-                      <p style={{ marginBottom: "5px", fontSize: "16px" }}>
-                        From local drive:
-                      </p>
-                      <UploadStructureFile
-                        pdbId={pdbId}
-                        setPdbId={setPdbId}
-                        uploadStructure={uploadStructure}
-                        setShowResult={setShowResult}
-                        setUploadStructure={setUploadStructure}
-                        setGetStructure={setGetStructure}
-                        setIsUpload={setIsUpload}
-                        setLoading={setLoading}
-                        setFileName={setFileName}
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.split_layout_divider}>
-                    <div className={styles.split_layout_rule}></div>
-                    <div className={styles.split_layout_label}>or</div>
-                    <div className={styles.split_layout_rule}></div>
-                  </div>
-                  <div>
-                    <div style={{ minWidth: "350px" }}>
-                      <p style={{ fontSize: "16px" }}>
-                        From Protein Data Bank:
-                      </p>
-                      <Form.Item>
-                        <Input
-                          size="large"
-                          name="rcsbPdbId"
-                          data-testid="rcsb-pdb-id-input"
-                          value={pdbId.name}
-                          status={pdbError ? "error" : ""}
-                          onChange={(e) =>
-                            setPdbId({
-                              name: e.target.value.toUpperCase(),
-                            })
-                          }
-                          disabled={isUpload}
-                          style={{
-                            width: "200px",
-                            paddingTop: "2px",
-                            paddingBottom: "2px",
-                          }}
-                          placeholder={"PDB ID eg. 1FFK"}
-                          maxLength={4}
-                        />
-                      </Form.Item>
-                      {/* {pdbError ? (
-                        <div style={{ paddingLeft: "15px" }}>
-                          <CloseCircleFilled style={{ color: "red" }} /> Wrong
-                          PDBid
-                        </div>
-                      ) : null} */}
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <Form.Item noStyle>
-                    <Button
-                      data-testid="send-request-button"
-                      htmlType="submit"
-                      size="large"
-                      type="primary"
-                      shape="round"
-                      disabled={
-                        (pdbId.name.length < 4 && !isUpload) ||
-                        pdbError ||
-                        modelQuery
-                      }
-                      loading={loading}
-                      onClick={submit}
-                      style={{ marginBottom: "25px" }}
-                    >
-                      Upload
-                    </Button>
-                  </Form.Item>
-                </div>
-              </Form>
-            </div>
-          </div>
+          <p>Select chain(s)</p>
+          <Button size="small" onClick={info} icon={<QuestionOutlined />} />
         </div>
+        <Select
+          mode="multiple"
+          style={{ width: 200 }}
+          value={selectedChains}
+          placeholder="Please select"
+          onChange={chooseChains}
+          options={optionsChains.map((chain: string) => {
+            return { value: chain, label: chain };
+          })}
+        />
       </div>
-      <div>
-        {getStructure.fileHashId != "" && !loading && showResult ? (
-          <FirstScenarioProperties
-            getStructure={getStructure}
-            fileName={fileName}
+
+      <>
+        {selectedChains.map((chain) => (
+          <SequenceCard
+            key={chain}
+            name={chain}
+            sequence={startingModels[selectedModel][chain]["sequence"]}
+            residuesWithoutAtoms={
+              startingModels[selectedModel][chain]["residuesWithoutAtoms"]
+            }
+            resultModel={resultModel}
+            setResultModel={setResultModel}
+            setSelectedChains={setSelectedChains}
+            selectedChains={selectedChains}
           />
-        ) : null}
-      </div>
+        ))}
+      </>
+
+      <Button
+        size="large"
+        style={{ marginBottom: "25px" }}
+        type="primary"
+        shape="round"
+        onClick={submit}
+        disabled={!correctSubmit || selectedChains.length === 0}
+      >
+        Submit
+      </Button>
     </div>
   );
-}
+};
+
+export default FirstScenarioProperties;

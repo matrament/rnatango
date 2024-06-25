@@ -7,15 +7,6 @@ import {
   torsion_angles_residue,
 } from "../../types/modelsType";
 import { Alert, Select } from "antd";
-import dynamic from "next/dynamic";
-import ChiTest from "./ChiTest";
-// const HistogramAngles = dynamic(
-//   () => import("@/components/first-scenario/HistogramAngles")
-// );
-// const ResultTable = dynamic(() => import("./ResultTable"));
-// const ChiStatistics = dynamic(
-//   () => import("@/components/first-scenario/ChiStatistics")
-// );
 
 import HistogramAngles from "./HistogramAngles";
 import ResultTable from "./ResultTable";
@@ -104,10 +95,10 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
   const [concatResidues, setConcatResidues] = useState<
     torsion_angles_residue[]
   >([]);
-  const [showAngleHistogram, setShowAngleHistogram] = useState<string[]>(
+  const [anglesHistogram, setAnglesHistogram] = useState<string[]>(
     Object.keys(angleName)
   );
-  const [selectRows, setSelectRows] = useState<{
+  const [selectedRows, setSelectedRows] = useState<{
     [key: number]: torsion_angles_residue[];
   }>([]);
 
@@ -149,26 +140,21 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
       }
     }
     setResultTorsionAngle(x);
-    console.log(x);
-    console.log(props.getResultFile);
-    setSelectRows(x.map((chain: torsion_angles) => chain.residues));
+
+    setSelectedRows(x.map((chain: torsion_angles) => chain.residues));
     setConcatResidues(x.map((chain: torsion_angles) => chain.residues).flat());
   }, [props.getResultFile]);
 
   useEffect(() => {
     let x: torsion_angles_residue[];
-    x = Object.values(selectRows).flat();
-    Object.keys(selectRows).length != 0 ? setConcatResidues(x) : null;
-  }, [selectRows]);
+    x = Object.values(selectedRows).flat();
+    Object.keys(selectedRows).length != 0 ? setConcatResidues(x) : null;
+  }, [selectedRows]);
 
   type ObjectKey = keyof typeof angleName;
 
   const handleChange = (value: string[]) => {
     let x: string[][] = value.map((e: string) => e.split("-"));
-    // x.sort(function (a, b) {
-    //   return a[0].localeCompare(b[0]);
-    // });
-    console.log(value);
   };
 
   return (
@@ -211,8 +197,8 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
                     chain={el.chain.name}
                     sequence={el.chain.sequence}
                     indexChain={index}
-                    selectRows={selectRows}
-                    setSelectRows={setSelectRows}
+                    selectedRows={selectedRows}
+                    setSelectedRows={setSelectedRows}
                     fileName={props.getResultFile.structureName}
                   />
                 </div>
@@ -245,7 +231,7 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
               </div>
 
               <div className={styles.angle}>
-                {showAngleHistogram.map((angleName) => (
+                {anglesHistogram.map((angleName) => (
                   <HistogramAngles
                     key={angleName}
                     title={angleName}

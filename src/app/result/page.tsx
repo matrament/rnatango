@@ -45,11 +45,11 @@ const ResultPage = (props: any) => {
   useEffect(() => {
     processingResponce(
       searchParams.get("id")!,
+      getResultFile,
       setGetResultFile,
       setGetStatus,
       getStatus
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const ResultPage = (props: any) => {
           </Button>
         </div>
       </div>
-      {stepsNumber < 4 ? (
+      {getResultFile.structureName === "" ? (
         <LoadingCard />
       ) : (
         <DataResult getResultFile={getResultFile} key={seedState} />

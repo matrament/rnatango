@@ -1,11 +1,14 @@
 "use client";
 import styles from "./first-scenario.module.css";
 import { useState, useEffect } from "react";
-import { Table, Collapse, Select, Button } from "antd";
+import { Table, Collapse, Select, Button, Checkbox } from "antd";
 import { torsion_angles_residue } from "../../types/modelsType";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import { exportDataToCSV } from "../../utils/exportDataToCSV";
+import type {GetProp } from "antd";
+
+type CheckboxValueType = GetProp<typeof Checkbox.Group, "value">[number];
 
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
@@ -64,10 +67,6 @@ const options: ItemProps[] = [
     value: "4-delta",
   },
   {
-    label: "epsilon (\u03B5)",
-    value: "5-epsilon",
-  },
-  {
     label: "zeta (\u03B6)",
     value: "6-zeta",
   },
@@ -98,8 +97,8 @@ const ResultTable = (props: {
   chain: string;
   sequence: string;
   indexChain: number;
-  selectRows: any;
-  setSelectRows: any;
+  selectedRows: any;
+  setSelectedRows: any;
   fileName: string;
 }) => {
   const [angleColumn, setAngleColumn] = useState<any>();
@@ -110,9 +109,12 @@ const ResultTable = (props: {
     handleChange(Object.keys(angleName));
     setCsvData(props.dataAngle);
     setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
-    console.log(props.dataAngle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(
+    Object.values(angleName)
+  );
 
   const handleChange = (value: string[]) => {
     let x: TableColumnsType<tableAngle> = value.map((e) => ({
@@ -139,12 +141,10 @@ const ResultTable = (props: {
     selectedRows: any
   ) => {
     setSelectedRowKeys(newSelectedRowKeys);
-    props.setSelectRows({
-      ...props.selectRows,
+    props.setSelectedRows({
+      ...props.selectedRows,
       [props.indexChain]: selectedRows,
     });
-    console.log(csvData);
-    console.log(angleColumn);
     setCsvData(selectedRows);
   };
 
