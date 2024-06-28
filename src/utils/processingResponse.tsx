@@ -5,10 +5,10 @@ import { single_result_angle } from "../types/modelsType";
 
 export function processingResponce(
   taskId: string,
-  getResultFile: single_result_angle,
-  setGetResultFile: any,
-  setGetStatus: any,
-  getStatus: any
+  resultFile: single_result_angle,
+  setResultFile: any,
+  setStatus: any,
+  status: any
 ) {
   const requestOptions = {
     method: "GET",
@@ -31,11 +31,11 @@ export function processingResponce(
   };
   socket.onmessage = (event) => {
     let a = JSON.parse(event.data);
-    setGetStatus(a.status);
+    setStatus(a.status);
 
     if (
       (a.status === "SUCCESS" || a.status === "FAILED") &&
-      getResultFile.structureName == ""
+      resultFile.structureName == ""
     ) {
       clearInterval(timer);
       if (a.status === "SUCCESS") {
@@ -45,7 +45,7 @@ export function processingResponce(
         )
           .then((response: any) => response.json())
           .then((response: any) => {
-            setGetResultFile(response);
+            setResultFile(response);
 
             // clearInterval(timer);
           })

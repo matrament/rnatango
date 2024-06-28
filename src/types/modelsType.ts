@@ -12,6 +12,21 @@ export type Chains = {
   residuesWithoutAtoms: number[];
 };
 
+export type Target = {
+  [key: string]: SingleModelTarget;
+};
+
+export type SingleModelTarget = {
+  [key: string]: ChainTarget;
+};
+
+export type ChainTarget = {
+  name: string;
+  sequence: string;
+  residuesWithoutAtoms: number[];
+  continousFragments: number[][];
+};
+
 export type pdb_id = {
   name: string;
 };
@@ -100,4 +115,33 @@ export type torsion_angles = {
     residueWithoutAtom: number[];
   };
   residues: torsion_angles_residue[];
+};
+
+export type scenario = {
+  title: string;
+  example: string[];
+  scenario: number;
+};
+
+export type resultSecondScenario = {
+  name: string;
+  key: number;
+  models: {
+    [key: string]: result_second_scenario_nucleotide_value;
+  };
+};
+
+export type result_second_scenario_nucleotide_value = {
+  alpha: number | null;
+  beta: number | null;
+  gamma: number | null;
+  delta: number | null;
+  epsilon: number | null;
+  zeta: number | null;
+  eta: number | null;
+  theta: number | null;
+  eta_prim: number | null;
+  theta_prim: number | null;
+  chi: number | null;
+  mcq: number;
 };

@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import styles from "./page.module.css";
-import SecondScenarioUpload from "../components/second-scenario/SecondScenario";
 import ThirdScenarioUpload from "../components/third-scenario/ThirdScenarioUpload";
-import RequestForm from "../components/first-scenario/LoadData";
+import LoadData from "../components/first-scenario/LoadData";
+import scenarios from "../json/scenarios.json";
 
 const ScenarioButton = (props: {
   title: string;
@@ -42,8 +42,12 @@ const Home = () => {
           ))}
         </div>
       </div>
-      {chooseScenario === 1 ? <RequestForm /> : null}
-      {chooseScenario === 2 ? <SecondScenarioUpload /> : null}
+      {chooseScenario === 1 ? (
+        <LoadData scenario={scenarios.firstScenario} />
+      ) : null}
+      {chooseScenario === 2 ? (
+        <LoadData scenario={scenarios.secondScenario} />
+      ) : null}
       {chooseScenario === 3 ? <ThirdScenarioUpload /> : null}
     </>
   );

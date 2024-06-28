@@ -21,7 +21,7 @@ type resultType = {
   [key: string]: number[][];
 };
 
-const FirstScenarioProperties = (props: {
+const RequestForm = (props: {
   structure: structure;
   fileName: string;
 }) => {
@@ -218,4 +218,4 @@ const FirstScenarioProperties = (props: {
   );
 };
 
-export default FirstScenarioProperties;
+export default RequestForm;

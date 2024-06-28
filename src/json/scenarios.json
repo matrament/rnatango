@@ -1,0 +1,13 @@
+{
+  "firstScenario": {
+    "title": "Select file with 3D RNA structure (PDB/CIF)",
+    "example": ["1PBN", "1ZEW", "1T4X"],
+    "scenario": 1
+  },
+
+  "secondScenario": {
+    "title": "Select target",
+    "example": ["1PBN", "1ZEW", "1T4X"],
+    "scenario": 2
+  }
+}

@@ -9,6 +9,7 @@ import LoadingCard from "../../components/LoadingCard";
 import { ReloadOutlined } from "@ant-design/icons";
 import DataResult from "../../components/first-scenario/DataResult";
 import { useMediaQuery } from "react-responsive";
+import { Suspense } from "react";
 
 let emptyResult: single_result_angle = {
   torsionAngles: [],
@@ -21,9 +22,9 @@ let emptyResult: single_result_angle = {
 const ResultPage = (props: any) => {
   const searchParams = useSearchParams();
 
-  const [getResultFile, setGetResultFile] =
+  const [resultFile, setResultFile] =
     useState<single_result_angle>(emptyResult);
-  const [getStatus, setGetStatus] = useState("");
+  const [status, setStatus] = useState("");
   const [stepsNumber, setStepsNumber] = useState(2);
   const [seedState, setSeedState] = useState(1);
   const isDesktop = useMediaQuery({ query: "(min-width: 1200px)" });
@@ -36,7 +37,7 @@ const ResultPage = (props: any) => {
       title: "Success",
       description: `${
         stepsNumber === 4
-          ? "Results will be stored until " + getResultFile.resultRemovedAfter
+          ? "Results will be stored until " + resultFile.resultRemovedAfter
           : ""
       }`,
     },
@@ -45,21 +46,21 @@ const ResultPage = (props: any) => {
   useEffect(() => {
     processingResponce(
       searchParams.get("id")!,
-      getResultFile,
-      setGetResultFile,
-      setGetStatus,
-      getStatus
+      resultFile,
+      setResultFile,
+      setStatus,
+      status
     );
   }, []);
 
   useEffect(() => {
-    if (getStatus === "PROCESSING") {
+    if (status === "PROCESSING") {
       setStepsNumber(3);
     }
-    if (getStatus === "SUCCESS") {
+    if (status === "SUCCESS") {
       setStepsNumber(4);
     }
-  }, [getStatus]);
+  }, [status]);
 
   const resetSettings = () => {
     let x = seedState + 1;
@@ -77,7 +78,7 @@ const ResultPage = (props: any) => {
             items={steps}
             status="wait"
           />
-          {getStatus === "FAILED" ? (
+          {status === "FAILED" ? (
             <Alert
               message="Server error"
               showIcon
@@ -99,13 +100,21 @@ const ResultPage = (props: any) => {
           </Button>
         </div>
       </div>
-      {getResultFile.structureName === "" ? (
+      {resultFile.structureName === "" ? (
         <LoadingCard />
       ) : (
-        <DataResult getResultFile={getResultFile} key={seedState} />
+        <DataResult resultFile={resultFile} key={seedState} />
       )}
     </div>
   );
 };
 
-export default ResultPage;
+const Page = () => {
+  return (
+    <Suspense>
+      <ResultPage />
+    </Suspense>
+  );
+};
+
+export default Page;

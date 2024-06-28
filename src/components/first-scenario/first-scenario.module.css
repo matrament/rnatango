@@ -19,6 +19,23 @@
   flex-direction: column;
 }
 
+.specifyTarget {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.scenarioTarget {
+  border: 1px solid #dcdcdc;
+  border-radius: 40px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .scenario {
   border: 1px solid #dcdcdc;
   border-radius: 40px;
@@ -54,6 +71,34 @@
   word-wrap: break-word;
   margin-bottom: 20px;
   border: 1px solid #dcdcdc;
+}
+.sequencetarget {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 63em;
+  @media screen and (max-width: 1850px) and (min-width: 1200px) {
+    width: 50em;
+  }
+  @media screen and (max-width: 1200px) and (min-width: 750px) {
+    width: 38em;
+  }
+  @media screen and (max-width: 750px) {
+    width: 25em;
+  }
+}
+
+.nucleobasesNonSelect {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  height: 2.7em;
+  width: 2.5em;
+  background: inherit;
+  border: 0;
 }
 
 .nucleobases {
@@ -106,6 +151,10 @@
   padding-bottom: 0.1em;
   width: 100%;
   text-align: center;
+}
+
+.nonactiveNonselect {
+  font-color: black;
 }
 
 .nonactiveC {
@@ -275,4 +324,22 @@
   margin-top: 10px;
   padding-bottom: 10px;
   padding-top: 10px;
+}
+
+.parent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-top: 1px solid gray;
+  width: 100%;
+}
+
+.ant-upload.ant-upload-drag {
+  width: 80%;
+  margin: 20px;
+}
+.ant-upload-list.ant-upload-list-picture {
+  width: 100% !important;
+  margin: 20px;
 }

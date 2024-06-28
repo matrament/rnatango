@@ -1,7 +1,7 @@
 "use client";
 import styles from "../first-scenario.module.css";
 import { useEffect, useState } from "react";
-import { Button, Tooltip} from "antd";
+import { Button, Tooltip } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 import NucleotidePanel from "../NucleotidePanel";
@@ -71,6 +71,7 @@ const SequenceCard = (props: {
               arrayChain={arrayChain}
               residuesWithoutAtoms={props.residuesWithoutAtoms}
               key={sequence.id}
+              deleteSequenceOption={true}
             />
           ))}
         </div>

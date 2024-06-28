@@ -88,7 +88,7 @@ const options: ItemProps[] = [
   },
 ];
 
-const DataResult = (props: { getResultFile: single_result_angle }) => {
+const DataResult = (props: { resultFile: single_result_angle }) => {
   const [resultTorsionAngle, setResultTorsionAngle] = useState<
     torsion_angles[]
   >([]);
@@ -104,34 +104,34 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
 
   useEffect(() => {
     let x: any = [];
-    for (let i = 0; i < props.getResultFile.torsionAngles.length; i++) {
+    for (let i = 0; i < props.resultFile.torsionAngles.length; i++) {
       x[i] = {
-        chain: props.getResultFile.torsionAngles[i].chain,
+        chain: props.resultFile.torsionAngles[i].chain,
         residues: [],
       };
       for (
         let j = 0;
-        j < props.getResultFile.torsionAngles[i].residues.length;
+        j < props.resultFile.torsionAngles[i].residues.length;
         j++
       ) {
         let z: { [key: string]: number | null } = {};
-        let y = props.getResultFile.torsionAngles[i].chain.name.concat(
+        let y = props.resultFile.torsionAngles[i].chain.name.concat(
           ".",
-          props.getResultFile.torsionAngles[i].residues[j].name,
-          props.getResultFile.torsionAngles[i].residues[j].number.toString()
+          props.resultFile.torsionAngles[i].residues[j].name,
+          props.resultFile.torsionAngles[i].residues[j].number.toString()
         );
         x[i].residues[j] = { name: y, key: j };
         for (
           let k = 0;
           k <
-          props.getResultFile.torsionAngles[i].residues[j].torsionAngles.length;
+          props.resultFile.torsionAngles[i].residues[j].torsionAngles.length;
           k++
         ) {
           let a =
-            props.getResultFile.torsionAngles[i].residues[j].torsionAngles[k]
+            props.resultFile.torsionAngles[i].residues[j].torsionAngles[k]
               .value;
           z[
-            props.getResultFile.torsionAngles[i].residues[j].torsionAngles[
+            props.resultFile.torsionAngles[i].residues[j].torsionAngles[
               k
             ].angle.toLowerCase()
           ] = a == null ? a : Number(a.toFixed(2));
@@ -143,7 +143,7 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
 
     setSelectedRows(x.map((chain: torsion_angles) => chain.residues));
     setConcatResidues(x.map((chain: torsion_angles) => chain.residues).flat());
-  }, [props.getResultFile]);
+  }, [props.resultFile]);
 
   useEffect(() => {
     let x: torsion_angles_residue[];
@@ -162,9 +162,9 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
       {resultTorsionAngle.length != 0 ? (
         <div className={styles.scenario}>
           <div className={styles.line}>
-            <h1>{props.getResultFile.structureName}</h1>
+            <h1>{props.resultFile.structureName}</h1>
             <p style={{ marginTop: 0, color: "#8c8c8c" }}>
-              {props.getResultFile.structureMolecule}
+              {props.resultFile.structureMolecule}
             </p>
           </div>
           <div
@@ -199,11 +199,11 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
                     indexChain={index}
                     selectedRows={selectedRows}
                     setSelectedRows={setSelectedRows}
-                    fileName={props.getResultFile.structureName}
+                    fileName={props.resultFile.structureName}
                   />
                 </div>
               ))}
-              {props.getResultFile.containDiscontinuousSequences ? (
+              {props.resultFile.containDiscontinuousSequences ? (
                 <div style={{ marginBottom: "25px" }}>
                   <Alert
                     message="The chain is discontinuous. Data are shown for each continuous
@@ -238,7 +238,7 @@ const DataResult = (props: { getResultFile: single_result_angle }) => {
                     angle={concatResidues.map(
                       (el) => el[angleName as ObjectKey]
                     )}
-                    fileName={props.getResultFile.structureName}
+                    fileName={props.resultFile.structureName}
                   />
                 ))}
               </div>

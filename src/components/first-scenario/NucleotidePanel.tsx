@@ -44,12 +44,17 @@ const NucleotidePanel = (props: {
   arrayChain: string[];
   residuesWithoutAtoms: number[];
   deleteChainRange: any;
+  deleteSequenceOption: boolean;
 }) => {
   const [selectedSequence, setSelectedSequence] = useState<number[]>([0, 0]);
 
   useEffect(() => {
-    let rangeSequence = range(0, props.arrayChain.length - 1, 1);
-    setSelectedSequence(rangeSequence);
+    if (props.deleteSequenceOption) {
+      let rangeSequence = range(0, props.arrayChain.length - 1, 1);
+      setSelectedSequence(rangeSequence);
+    } else {
+      setSelectedSequence([]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -176,16 +181,18 @@ const NucleotidePanel = (props: {
             />
           </Space.Compact>
         </div>
-        <div style={{ padding: "15px" }}>
-          <Popconfirm
-            title="Delete chain"
-            description="Are you sure to delete this chain?"
-            icon={<QuestionCircleOutlined />}
-            onConfirm={() => props.deleteChainRange(props.indexSequence)}
-          >
-            <Button type="text" shape="circle" icon={<CloseOutlined />} />
-          </Popconfirm>
-        </div>
+        {props.deleteSequenceOption ? (
+          <div style={{ padding: "15px" }}>
+            <Popconfirm
+              title="Delete chain"
+              description="Are you sure to delete this chain?"
+              icon={<QuestionCircleOutlined />}
+              onConfirm={() => props.deleteChainRange(props.indexSequence)}
+            >
+              <Button type="text" shape="circle" icon={<CloseOutlined />} />
+            </Popconfirm>
+          </div>
+        ) : null}
       </div>
 
       <div className={styles.chainsarray}>

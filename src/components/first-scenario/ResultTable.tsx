@@ -6,7 +6,7 @@ import { torsion_angles_residue } from "../../types/modelsType";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import { exportDataToCSV } from "../../utils/exportDataToCSV";
-import type {GetProp } from "antd";
+import type { GetProp } from "antd";
 
 type CheckboxValueType = GetProp<typeof Checkbox.Group, "value">[number];
 
@@ -108,6 +108,7 @@ const ResultTable = (props: {
   useEffect(() => {
     handleChange(Object.keys(angleName));
     setCsvData(props.dataAngle);
+    console.log(props.dataAngle);
     setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

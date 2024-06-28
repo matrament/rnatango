@@ -18,7 +18,7 @@ const HistogramAngles = (props: {
     }
   }, [props.angle]);
 
-  const dataProcess = () => {
+  const dataProcess:any = () => {
     let counts: { [key: number]: number } = {};
 
     props.angle.reduce((acc, element) => {

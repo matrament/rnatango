@@ -31,9 +31,6 @@ const CiteUs = () => {
         )
       </p>
       <p>
-        Other related works include:
-        <br />
-        <br />
         J. Wiedemann, T. Zok, M. Milostan, M. Szachniuk (2017)
         <br />
         LCS-TA to identify similar fragments in RNA 3D structures,{" "}

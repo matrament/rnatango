@@ -4,13 +4,14 @@ import styles from "./first-scenario.module.css";
 import { Button, Form, Input, Space, Tooltip } from "antd";
 
 import { UploadFile } from "antd/lib/upload/interface";
-import { pdb_id, structure } from "../../types/modelsType";
+import { pdb_id, structure, scenario } from "../../types/modelsType";
 import { checkRcsbMaxModel } from "../../utils/checkRcsbMaxModel";
 import { processingRequest } from "../../utils/processingRequest";
 import UploadStructureFile from "./input/UploadStructureFile";
-import FirstScenarioProperties from "./RequestForm";
+import RequestForm from "./RequestForm";
+import DefineTarget from "../second-scenario/DefineTarget";
 
-export default function RequestForm() {
+export default function LoadData(props: { scenario: scenario }) {
   let rcsbPdbId: pdb_id = {
     name: "",
   };
@@ -74,9 +75,7 @@ export default function RequestForm() {
 
   return (
     <div style={{ marginBottom: "10px", width: "100%" }}>
-      <div style={{ textAlign: "center" }}>
-        Select file with 3D RNA structure (PDB/CIF){" "}
-      </div>
+      <div style={{ textAlign: "center" }}>{props.scenario.title}</div>
       <div className={styles.scenario}>
         <div
           style={{
@@ -234,9 +233,14 @@ export default function RequestForm() {
         </div>
       </div>
       <div>
-        {structure.fileHashId != "" && !loading && showResult ? (
-          <FirstScenarioProperties structure={structure} fileName={fileName} />
-        ) : null}
+        {structure.fileHashId !== "" &&
+          !loading &&
+          showResult &&
+          (props.scenario.scenario === 1 ? (
+            <RequestForm structure={structure} fileName={fileName} />
+          ) : props.scenario.scenario === 2 ? (
+            <DefineTarget structure={structure} fileName={fileName} />
+          ) : null)}
       </div>
     </div>
   );
