@@ -1,28 +1,19 @@
 "use client";
-import { useState } from "react";
 import styles from "./page.module.css";
 import ThirdScenarioUpload from "../components/third-scenario/ThirdScenarioUpload";
 import LoadData from "../components/first-scenario/LoadData";
 import scenarios from "../json/scenarios.json";
-
-const ScenarioButton = (props: {
-  title: string;
-  onClick: any;
-  conditionalcss: any;
-}) => {
-  return (
-    <button
-      className={`${styles.buttonscenario} ${props.conditionalcss}`}
-      onClick={props.onClick}
-    >
-      {props.title}
-    </button>
-  );
-};
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const Home = () => {
-  const [chooseScenario, setChooseScenario] = useState(1);
-  const buttons = ["Single model", "Model(s) vs Target", "Model vs Model"];
+  const searchParams = useSearchParams();
+  const selectedScenario = searchParams.get("scenario");
+  const scenariosVariants: { [key: string]: string } = {
+    "1": "Single model",
+    "2": "Model(s) vs Target",
+    "3": "Model vs Model",
+  };
   return (
     <>
       <p style={{ textAlign: "center", marginBottom: "10px" }}>
@@ -30,25 +21,26 @@ const Home = () => {
       </p>
       <div className={styles.scenario}>
         <div className={styles.buttond}>
-          {buttons.map((button: string, index: number) => (
-            <ScenarioButton
-              key={index}
-              title={button}
-              onClick={() => setChooseScenario(index + 1)}
-              conditionalcss={
-                chooseScenario == index + 1 ? styles.active : styles.nonactive
-              }
-            />
-          ))}
+          {Object.keys(scenariosVariants).map(
+            (version: string, index: number) => (
+              <Link
+                key={index}
+                href={`?scenario=${version}`}
+                className={`${styles.buttonscenario} ${
+                  selectedScenario === version
+                    ? styles.active
+                    : styles.nonactive
+                }`}
+              >
+                {scenariosVariants[version]}
+              </Link>
+            )
+          )}
         </div>
       </div>
-      {chooseScenario === 1 ? (
-        <LoadData scenario={scenarios.firstScenario} />
-      ) : null}
-      {chooseScenario === 2 ? (
-        <LoadData scenario={scenarios.secondScenario} />
-      ) : null}
-      {chooseScenario === 3 ? <ThirdScenarioUpload /> : null}
+      {selectedScenario === "1" ? <LoadData /> : null}
+      {selectedScenario === "2" ? <LoadData /> : null}
+      {selectedScenario === "3" ? <ThirdScenarioUpload /> : null}
     </>
   );
 };

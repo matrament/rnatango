@@ -1,69 +1,129 @@
 "use client";
-import { InputNumber, Space } from "antd";
-import type { InputNumberProps } from "antd";
-import { Divider, Checkbox } from "antd";
+import {
+  InputNumber,
+  Slider,
+  Row,
+  Col,
+  Divider,
+  Checkbox,
+  SliderSingleProps,
+  CheckboxProps,
+  GetProp,
+  InputNumberProps,
+} from "antd";
+import { second_scenario_submit } from "@/types/modelsType";
 import { useState } from "react";
-
-import type { CheckboxProps, GetProp } from "antd";
+import angles from "../../json/angles.json";
+import { SelectOutlined } from "@ant-design/icons";
 
 type CheckboxValueType = GetProp<typeof Checkbox.Group, "value">[number];
 
 const CheckboxGroup = Checkbox.Group;
 
-const plainOptions = [
-  "hsa-mir-21",
-  "hsa-mir-30a",
-  "hsa-mir-33a",
-  "hsa-mir-122",
-  "hsa-mir-135b",
-  "hsa-mir-136-v1",
-  "hsa-mir-155",
-  "hsa-mir-203a",
+const initAngles = [
+  "alpha",
+  "beta",
+  "gamma",
+  "delta",
+  "epsilon",
+  "zeta",
+  "eta",
+  "theta",
+  "eta prim",
+  "theta_prim",
+  "chi",
 ];
 
-const initParam = {
-  mcq: 15,
-  torsionAngles: ['alpha', 'beta', 'gamma']
-}
-
-const changeMCQ: InputNumberProps["onChange"] = (value) => {
-  console.log("changed", value);
+const marks: SliderSingleProps["marks"] = {
+  0: "0°",
+  15: "15°",
+  180: "180°",
 };
 
-const ParametersScenarioSecond = () => {
-  const [parameters, setParameters] = useState<any>({})
+const ParametersScenarioSecond = (props: {
+  params: second_scenario_submit;
+  setParams: any;
+}) => {
   const [checkedList, setCheckedList] =
-    useState<CheckboxValueType[]>(plainOptions);
-  const checkAll = plainOptions.length === checkedList.length;
+    useState<CheckboxValueType[]>(initAngles);
+  const checkAll = Object.keys(angles).length === checkedList.length;
   const indeterminate =
-    checkedList.length > 0 && checkedList.length < plainOptions.length;
+    checkedList.length > 0 && checkedList.length < initAngles.length;
 
   const onChang = (list: CheckboxValueType[]) => {
     setCheckedList(list);
+    props.setParams({ ...props.params, angles: list });
   };
 
   const onCheckAllChange: CheckboxProps["onChange"] = (e) => {
-    setCheckedList(e.target.checked ? plainOptions : []);
+    setCheckedList(e.target.checked ? initAngles : []);
+    props.setParams({
+      ...props.params,
+      angles: e.target.checked ? initAngles : [],
+    });
+  };
+
+  const changeMCQ: InputNumberProps["onChange"] = (newValue) => {
+    props.setParams({ ...props.params, threshold: newValue as number });
   };
 
   return (
     <div>
-      <p>Define parameters</p>
-
-      <Checkbox
-        indeterminate={indeterminate}
-        onChange={onCheckAllChange}
-        checked={checkAll}
+      <Divider orientation="left">
+        Select torsion angles for MCQ? analysis <SelectOutlined style={{ color: "#04afa4" }}/>
+      </Divider>
+      <Col
+        style={{
+          margin: "30px 50px 30px 50px",
+          display: "flex",
+          rowGap: "15px",
+          flexDirection: "column",
+        }}
       >
-        Check all
-      </Checkbox>
-      <CheckboxGroup
-        options={plainOptions}
-        value={checkedList}
-        onChange={onChang}
-      />
-      <p>MCQ threshold:</p>
-      <InputNumber min={0} max={180} defaultValue={15} onChange={changeMCQ} />
+        <Row>
+          <Checkbox
+            indeterminate={indeterminate}
+            onChange={onCheckAllChange}
+            checked={checkAll}
+          >
+            Check all
+          </Checkbox>
+        </Row>
+        <Row>
+          <CheckboxGroup
+            options={angles}
+            value={checkedList}
+            onChange={onChang}
+          />
+        </Row>
+      </Col>
+      <Divider orientation="left">
+        LCS-TA: <SelectOutlined style={{ color: "#04afa4" }} />
+      </Divider>
+      <Row style={{ margin: "30px 50px 30px 50px" }}>
+        <Col span={3}>
+          <p>MCQ threshold:</p>
+        </Col>
+        <Col span={10}>
+          <Slider
+            min={0}
+            max={180}
+            marks={marks}
+            onChange={changeMCQ}
+            value={props.params.threshold}
+          />
+        </Col>
+        <Col span={4}>
+          <InputNumber
+            min={0}
+            max={180}
+            style={{ margin: "0 25px" }}
+            value={props.params.threshold}
+            onChange={changeMCQ}
+          />
+        </Col>
+      </Row>
+      <Divider />
     </div>
   );
 };

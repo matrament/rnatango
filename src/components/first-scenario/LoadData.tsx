@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import styles from "./first-scenario.module.css";
 import { Button, Form, Input, Space, Tooltip } from "antd";
-
+import { useSearchParams } from "next/navigation";
 import { UploadFile } from "antd/lib/upload/interface";
 import { pdb_id, structure, scenario } from "../../types/modelsType";
 import { checkRcsbMaxModel } from "../../utils/checkRcsbMaxModel";
@@ -10,8 +10,12 @@ import { processingRequest } from "../../utils/processingRequest";
 import UploadStructureFile from "./input/UploadStructureFile";
 import RequestForm from "./RequestForm";
 import DefineTarget from "../second-scenario/DefineTarget";
+import scenarios from "../../json/scenarios.json";
 
-export default function LoadData(props: { scenario: scenario }) {
+export default function LoadData() {
+  const searchParams = useSearchParams();
+  const selectedScenario = searchParams.get("scenario");
+
   let rcsbPdbId: pdb_id = {
     name: "",
   };
@@ -75,7 +79,11 @@ export default function LoadData(props: { scenario: scenario }) {
 
   return (
     <div style={{ marginBottom: "10px", width: "100%" }}>
-      <div style={{ textAlign: "center" }}>{props.scenario.title}</div>
+      <div style={{ textAlign: "center" }}>
+        {selectedScenario === "1" || selectedScenario === "2"
+          ? scenarios[selectedScenario].title
+          : null}
+      </div>
       <div className={styles.scenario}>
         <div
           style={{
@@ -85,60 +93,40 @@ export default function LoadData(props: { scenario: scenario }) {
             paddingTop: "20px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
-          >
-            <p>From example collection:</p>
-            <Space.Compact>
-              <Tooltip title="A-RNA">
-                <Button
-                  onClick={() => {
-                    setStructure(firstStructure);
-                    setUploadStructure([]);
-                    setPdbId({
-                      name: "1PBM",
-                    });
-                  }}
-                >
-                  1PBM
-                </Button>
-              </Tooltip>
-              <Tooltip title="B-DNA">
-                <Button
-                  onClick={() => {
-                    setStructure(firstStructure);
-
-                    setUploadStructure([]);
-                    setPdbId({
-                      name: "1ZEW",
-                    });
-                  }}
-                >
-                  1ZEW
-                </Button>
-              </Tooltip>
-              <Tooltip title="Z-RNA">
-                <Button
-                  onClick={() => {
-                    setStructure(firstStructure);
-                    setUploadStructure([]);
-                    setPdbId({
-                      name: "1T4X",
-                    });
-                  }}
-                >
-                  1T4X
-                </Button>
-              </Tooltip>
-            </Space.Compact>
-          </div>
+          {selectedScenario === "1" || selectedScenario === "2" ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+              }}
+            >
+              <p>From example collection:</p>
+              <Space.Compact>
+                {scenarios[selectedScenario].example.map(
+                  (pdb: { ID: string; description: string }, index: number) => (
+                    <Tooltip key={index} title={pdb.description}>
+                      <Button
+                        key={index}
+                        onClick={() => {
+                          setStructure(firstStructure);
+                          setUploadStructure([]);
+                          setPdbId({
+                            name: pdb.ID,
+                          });
+                        }}
+                      >
+                        {pdb.ID}
+                      </Button>
+                    </Tooltip>
+                  )
+                )}
+              </Space.Compact>
+            </div>
+          ) : null}
           <div className={styles.upload}>
             <div className={styles.column}>
-              <Form labelCol={{ span: 16 }} wrapperCol={{ span: 32 }}>
+              <Form labelCol={{ span: 16 }} wrapperCol={{ span: 30 }}>
                 <div className={styles.requestCard}>
                   <div>
                     <div style={{ minWidth: "350px" }}>
@@ -236,9 +224,9 @@ export default function LoadData(props: { scenario: scenario }) {
         {structure.fileHashId !== "" &&
           !loading &&
           showResult &&
-          (props.scenario.scenario === 1 ? (
+          (selectedScenario === "1" ? (
             <RequestForm structure={structure} fileName={fileName} />
-          ) : props.scenario.scenario === 2 ? (
+          ) : selectedScenario === "2" ? (
             <DefineTarget structure={structure} fileName={fileName} />
           ) : null)}
       </div>

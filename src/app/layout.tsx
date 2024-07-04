@@ -74,6 +74,10 @@ export default function RootLayout({
               Modal: {
                 borderRadiusLG: 30,
               },
+              Divider: {
+                colorSplit: "#dcdcdc",
+                fontFamily: openSansBold.style.fontFamily,
+              },
             },
           }}
         >

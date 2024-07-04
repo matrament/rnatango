@@ -19,6 +19,7 @@ import type { RadioChangeEvent } from "antd";
 import FullChainAnalysis from "./FullChainAnalysis";
 import NucleotidePanel from "../first-scenario/NucleotidePanel";
 import Link from "next/link";
+import { GetTargetId } from "@/utils/secondScenario/getTargetID";
 
 const initModel: Target = {
   "1": {
@@ -82,6 +83,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
     };
 
     console.log(result);
+    GetTargetId(result, router);
   };
 
   useEffect(() => {
@@ -100,14 +102,12 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
     setInitialModels(x);
     setChainsToSelect(Object.keys(x["1"]));
     setSelectedChain(Object.keys(x["1"])[0]);
-    console.log(x);
   }, [props.structure.models]);
 
   useEffect(() => {
     if (value === 2) {
       let x = isRangeDiscontinous();
       setOutOfRange(x);
-      console.log(x);
     }
   }, [sequenceRange]);
 
@@ -131,7 +131,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
       mainList.forEach((item: string, index) => {
         if (excludeList.includes(index)) {
           if (sublist.length > 0) {
-            sublist.push(index);
+            sublist.push(index - 1);
             result.push(sublist);
             sublist = [];
           }
@@ -141,6 +141,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
           }
         }
       });
+      console.log(result);
       return result;
     } else {
       return [[0, mainList.length - 1]];
@@ -169,7 +170,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
       return false;
     }
     for (let range of listOfRanges) {
-      if (finalRange[0] >= range[0] && finalRange[1] < range[1]) {
+      if (finalRange[0] >= range[0] && finalRange[1] <= range[1]) {
         return false;
       }
     }
@@ -295,23 +296,21 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
             />
           </div>
         ) : null}
-        <Link href="/target_model">
-          <Button
-            size="large"
-            style={{ marginBottom: "25px" }}
-            type="primary"
-            shape="round"
-            onClick={submit}
-            disabled={
-              ((sequenceRange[0].chain[1] - sequenceRange[0].chain[0] < 3 ||
-                sequenceRange[0].chain[0] === undefined) &&
-                value == 2) ||
-              outOfRange
-            }
-          >
-            Submit
-          </Button>
-        </Link>
+        <Button
+          size="large"
+          style={{ marginBottom: "25px" }}
+          type="primary"
+          shape="round"
+          onClick={submit}
+          disabled={
+            ((sequenceRange[0].chain[1] - sequenceRange[0].chain[0] < 3 ||
+              sequenceRange[0].chain[0] === undefined) &&
+              value == 2) ||
+            outOfRange
+          }
+        >
+          Submit
+        </Button>
       </div>
     </div>
   );

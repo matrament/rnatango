@@ -30,7 +30,7 @@ export type ChainTarget = {
 export type pdb_id = {
   name: string;
 };
-export type single_scenario_request_selection_chain = {
+export type request_selection_chain = {
   name: string;
   nucleotideRange: {
     fromInclusive: number;
@@ -39,7 +39,7 @@ export type single_scenario_request_selection_chain = {
 };
 export type single_scenario_request_selection = {
   modelName: string;
-  chains: single_scenario_request_selection_chain[];
+  chains: request_selection_chain[];
 };
 export type single_scenario_request = {
   fileId: string;
@@ -144,4 +144,46 @@ export type result_second_scenario_nucleotide_value = {
   theta_prim: number | null;
   chi: number | null;
   mcq: number;
+};
+
+export type second_scenario_target = {
+  targetHashId: string;
+  selection: {
+    modelName: string;
+    chains: request_selection_chain[];
+  };
+};
+
+export type second_scenario_models_target = {
+  target: {
+    sequence: string;
+    sourceSelection: {
+      modelName: string;
+      chains: request_selection_chain[];
+    };
+    selection: {
+      modelName: string;
+      chains: request_selection_chain[];
+    };
+  };
+  models: second_scenario_models[];
+};
+
+export type second_scenario_models = {
+  fileId: string;
+  sequence: string;
+  selection: {
+    modelName: string;
+    chains: request_selection_chain[];
+  };
+  sourceSelection: {
+    modelName: string;
+    chains: request_selection_chain[];
+  };
+};
+
+export type second_scenario_submit = {
+  taskHashId: string;
+  angles: string[];
+  threshold: number;
 };

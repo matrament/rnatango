@@ -261,6 +261,13 @@
   justify-content: center;
   border-top: solid 1px #dcdcdc;
 }
+.tableButton {
+  width: 100%;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+}
 
 .sequenceTitle {
   border-bottom: solid 1px #dcdcdc;

@@ -5,7 +5,7 @@ import { torsion_angles_residue } from "../types/modelsType";
 type angleObject = { [key: string]: number | string | null };
 
 export function exportDataToCSV(
-  csvData: torsion_angles_residue[],
+  csvData: angleObject[],
   angleColumn: [any],
   fileName: string,
   chain: string

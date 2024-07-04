@@ -18,7 +18,7 @@ const HistogramAngles = (props: {
     }
   }, [props.angle]);
 
-  const dataProcess:any = () => {
+  const dataProcess: any = () => {
     let counts: { [key: number]: number } = {};
 
     props.angle.reduce((acc, element) => {
@@ -140,7 +140,7 @@ const HistogramAngles = (props: {
           <h3>{props.title}</h3>
         </div>
       </div>
-      <ReactECharts option={option} />
+      <ReactECharts option={option} style={{ height: "500px" }} />
     </div>
   );
 };
