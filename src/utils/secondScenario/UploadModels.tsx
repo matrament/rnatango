@@ -6,6 +6,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import styles from "../first-scenario/first-scenario.module.css";
 import { useState } from "react";
 import lang from "../lang.json";
+import { error } from "console";
 
 const { Dragger } = Upload;
 
@@ -31,6 +32,7 @@ interface UploadFileArguments {
   setModelsTarget: any;
   setLoading: any;
   taskID: string | null;
+  error: boolean;
 }
 
 const UploadModels = (props: UploadFileArguments) => {
@@ -85,6 +87,7 @@ const UploadModels = (props: UploadFileArguments) => {
       <Dragger
         fileList={props.uploadStructure ? props.uploadStructure : undefined}
         {...uploader_props}
+        disabled={props.error}
       >
         <p className="ant-upload-drag-icon">
           <InboxOutlined />

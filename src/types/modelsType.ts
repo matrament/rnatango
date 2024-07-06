@@ -67,12 +67,12 @@ export type single_result_angle_chain_residues = {
   name: string;
   number: number;
   icode: string;
-  torsionAngles: [
-    {
-      angle: string;
-      value: number;
-    }
-  ];
+  torsionAngles: result_torsion_angles[];
+};
+
+export type result_torsion_angles = {
+  angle: string;
+  value: number;
 };
 
 export type single_result_angle_chain = {
@@ -186,4 +186,50 @@ export type second_scenario_submit = {
   taskHashId: string;
   angles: string[];
   threshold: number;
+};
+
+export type second_scenario_result = {
+  model: string;
+  chain: string;
+  lcsThreshold: number;
+  requestedAngles: string[];
+  differences: second_scenario_result_differences[];
+};
+
+export type second_scenario_result_differences = {
+  modelHashId: string;
+  modelName: string;
+  model: string;
+  modelMCQ: number;
+  residues: second_scenario_result_differences_residues[];
+  residueMCQs: number[];
+};
+
+export type second_scenario_result_differences_residues = {
+  name: string;
+  number: number;
+  dotBracketSymbol: string;
+  icode: string;
+  torsionAngles: result_torsion_angles[];
+};
+
+export type second_scenario_result_dataset = {
+  [key: string]: second_scenario_result_dataset_single_model[];
+};
+
+export type second_scenario_result_dataset_single_model = {
+  key: number;
+  name: string;
+  mcq: number | null;
+  alpha: number | null;
+  beta: number | null;
+  gamma: number | null;
+  delta: number | null;
+  epsilon: number | null;
+  zeta: number | null;
+  eta: number | null;
+  theta: number | null;
+  eta_prim: number | null;
+  theta_prim: number | null;
+  chi: number | null;
 };

@@ -1,11 +1,12 @@
 "use client";
 import styles from "../../first-scenario/first-scenario.module.css";
 import { useState, useEffect } from "react";
-import { Table, Collapse, Select, Button, Checkbox } from "antd";
+import { Table, Collapse, Select, Button, Checkbox, Divider } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import { exportDataToCSV } from "../../../utils/exportDataToCSV";
 import type { GetProp } from "antd";
+import { second_scenario_result_dataset } from "../../../types/modelsType";
 
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
@@ -25,9 +26,8 @@ const ModelsNucleotyde = (props: {
     handleChange(props.models);
     setCsvData(props.dataset);
     setSelectedRowKeys(Array.from(Array(props.dataset.length).keys()));
-    console.log(props.dataset);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.models]);
 
   const handleChange = (value: string[]) => {
     let x: TableColumnsType = value.map((e, index) => ({
@@ -64,6 +64,7 @@ const ModelsNucleotyde = (props: {
 
   return (
     <div style={{ width: "100%" }}>
+      <h2 style={{ textAlign: "center", marginTop: "0" }}>Table....</h2>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}
         columns={column}
@@ -92,6 +93,7 @@ const ModelsNucleotyde = (props: {
           Download .csv
         </Button>
       </div>
+      <Divider />
     </div>
   );
 };

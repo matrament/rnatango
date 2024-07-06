@@ -1,12 +1,12 @@
 import { message } from "antd";
 import lang from "../lang.json";
 import config from "../../config.json";
-import initTarget from "../../json/initTarget.json";
+import initResult from "../../json/initResultSecond.json";
 
-export function UploadedTaskDetails(
+export function processingResponseSecond(
   taskId: string | null,
-  setModelsTarget: any,
-  setError: any
+  setResult: any,
+  setLoading: any
 ) {
   const requestOptions = {
     method: "GET",
@@ -17,11 +17,11 @@ export function UploadedTaskDetails(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  fetch(config.SERVER_URL + "/one-many/form/" + taskId, requestOptions)
+  fetch(config.SERVER_URL + "/one-many/" + taskId + "/result", requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
-        setModelsTarget(initTarget);
-        setError(true);
+        setResult(initResult);
+        setLoading(false);
         message.error(lang.rcsb_error);
       } else {
         return response.json();
@@ -29,11 +29,11 @@ export function UploadedTaskDetails(
     })
     .then((response: any) => {
       if (response != "" && response != undefined) {
-        setModelsTarget(response);
+        setResult(response);
       } else {
-        setModelsTarget(initTarget);
-        setError(true);
+        setResult(initResult);
       }
+      setLoading(false);
     })
     .catch((error: any) => message.error("Something went wrong, try again"));
 }

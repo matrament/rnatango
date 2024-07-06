@@ -1,15 +1,13 @@
 "use client";
 import styles from "../../first-scenario/first-scenario.module.css";
 import { useState, useEffect } from "react";
-import { Table, Collapse, Select, Button, Checkbox } from "antd";
+import { Table, Collapse, Select, Button, Checkbox, Divider } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import { exportDataToCSV } from "../../../utils/exportDataToCSV";
 import type { GetProp } from "antd";
 
 type CheckboxValueType = GetProp<typeof Checkbox.Group, "value">[number];
-
-type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
 type datasetModels = {
   [key: string]: string | number | null;
@@ -30,11 +28,6 @@ const columns: datasetModels = {
   3: "1/3 \u00B7 \u03C0 = 60\u00B0",
 };
 
-const obiekty = [
-  { at: 3, dt: 5 },
-  { at: 3, dt: 5 },
-];
-
 const ModelsRangeAngle = (props: {
   dataset: datasetModels[];
   models: string[];
@@ -42,7 +35,6 @@ const ModelsRangeAngle = (props: {
   const [angleColumn, setAngleColumn] = useState<any>();
   const [dataStatistic, setDataStatistic] = useState<any>([]);
   //   const [csvData, setCsvData] = useState<torsion_angles_residue[]>([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   useEffect(() => {
     handleChange(Object.keys(columns));
@@ -51,11 +43,9 @@ const ModelsRangeAngle = (props: {
       return makeStatisticOfMCQvalue(model, index);
     });
     // setCsvData(props.dataAngle);
-    // setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     setDataStatistic(x);
-    console.log(x);
   }, [props.models]);
 
   const makeStatisticOfMCQvalue = (model: string, index: number) => {
@@ -102,31 +92,12 @@ const ModelsRangeAngle = (props: {
     setAngleColumn(x);
   };
 
-  //   const handleOnChange = (
-  //     newSelectedRowKeys: React.Key[],
-  //     selectedRows: any
-  //   ) => {
-  //     setSelectedRowKeys(newSelectedRowKeys);
-  //     props.setSelectedRows({
-  //       ...props.selectedRows,
-  //       [props.indexChain]: selectedRows,
-  //     });
-  //     // setCsvData(selectedRows);
-  //   };
-
-  //   const rowSelection: TableRowSelection<torsion_angles_residue> = {
-  //     columnWidth: "10px",
-  //     selectedRowKeys,
-  //     onChange: handleOnChange,
-  //   };
-
   return (
     <div style={{ width: "100%" }}>
+      <h2 style={{ textAlign: "center", marginTop: "0" }}>Table ...</h2>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}
         columns={angleColumn}
-        //   rowSelection={rowSelection}
-        rowClassName={styles.rowStyle}
         dataSource={dataStatistic}
         size="middle"
         bordered
@@ -150,6 +121,7 @@ const ModelsRangeAngle = (props: {
           Download .csv
         </Button>
       </div>
+      <Divider/>
     </div>
   );
 };

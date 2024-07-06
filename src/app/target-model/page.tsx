@@ -4,6 +4,8 @@ import styles from "./page.module.css";
 import IntersectionOfTargetModels from "@/components/second-scenario/IntersectionOfTargetModels";
 import ParametersScenarioSecond from "@/components/second-scenario/ParametersScenarioSecond";
 import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { UploadFile } from "antd/lib/upload/interface";
 import {
   Button,
@@ -13,7 +15,6 @@ import {
   Tooltip,
   Divider,
 } from "antd";
-import { useSearchParams } from "next/navigation";
 import {
   second_scenario_models_target,
   second_scenario_submit,
@@ -21,14 +22,8 @@ import {
 import { UploadedTaskDetails } from "@/utils/secondScenario/UploadedTaskDetails";
 import { DeleteOutlined } from "@ant-design/icons";
 import { DeleteModel } from "@/utils/secondScenario/DeleteModel";
-
-const initSelectionChain = {
-  name: "",
-  nucleotideRange: {
-    fromInclusive: 0,
-    toInclusive: 0,
-  },
-};
+import initTarget from "../../json/initTarget.json";
+import { getTaskID } from "../../utils/secondScenario/getTaskID";
 
 interface DataType {
   key: React.Key;
@@ -37,41 +32,31 @@ interface DataType {
   range: string;
 }
 
-const initTarget = {
-  target: {
-    sequence: "",
-    sourceSelection: {
-      modelName: "",
-      chains: [initSelectionChain],
-    },
-    selection: {
-      modelName: "",
-      chains: [initSelectionChain],
-    },
-  },
-  models: [],
-};
-
 const targetModels = () => {
+  const router = useRouter();
+
   const [modelsTarget, setModelsTarget] =
     useState<second_scenario_models_target>(initTarget);
   const [datasetModels, setDatasetModels] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
+  const searchParams = useSearchParams();
+  const targetID = searchParams.get("id");
   const [params, setParams] = useState<second_scenario_submit>({
-    taskHashId: "",
+    taskHashId: searchParams.get("id") ?? "",
     angles: [
-      "alpha",
-      "beta",
-      "gamma",
-      "delta",
-      "epsilon",
-      "zeta",
-      "eta",
-      "theta",
-      "eta prim",
-      "theta_prim",
-      "chi",
+      "ALPHA",
+      "BETA",
+      "GAMMA",
+      "DELTA",
+      "EPSILON",
+      "ZETA",
+      "ETA",
+      "ETA_PRIM",
+      "THETA",
+      "THETA_PRIM",
+      "CHI",
     ],
     threshold: 15,
   });
@@ -120,9 +105,6 @@ const targetModels = () => {
     },
   ];
 
-  const searchParams = useSearchParams();
-  const targetID = searchParams.get("id");
-
   useEffect(() => {
     let temp: DataType[] = [];
     if (modelsTarget.models.length != 0) {
@@ -140,12 +122,12 @@ const targetModels = () => {
   }, [modelsTarget]);
 
   useEffect(() => {
-    UploadedTaskDetails(targetID, setModelsTarget);
+    UploadedTaskDetails(targetID, setModelsTarget, setError);
   }, []);
 
   const submit = () => {
-    setParams({ ...params, taskHashId: targetID ?? "" });
-    console.log(params);
+    // console.log(params);
+    getTaskID(params, router);
   };
 
   return (
@@ -172,6 +154,7 @@ const targetModels = () => {
           setModelsTarget={setModelsTarget}
           setLoading={setLoading}
           taskID={searchParams.get("id")}
+          error={error}
         />
         {datasetModels.length != 0 ? (
           <Table

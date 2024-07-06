@@ -78,6 +78,9 @@ export default function RootLayout({
                 colorSplit: "#dcdcdc",
                 fontFamily: openSansBold.style.fontFamily,
               },
+              // Tabs: {
+              //   horizontalMargin: "16px 16px 16px 0",
+              // },
             },
           }}
         >

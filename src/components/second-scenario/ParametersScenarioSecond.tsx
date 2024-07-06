@@ -21,17 +21,17 @@ type CheckboxValueType = GetProp<typeof Checkbox.Group, "value">[number];
 const CheckboxGroup = Checkbox.Group;
 
 const initAngles = [
-  "alpha",
-  "beta",
-  "gamma",
-  "delta",
-  "epsilon",
-  "zeta",
-  "eta",
-  "theta",
-  "eta prim",
-  "theta_prim",
-  "chi",
+  "ALPHA",
+  "BETA",
+  "GAMMA",
+  "DELTA",
+  "EPSILON",
+  "ZETA",
+  "ETA",
+  "ETA_PRIM",
+  "THETA",
+  "THETA_PRIM",
+  "CHI",
 ];
 
 const marks: SliderSingleProps["marks"] = {
@@ -70,7 +70,8 @@ const ParametersScenarioSecond = (props: {
   return (
     <div>
       <Divider orientation="left">
-        Select torsion angles for MCQ? analysis <SelectOutlined style={{ color: "#04afa4" }}/>
+        Select torsion angles for MCQ? analysis{" "}
+        <SelectOutlined style={{ color: "#04afa4" }} />
       </Divider>
       <Col
         style={{

@@ -1,38 +1,31 @@
 import { message } from "antd";
 import lang from "../lang.json";
+import { second_scenario_submit } from "../../types/modelsType";
 import config from "../../config.json";
-import initTarget from "../../json/initTarget.json";
 
-export function UploadedTaskDetails(
-  taskId: string | null,
-  setModelsTarget: any,
-  setError: any
-) {
+export function getTaskID(submit: second_scenario_submit, router: any) {
   const requestOptions = {
-    method: "GET",
+    method: "POST",
+    body: JSON.stringify(submit),
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "*", //localhost zabazpieczenie
     },
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
-
-  fetch(config.SERVER_URL + "/one-many/form/" + taskId, requestOptions)
+  fetch(config.SERVER_URL + "/one-many/submit", requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
-        setModelsTarget(initTarget);
-        setError(true);
         message.error(lang.rcsb_error);
+        // setLoading(false);
+        return "";
       } else {
         return response.json();
       }
     })
     .then((response: any) => {
       if (response != "" && response != undefined) {
-        setModelsTarget(response);
-      } else {
-        setModelsTarget(initTarget);
-        setError(true);
+        router.push(`/result-second?id=${response.taskId}`);
       }
     })
     .catch((error: any) => message.error("Something went wrong, try again"));
