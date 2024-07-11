@@ -171,6 +171,7 @@ export type second_scenario_models_target = {
 
 export type second_scenario_models = {
   fileId: string;
+  fileName: string;
   sequence: string;
   selection: {
     modelName: string;
@@ -190,6 +191,8 @@ export type second_scenario_submit = {
 
 export type second_scenario_result = {
   model: string;
+  targetHashId: string;
+  targetFileName: string;
   chain: string;
   lcsThreshold: number;
   requestedAngles: string[];
@@ -203,6 +206,21 @@ export type second_scenario_result_differences = {
   modelMCQ: number;
   residues: second_scenario_result_differences_residues[];
   residueMCQs: number[];
+  modelLCS: second_scenario_result_differences_lcs;
+};
+
+export type second_scenario_result_differences_lcs = {
+  targetNucleotideRange: {
+    fromInclusive: number;
+    toInclusive: number;
+  };
+  modelNucleotideRange: {
+    fromInclusive: number;
+    toInclusive: number;
+  };
+  validResidues: number;
+  coveragePercent: number;
+  fragmentMCQ: number;
 };
 
 export type second_scenario_result_differences_residues = {
@@ -232,4 +250,19 @@ export type second_scenario_result_dataset_single_model = {
   eta_prim: number | null;
   theta_prim: number | null;
   chi: number | null;
+};
+
+export type angles_result = {
+  mcq: string;
+  alpha: string;
+  beta: string;
+  gamma: string;
+  delta: string;
+  epsilon: string;
+  zeta: string;
+  eta: string;
+  theta: string;
+  eta_prim: string;
+  theta_prim: string;
+  chi: string;
 };

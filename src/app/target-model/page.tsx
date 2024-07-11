@@ -3,7 +3,7 @@ import UploadModels from "@/utils/secondScenario/UploadModels";
 import styles from "./page.module.css";
 import IntersectionOfTargetModels from "@/components/second-scenario/IntersectionOfTargetModels";
 import ParametersScenarioSecond from "@/components/second-scenario/ParametersScenarioSecond";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { UploadFile } from "antd/lib/upload/interface";
@@ -28,11 +28,11 @@ import { getTaskID } from "../../utils/secondScenario/getTaskID";
 interface DataType {
   key: React.Key;
   sequence: string;
-  number: string;
+  name: string;
   range: string;
 }
 
-const targetModels = () => {
+const TargetModels = () => {
   const router = useRouter();
 
   const [modelsTarget, setModelsTarget] =
@@ -67,9 +67,9 @@ const targetModels = () => {
 
   const columns: TableColumnsType<DataType> = [
     {
-      title: "Number",
-      dataIndex: "number",
-      key: "number",
+      title: "File name",
+      dataIndex: "name",
+      key: "name",
       width: 200,
       fixed: "left",
     },
@@ -111,7 +111,7 @@ const targetModels = () => {
       temp = modelsTarget.models.map((model, index) => {
         let x = {
           key: model.fileId,
-          number: (index + 1).toString(),
+          name: model.fileName,
           sequence: model.sequence,
           range: `${model.selection.chains[0].nucleotideRange.fromInclusive}-${model.selection.chains[0].nucleotideRange.toInclusive}`,
         };
@@ -119,7 +119,7 @@ const targetModels = () => {
       });
     }
     setDatasetModels(temp);
-  }, [modelsTarget]);
+  }, [modelsTarget, uploadStructure]);
 
   useEffect(() => {
     UploadedTaskDetails(targetID, setModelsTarget, setError);
@@ -146,7 +146,6 @@ const targetModels = () => {
             </Tooltip>
           </span>
         </h1>
-        <Divider />
 
         <UploadModels
           uploadStructure={uploadStructure}
@@ -201,4 +200,12 @@ const targetModels = () => {
   );
 };
 
-export default targetModels;
+const PageTargetModels = () => {
+  return (
+    <Suspense>
+      <TargetModels />
+    </Suspense>
+  );
+};
+
+export default PageTargetModels;

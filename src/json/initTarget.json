@@ -1,0 +1,30 @@
+{
+  "target": {
+    "sequence": "",
+    "sourceSelection": {
+      "modelName": "",
+      "chains": [
+        {
+          "name": "",
+          "nucleotideRange": {
+            "fromInclusive": 0,
+            "toInclusive": 0
+          }
+        }
+      ]
+    },
+    "selection": {
+      "modelName": "",
+      "chains": [
+        {
+          "name": "",
+          "nucleotideRange": {
+            "fromInclusive": 0,
+            "toInclusive": 0
+          }
+        }
+      ]
+    }
+  },
+  "models": []
+}

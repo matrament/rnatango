@@ -7,8 +7,6 @@ import { DownloadOutlined } from "@ant-design/icons";
 import { exportDataToCSV } from "../../../utils/exportDataToCSV";
 import type { GetProp } from "antd";
 
-type CheckboxValueType = GetProp<typeof Checkbox.Group, "value">[number];
-
 type datasetModels = {
   [key: string]: string | number | null;
 };
@@ -21,11 +19,40 @@ interface tableAngle {
   fixed: any;
 }
 
-const columns: datasetModels = {
-  0: "1/12 \u00B7 \u03C0 = 15\u00B0",
-  1: "1/6 \u00B7 \u03C0 = 30\u00B0",
-  2: "1/4 \u00B7 \u03C0 = 45\u00B0",
-  3: "1/3 \u00B7 \u03C0 = 60\u00B0",
+const columns = [
+  { key: "15", description: "1/12 \u00B7 \u03C0 = 15\u00B0" },
+  { key: "30", description: "1/6 \u00B7 \u03C0 = 30\u00B0" },
+  { key: "45", description: "1/4 \u00B7 \u03C0 = 45\u00B0" },
+  { key: "60", description: "1/3 \u00B7 \u03C0 = 60\u00B0" },
+  { key: "75", description: "5/12 \u00B7 \u03C0 = 75\u00B0" },
+  { key: "90", description: "1/2 \u00B7 \u03C0 = 90\u00B0" },
+  { key: "105", description: "7/12 \u00B7 \u03C0 = 105\u00B0" },
+  { key: "120", description: "2/3 \u00B7 \u03C0 = 120\u00B0" },
+  { key: "135", description: "3/4 \u00B7 \u03C0 = 135\u00B0" },
+  { key: "150", description: "5/6 \u00B7 \u03C0 = 150\u00B0" },
+  { key: "165", description: "11/12 \u00B7 \u03C0 = 165\u00B0" },
+  { key: "180", description: "\u00B7 \u03C0 = 180\u00B0" },
+];
+const columns_display = [
+  { key: "15", description: "1/12 \u00B7 \u03C0 = 15\u00B0" },
+  { key: "30", description: "1/6 \u00B7 \u03C0 = 30\u00B0" },
+  { key: "45", description: "1/4 \u00B7 \u03C0 = 45\u00B0" },
+  { key: "60", description: "1/3 \u00B7 \u03C0 = 60\u00B0" },
+];
+
+type rowType = keyof {
+  "15": number;
+  "30": number;
+  "45": number;
+  "60": number;
+  "75": number;
+  "90": number;
+  "105": number;
+  "120": number;
+  "135": number;
+  "150": number;
+  "165": number;
+  "180": number;
 };
 
 const ModelsRangeAngle = (props: {
@@ -34,53 +61,71 @@ const ModelsRangeAngle = (props: {
 }) => {
   const [angleColumn, setAngleColumn] = useState<any>();
   const [dataStatistic, setDataStatistic] = useState<any>([]);
-  //   const [csvData, setCsvData] = useState<torsion_angles_residue[]>([]);
+  const [csvData, setCsvData] = useState<datasetModels[]>([]);
 
   useEffect(() => {
-    handleChange(Object.keys(columns));
+    handleChange(columns_display);
 
     let x = props.models.map((model: string, index) => {
       return makeStatisticOfMCQvalue(model, index);
     });
-    // setCsvData(props.dataAngle);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     setDataStatistic(x);
+    setCsvData(x);
   }, [props.models]);
 
   const makeStatisticOfMCQvalue = (model: string, index: number) => {
-    let temp: { [key: number]: number; name: string; key: number } = {
+    let temp = {
       name: model,
       key: index,
+      "15": 0,
+      "30": 0,
+      "45": 0,
+      "60": 0,
+      "75": 0,
+      "90": 0,
+      "105": 0,
+      "120": 0,
+      "135": 0,
+      "150": 0,
+      "165": 0,
+      "180": 0,
     };
     for (let i = 0; i < props.dataset.length; i++) {
       let value = props.dataset[i][model];
       if (typeof value === "number" && value !== null) {
         let index = Math.floor(value / 15);
-        temp[index] = (temp[index] || 0) + 1;
+        let key_value = columns[index].key;
+        temp[key_value as rowType] = (temp[key_value as rowType] || 0) + 1;
       }
     }
     let sum = 0;
     for (let i = 0; i < 12; i++) {
       let x = 0;
-      if (temp[i] != undefined) {
-        x = temp[i];
+      if (temp[columns[i].key as rowType] != undefined) {
+        x = temp[columns[i].key as rowType];
       }
-      temp[i] = +(((x + sum) * 100) / props.dataset.length).toFixed(2);
+      temp[columns[i].key as rowType] = +(
+        ((x + sum) * 100) /
+        props.dataset.length
+      ).toFixed(2);
       sum = sum + x;
     }
     return temp;
   };
 
-  const handleChange = (value: string[]) => {
-    let x: TableColumnsType = value.map((e: string, index) => ({
-      title: columns[e],
-      key: index + 1,
-      dataIndex: e,
-      width: 30,
-      fixed: false,
-      render: (e: string) => <p className={styles.tableAngleMono}>{e}</p>,
-    }));
+  const handleChange = (value: { key: string; description: string }[]) => {
+    let x: TableColumnsType = value.map(
+      (e: { key: string; description: string }, index: number) => ({
+        title: e.description,
+        key: index + 1,
+        dataIndex: e.key,
+        width: 30,
+        fixed: false,
+        render: (e: string) => <p className={styles.tableAngleMono}>{e}</p>,
+      })
+    );
     x.splice(0, 0, {
       title: "Model",
       key: 0,
@@ -94,7 +139,9 @@ const ModelsRangeAngle = (props: {
 
   return (
     <div style={{ width: "100%" }}>
-      <h2 style={{ textAlign: "center", marginTop: "0" }}>Table ...</h2>
+      <h2 style={{ textAlign: "center", marginTop: "0" }}>
+        Percentage of MCQ Ranges
+      </h2>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}
         columns={angleColumn}
@@ -109,19 +156,19 @@ const ModelsRangeAngle = (props: {
           type="primary"
           shape="round"
           icon={<DownloadOutlined />}
-          // onClick={() =>
-          //   exportDataToCSV(
-          //     csvData.sort((a: any, b: any) => a.key - b.key),
-          //     angleColumn,
-          //     props.fileName,
-          //     props.chain
-          //   )
-          // }
+          onClick={() =>
+            exportDataToCSV(
+              csvData.sort((a: any, b: any) => a.key - b.key),
+              angleColumn as [any],
+              "percentage",
+              "of_MCQ_Ranges"
+            )
+          }
         >
           Download .csv
         </Button>
       </div>
-      <Divider/>
+      <Divider />
     </div>
   );
 };

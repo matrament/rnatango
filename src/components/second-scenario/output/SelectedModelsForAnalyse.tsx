@@ -6,18 +6,12 @@ import { PaperClipOutlined } from "@ant-design/icons";
 const SelectedModelsForAnalyse = (props: {
   models: { [key: number]: string }[];
   setSelectedModels: any;
+  selectedModels: string[];
+  targetFileName: string;
 }) => {
-  const [options, setOptions] = useState<{ label: string; value: string }[]>(
-    []
-  );
-  const [selectedModels, setSelectedModels] = useState<string[]>([]);
-
-  //   useEffect(() => {
-  //     let temp: string[] = props.models.map((model) => {
-  //       return Object.values(model)[0];
-  //     });
-  //     setSelectedModels(temp);
-  //   }, [selectedModels]);
+  useEffect(() => {
+    console.log(props.selectedModels);
+  }, [props.selectedModels]);
 
   const onChange = (value: string[]) => {
     props.setSelectedModels(value);
@@ -25,8 +19,14 @@ const SelectedModelsForAnalyse = (props: {
 
   return (
     <div style={{ width: "100%" }}>
-      <div style={{ margin: "30px 50px 30px 50px" }}>
-        <p>Models: </p>
+      <div style={{ margin: "40px 50px 10px 50px" }}>
+        <p>
+          <b>Target file name: </b> {props.targetFileName}
+        </p>
+        <p>
+          <b>Select Model(s) for analysis: </b>
+        </p>
+
         <Select
           mode="multiple"
           style={{ width: "100%" }}
@@ -36,7 +36,7 @@ const SelectedModelsForAnalyse = (props: {
               value: Object.values(model)[0],
             };
           })}
-          defaultValue={selectedModels}
+          defaultValue={props.selectedModels}
           onChange={onChange}
           placeholder="Select Item..."
           maxTagCount="responsive"

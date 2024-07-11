@@ -15,6 +15,7 @@ const Header = () => {
 };
 
 export default Header;
+
 const DesktopHeader = () => {
   const pathname = usePathname();
   return (

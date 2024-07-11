@@ -2,6 +2,7 @@ import { Button, message, Image, Divider } from "antd";
 import lang from "../../../utils/lang.json";
 import config from "../../../config.json";
 import { DownloadOutlined } from "@ant-design/icons";
+import styles from "../../first-scenario/first-scenario.module.css";
 
 function downloadFile(type: any, modelId: string) {
   const requestOptions = {
@@ -34,6 +35,13 @@ const MCQstructure = (props: { modelHashId: string }) => {
       </h2>
       <Image
         alt={"secondary_structure"}
+        style={{
+          width: "100%",
+          objectFit: "contain",
+          objectPosition: "50% 50%",
+        }}
+        width={700}
+        height={700}
         // className="two-d-image"
         src={`${config.SERVER_URL}/one-many/secondary/structure/${props.modelHashId}`}
       />

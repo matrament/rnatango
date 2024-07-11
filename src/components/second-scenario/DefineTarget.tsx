@@ -11,6 +11,8 @@ import {
   Space,
   InputNumber,
   Divider,
+  Col,
+  Row,
 } from "antd";
 import { Target, structure, Chains } from "../../types/modelsType";
 import { QuestionOutlined } from "@ant-design/icons";
@@ -180,25 +182,18 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
   return (
     <div>
       <div className={styles.scenarioTarget}>
-        <div className={styles.header}>
-          <h2>
-            {props.structure.fileHashId.length < 5
-              ? props.structure.fileHashId.toUpperCase()
-              : props.fileName}
-          </h2>
-        </div>
+        <h2 style={{ marginBottom: 0 }}>
+          {props.structure.fileHashId.length < 5
+            ? props.structure.fileHashId.toUpperCase()
+            : props.fileName}
+        </h2>
+        <Divider />
         <div className={styles.specifyTarget}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "400px",
-            }}
-          >
-            <p>Model:</p>
-            <div>
+          <Row style={{ height: "40px" }}>
+            <Col span={5} style={{ display: "flex", alignItems: "center" }}>
+              <b>Select model:</b>
+            </Col>
+            <Col span={5} style={{ display: "flex", alignItems: "center" }}>
               <Select
                 style={{ width: 100 }}
                 value={model}
@@ -208,33 +203,40 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
                   return { value: model, label: model };
                 })}
               />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-
-              width: "400px",
-            }}
-          >
-            <p>Select chain:</p>
-
-            <Select
-              style={{ width: 100 }}
-              value={selectedChain}
-              placeholder="chain"
-              onChange={chooseChains}
-              options={chainsToSelect.map((chain: string) => {
-                return { value: chain, label: chain };
-              })}
-            />
-          </div>
-          <p>Analyse:</p>
+            </Col>
+          </Row>
+          <Row style={{ height: "40px" }}>
+            <Col
+              span={5}
+              style={{ display: "flex", alignItems: "center", gap: "5px" }}
+            >
+              <b>Select chain:</b>
+            </Col>
+            <Col span={5} style={{ display: "flex", alignItems: "center" }}>
+              <Select
+                style={{ width: 100 }}
+                value={selectedChain}
+                placeholder="chain"
+                onChange={chooseChains}
+                options={chainsToSelect.map((chain: string) => {
+                  return { value: chain, label: chain };
+                })}
+              />
+            </Col>
+          </Row>
+          <Row style={{ height: "40px" }}>
+            <Col
+              span={5}
+              style={{ display: "flex", alignItems: "center", gap: "5px" }}
+            >
+              <b>Analyse:</b>
+            </Col>
+          </Row>
           <Radio.Group onChange={onChange} value={value}>
-            <Space direction="vertical" style={{ marginLeft: "30px" }}>
+            <Space
+              direction="vertical"
+              style={{ margin: "10px 0px 15px 30px" }}
+            >
               <Radio value={1}>
                 {initialModels[model][selectedChain].residuesWithoutAtoms
                   .length === 0
@@ -244,19 +246,17 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
               <Radio value={2}>fragment of a chain</Radio>
             </Space>
           </Radio.Group>
-        </div>
-        {initialModels[model][selectedChain].residuesWithoutAtoms.length !=
-        0 ? (
-          <div style={{ marginTop: "25px" }}>
-            <Alert
-              message="The chain is discontinuous. To validate a task, select a continuous fragment of chain."
-              type="info"
-              showIcon
-            />
-          </div>
-        ) : null}
-        <Divider />
-        <div>
+          {initialModels[model][selectedChain].residuesWithoutAtoms.length !=
+          0 ? (
+            <div style={{ maxWidth: "650px", margin: "15px" }}>
+              <Alert
+                message="The chain is discontinuous. To validate a task, select a continuous fragment of chain."
+                type="info"
+                showIcon
+              />
+            </div>
+          ) : null}
+
           {selectedChain != "" &&
             (value == 1 ? (
               <FullChainAnalysis
@@ -287,7 +287,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
         </div>
         <Divider />
         {outOfRange ? (
-          <div style={{ maxWidth: "800px", marginBottom: "25px" }}>
+          <div style={{ maxWidth: "800px", marginBottom: "20px" }}>
             <Alert
               message="Warning"
               description="The selected fragment contains a discontinuity. To submit the task, select the fragment without grayed out elements."
@@ -298,7 +298,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
         ) : null}
         <Button
           size="large"
-          style={{ marginBottom: "25px" }}
+          style={{ marginBottom: "20px" }}
           type="primary"
           shape="round"
           onClick={submit}

@@ -35,6 +35,7 @@ export default function RootLayout({
               colorPrimary: "#fb5f4c",
               borderRadius: 16,
               fontFamily: openSans.style.fontFamily,
+              paddingLG: 30,
             },
             components: {
               Button: {
@@ -60,6 +61,7 @@ export default function RootLayout({
                 fontFamily: openSansBold.style.fontFamily,
                 colorBorder: "#dcdcdc",
                 borderRadiusLG: 30,
+                headerBg: "#ffff",
               },
               Input: {
                 fontFamily: openSansBold.style.fontFamily,
@@ -78,9 +80,9 @@ export default function RootLayout({
                 colorSplit: "#dcdcdc",
                 fontFamily: openSansBold.style.fontFamily,
               },
-              // Tabs: {
-              //   horizontalMargin: "16px 16px 16px 0",
-              // },
+              Grid: {
+                fontSize: 16,
+              },
             },
           }}
         >

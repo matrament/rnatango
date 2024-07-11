@@ -5,8 +5,9 @@ import { Table, Collapse, Select, Button, Divider } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import { exportDataToCSV } from "../../../utils/exportDataToCSV";
-import type { GetProp } from "antd";
 import { second_scenario_result_dataset_single_model } from "@/types/modelsType";
+import angles_description from "../../../json/angles_description.json";
+import { angles_result } from "../../../types/modelsType";
 
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
@@ -25,16 +26,14 @@ const ModelvsTarget = (props: {
 
   useEffect(() => {
     handleChange(props.requestedAngles);
-    console.log(props.dataset);
     setCsvData(props.dataset);
     setSelectedRowKeys(Array.from(Array(props.dataset.length).keys()));
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.dataset, props.requestedAngles]);
 
   const handleChange = (value: string[]) => {
     let x: TableColumnsType = value.map((e, index) => ({
-      title: `${e.toLowerCase()}`,
+      title: `${angles_description[e.toLowerCase() as keyof angles_result]}`,
       key: index + 1,
       dataIndex: `${e.toLowerCase()}`,
       width: 30,
@@ -68,7 +67,7 @@ const ModelvsTarget = (props: {
 
   return (
     <div style={{ width: "100%" }}>
-      <h2 style={{ textAlign: "center" }}>Table...</h2>
+      <h2 style={{ textAlign: "center" }}>Residue-wise angular differences</h2>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}
         columns={column}

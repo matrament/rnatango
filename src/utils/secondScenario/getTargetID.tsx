@@ -25,7 +25,6 @@ export function GetTargetId(target: second_scenario_target, router: any) {
     })
     .then((response: any) => {
       if (response != "" && response != undefined) {
-        console.log(response);
         router.push(`/target-model?id=${response.taskId}`);
       }
     })

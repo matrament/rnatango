@@ -5,8 +5,6 @@ import { Table, Collapse, Select, Button, Checkbox, Divider } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import { exportDataToCSV } from "../../../utils/exportDataToCSV";
-import type { GetProp } from "antd";
-import { second_scenario_result_dataset } from "../../../types/modelsType";
 
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
@@ -64,7 +62,9 @@ const ModelsNucleotyde = (props: {
 
   return (
     <div style={{ width: "100%" }}>
-      <h2 style={{ textAlign: "center", marginTop: "0" }}>Table....</h2>
+      <h2 style={{ textAlign: "center", marginTop: "0" }}>
+        Table of residues MCQ value
+      </h2>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}
         columns={column}
@@ -85,8 +85,8 @@ const ModelsNucleotyde = (props: {
             exportDataToCSV(
               csvData.sort((a: any, b: any) => a.key - b.key),
               column,
-              "test",
-              "test"
+              "table",
+              "residues_MCQ_value"
             )
           }
         >

@@ -4,6 +4,8 @@ import { ReactECharts } from "../../echarts/ReactECharts";
 import { ReactEChartsProps } from "../../echarts/ReactECharts";
 import { second_scenario_result_dataset_single_model } from "@/types/modelsType";
 import { Divider } from "antd";
+import angles_description from "../../../json/angles_description.json";
+import { angles_result } from "../../../types/modelsType";
 
 type ObjectKey = keyof second_scenario_result_dataset_single_model;
 
@@ -26,14 +28,36 @@ const StackedLinePlot = (props: {
     });
     setDataset(temp);
   }, [props.dataset]);
+
   const option: ReactEChartsProps["option"] = {
     tooltip: {
       trigger: "axis",
+      // formatter: (params) => {
+      //   return params[0].name;
+      // },
     },
     legend: {
       data: props.requestedAngles.map((e) => {
         return e.toLowerCase();
       }),
+      formatter: function (name) {
+        return `${angles_description[name as keyof angles_result]}`;
+      },
+      width: "70%",
+      selected: {
+        mcq: true,
+        alpha: false,
+        beta: false,
+        gamma: false,
+        delta: false,
+        epsilon: false,
+        zeta: false,
+        eta: false,
+        theta: false,
+        eta_prim: false,
+        theta_prim: false,
+        chi: false,
+      },
     },
     grid: {
       left: "4%",
@@ -50,7 +74,6 @@ const StackedLinePlot = (props: {
     },
     xAxis: {
       type: "category",
-      //   boundaryGap: false,
       data: props.dataset.map((e) => {
         return e.name;
       }),
@@ -59,15 +82,9 @@ const StackedLinePlot = (props: {
       type: "value",
       axisLabel: {
         formatter: "{value}°",
-        // customValues: [0, 4, 7, 8, 3000],
       },
     },
     dataZoom: [
-      //   {
-      //     type: "inside",
-      //     start: 0,
-      //     end: 10,
-      //   },
       {
         start: 0,
         end: 100,
@@ -78,7 +95,12 @@ const StackedLinePlot = (props: {
 
   return (
     <div style={{ width: "100%" }}>
-      <h2 style={{ textAlign: "center", marginTop: "0" }}>Line plot</h2>
+      <h2 style={{ textAlign: "center", marginTop: "0" }}>
+        Residue-wise angle values
+      </h2>
+      <p style={{ textAlign: "center", marginTop: "0" }}>
+        (click angle name to show/hide line plot)
+      </p>
       {dataset.length != 0 ? (
         <ReactECharts
           option={option}

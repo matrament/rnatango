@@ -1,12 +1,11 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { message, Upload, UploadProps, UploadFile } from "antd";
+import { message, Upload, UploadProps, UploadFile, Divider } from "antd";
 import config from "../../config.json";
 import { second_scenario_models_target } from "@/types/modelsType";
 import { InboxOutlined } from "@ant-design/icons";
 import styles from "../first-scenario/first-scenario.module.css";
 import { useState } from "react";
 import lang from "../lang.json";
-import { error } from "console";
 
 const { Dragger } = Upload;
 
@@ -82,22 +81,33 @@ const UploadModels = (props: UploadFileArguments) => {
     },
   };
   return (
-    <div style={{ display: "flex", rowGap: "30 px" }}>
-      <p>Upload max 10 models for analyse:</p>
-      <Dragger
-        fileList={props.uploadStructure ? props.uploadStructure : undefined}
-        {...uploader_props}
-        disabled={props.error}
+    <>
+      <Divider orientation="left">Upload max 10 models for analyse:</Divider>
+      <div
+        style={{
+          display: "flex",
+          rowGap: "20 px",
+          flexDirection: "column",
+          marginBottom: "20px",
+          width: "80%",
+          justifyContent: "center",
+        }}
       >
-        <p className="ant-upload-drag-icon">
-          <InboxOutlined />
-        </p>
-        <h3 className="ant-upload-text">
-          Click or drag file to this area to upload
-        </h3>
-        <h3 className="ant-upload-hint">*.cif, *.pdb</h3>
-      </Dragger>
-    </div>
+        <Dragger
+          fileList={props.uploadStructure ? props.uploadStructure : undefined}
+          {...uploader_props}
+          disabled={props.error}
+        >
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <h3 className="ant-upload-text">
+            Click or drag file to this area to upload
+          </h3>
+          <h3 className="ant-upload-hint">*.cif, *.pdb</h3>
+        </Dragger>
+      </div>
+    </>
   );
 };
 

@@ -22,7 +22,7 @@ const ChiStatistics = (props: { angle: any[] }) => {
       // top: "bottom",
       bottom: "0%",
       itemWidth: 30,
-      itemHeight: 30,
+      itemHeight: 15,
       orient: "horizontal",
       align: "auto",
       textStyle: {
@@ -123,7 +123,7 @@ const ChiStatistics = (props: { angle: any[] }) => {
       }}
     >
       <div style={{ width: "100%" }}>
-        <ReactECharts option={option} />
+        <ReactECharts option={option} style={{ height: "500px" }} />
       </div>
     </div>
   );

@@ -13,18 +13,21 @@ import { Divider, Tabs } from "antd";
 import HeatMap from "@/components/second-scenario/output/HeatMap";
 import MCQstructure from "./MCQstructure";
 import SelectedModelsForAnalyse from "./SelectedModelsForAnalyse";
+import LCSta from "./LCSta";
 
 const ResultModelsTarget = (props: { result: second_scenario_result }) => {
   const [models, setModels] = useState<{ [key: number]: string }[]>([]);
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [comparsionModelsMCQ, setComparsionModelsMCQ] = useState([]);
   const [dataset, setDataset] = useState<second_scenario_result_dataset[]>([]);
-  const [currentTab, setCurrentTab] = useState(1);
+  const [sequence, setSequence] = useState<string>("");
+  const [currentTab, setCurrentTab] = useState(0);
 
   useEffect(() => {
     let models_temp: { [key: number]: string }[] = [];
     let temp_models: any = [];
     let temp_comparsionModelsMCQ: any = [];
+    let temp_seq: string[] = [];
 
     for (let i = 0; i < props.result.differences.length; i++) {
       let model: any = [];
@@ -43,6 +46,7 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
           }
         });
         if (i === 0) {
+          temp_seq.push(residue.name);
           temp_comparsionModelsMCQ.push({
             key: index,
             name: `${props.result.chain}.${residue.name}${residue.number}`,
@@ -65,6 +69,7 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
       })
     );
     setComparsionModelsMCQ(temp_comparsionModelsMCQ);
+    setSequence(temp_seq.join(""));
   }, [props.result]);
 
   const onChange = (key: string) => {
@@ -80,38 +85,70 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
 
   return (
     <>
-      <SelectedModelsForAnalyse
-        models={models}
-        setSelectedModels={setSelectedModels}
-      />
-      <ModelsNucleotyde dataset={comparsionModelsMCQ} models={selectedModels} />
-      <ModelsRangeAngle dataset={comparsionModelsMCQ} models={selectedModels} />
-      <HeatMap dataset={comparsionModelsMCQ} models={selectedModels} />
-      <h1>Specify model</h1>
-      <Tabs
-        centered
-        type="card"
-        items={items}
-        onChange={onChange}
-        style={{ width: "100%" }}
-      />
-      {dataset[currentTab] && (
+      {models.length != 0 ? (
         <>
-          <ModelvsTarget
-            dataset={Object.values(dataset[currentTab])[0]}
-            model={Object.keys(dataset[currentTab])[0]}
-            requestedAngles={[...props.result.requestedAngles, "mcq"]}
+          <SelectedModelsForAnalyse
+            models={models}
+            setSelectedModels={setSelectedModels}
+            selectedModels={selectedModels}
+            targetFileName={props.result.targetFileName}
           />
-          <StackedLinePlot
-            dataset={Object.values(dataset[currentTab])[0]}
-            requestedAngles={[...props.result.requestedAngles, "mcq"]}
-          />
-          <MCQstructure
-            modelHashId={props.result.differences[currentTab].modelHashId}
-          />
+          <Divider />
+          {selectedModels.length != 0 ? (
+            <>
+              <ModelsNucleotyde
+                dataset={comparsionModelsMCQ}
+                models={selectedModels}
+              />
+              <HeatMap dataset={comparsionModelsMCQ} models={selectedModels} />
+              <ModelsRangeAngle
+                dataset={comparsionModelsMCQ}
+                models={selectedModels}
+              />
+              <h1 style={{ marginTop: "10px", marginBottom: "30px" }}>
+                Analysis for a specific model
+              </h1>
+              <Tabs
+                centered
+                type="card"
+                items={items}
+                onChange={onChange}
+                style={{ width: "100%" }}
+              />
+              {dataset[currentTab] && (
+                <>
+                  <ModelvsTarget
+                    dataset={Object.values(dataset[currentTab])[0]}
+                    model={Object.keys(dataset[currentTab])[0]}
+                    requestedAngles={[...props.result.requestedAngles, "mcq"]}
+                  />
+                  <StackedLinePlot
+                    dataset={Object.values(dataset[currentTab])[0]}
+                    requestedAngles={[...props.result.requestedAngles, "mcq"]}
+                  />
+                  <MCQstructure
+                    modelHashId={
+                      props.result.differences[currentTab].modelHashId
+                    }
+                  />
+                </>
+              )}
+              <LCSta
+                targetSequence={sequence}
+                lcs={props.result.differences.map((diff) => {
+                  return {
+                    lcs: diff.modelLCS,
+                    name: diff.modelName,
+                    modelId: diff.modelHashId,
+                  };
+                })}
+              />
+            </>
+          ) : (
+            <p>no models selected</p>
+          )}
         </>
-      )}
-      <h1>LCS-ta</h1>
+      ) : null}
     </>
   );
 };

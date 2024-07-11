@@ -207,9 +207,7 @@ const NucleotidePanel = (props: {
           />
         ))}
       </div>
-      <div
-        style={{ padding: "15px", marginBottom: "10px", fontWeight: "bold" }}
-      >
+      <div style={{ padding: "15px", fontWeight: "bold" }}>
         Nucleotide range: {selectedSequence[0]}-
         {selectedSequence[selectedSequence.length - 1]}
       </div>

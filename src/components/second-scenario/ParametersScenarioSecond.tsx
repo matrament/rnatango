@@ -14,7 +14,6 @@ import {
 import { second_scenario_submit } from "@/types/modelsType";
 import { useState } from "react";
 import angles from "../../json/angles.json";
-import { SelectOutlined } from "@ant-design/icons";
 
 type CheckboxValueType = GetProp<typeof Checkbox.Group, "value">[number];
 
@@ -68,10 +67,9 @@ const ParametersScenarioSecond = (props: {
   };
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Divider orientation="left">
-        Select torsion angles for MCQ? analysis{" "}
-        <SelectOutlined style={{ color: "#04afa4" }} />
+        Select torsion angles to compute MCQ:
       </Divider>
       <Col
         style={{
@@ -98,9 +96,7 @@ const ParametersScenarioSecond = (props: {
           />
         </Row>
       </Col>
-      <Divider orientation="left">
-        LCS-TA: <SelectOutlined style={{ color: "#04afa4" }} />
-      </Divider>
+      <Divider orientation="left">Set LCS-TA parameter:</Divider>
       <Row style={{ margin: "30px 50px 30px 50px" }}>
         <Col span={3}>
           <p>MCQ threshold:</p>

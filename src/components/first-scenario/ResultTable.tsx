@@ -108,7 +108,7 @@ const ResultTable = (props: {
   useEffect(() => {
     handleChange(Object.keys(angleName));
     setCsvData(props.dataAngle);
-    console.log(props.dataAngle);
+    // console.log(props.dataAngle);
     setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -192,7 +192,7 @@ const ResultTable = (props: {
                   size="middle"
                   bordered
                   pagination={{ position: ["bottomCenter"] }}
-                  scroll={{ x: "calc(1600px)", y: 2000 }}
+                  scroll={{ x: true }}
                 />
                 <div className={styles.downloadButton}>
                   <Button

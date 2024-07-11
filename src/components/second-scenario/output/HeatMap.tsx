@@ -67,7 +67,7 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
     setDatasetDiscrete(temp_discrete);
     setDatasetContinous(temp_continous);
     setResidue(xAxis);
-  }, [props.dataset]);
+  }, [props.dataset, props.models]);
 
   const option: ReactEChartsProps["option"] = {
     tooltip: {
@@ -83,14 +83,15 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
       },
     },
     grid: {
-      left: "15%",
-      right: "left",
-      height: `${props.models.length * 15}%`,
+      // left: "15%",
+      // right: "left",
+      // height: `${props.models.length * 10}%`,
+      bottom: 85,
     },
     toolbox: {
       feature: {
         saveAsImage: {
-          excludeComponents: ["visualMap", "toolbox"],
+          excludeComponents: ["visualMap", "toolbox", "dataZoom"],
         },
       },
     },
@@ -114,7 +115,6 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
     ],
     yAxis: {
       type: "category",
-      // data: props.models,
       splitArea: {
         show: true,
       },
@@ -131,14 +131,15 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
     dataZoom: [
       {
         type: "slider",
-        xAxisIndex: 0,
+        xAxisIndex: [0, 1],
         // right: 10,
         start: 0,
         end: 100,
+        top: "top",
       },
       {
         type: "inside",
-        xAxisIndex: 1,
+        xAxisIndex: [0, 1],
         // right: 10,
         start: 0,
         end: 100,
@@ -153,21 +154,33 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
         orient: "horizontal",
         left: "center",
         itemWidth: 26,
-        // inRange: {
-        //   color: ["#ffff", "#fb5f4c"], //From smaller to bigger value ->
-        // },
         splitNumber: 4,
+        pieces: [
+          { min: 60, label: ">60\u00B0", color: "#e31919" },
+          { min: 30, max: 60, label: "30\u00B0 - 60\u00B0", color: "#fd8c3a" },
+          { min: 15, max: 30, label: "15\u00B0 - 30\u00B0", color: "#fccc5c" },
+          { max: 15, label: ">15\u00B0", color: "#ffffb0" },
+        ],
         inRange: {
           color: [
-            "#ffffbf",
-            "#fee090",
-            "#fdae61",
-            "#f46d43",
-            "#d73027",
-            "#a50026",
+            "#ffffb0",
+            "#ffffb0",
+            "#ffffb0",
+            "#ffffb0",
+            "#ffffb0",
+            "#ffffb0",
+            "#FFF39B",
+            "#FEE686",
+            "#fccc5c",
+            "#FDAC4B",
+            "#fd8c3a",
+            "#F0532A",
+            "#EA3622",
+            "#e31919",
+            "#e31919",
           ],
         },
-        bottom: "10%",
+        itemHeight: continous ? 180 : 30,
         formatter: function (value: any) {
           return `${continous ? Math.round(Math.E ** value) : value}`;
         },
@@ -175,7 +188,7 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
     ],
     series: [
       {
-        name: "MCQ value",
+        name: "value",
         type: "heatmap",
         data: continous ? datasetContinous : datasetDiscrete,
 
@@ -191,7 +204,9 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
 
   return (
     <div style={{ width: "100%" }}>
-      <h2 style={{ textAlign: "center", marginTop: "0" }}>Heatmap...</h2>
+      <h2 style={{ textAlign: "center", marginTop: "0" }}>
+        Heatmap of MCQ Ranges
+      </h2>
       <Switch
         style={{ marginLeft: "30px" }}
         checkedChildren={<LineChartOutlined />}
@@ -201,7 +216,7 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
       />
       <ReactECharts
         option={option}
-        style={{ height: "30dvh", marginLeft: "30px", marginRight: "30px" }}
+        style={{ height: "40dvh", marginLeft: "30px", marginRight: "30px" }}
       />
       <Divider />
     </div>

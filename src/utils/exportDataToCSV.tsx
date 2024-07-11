@@ -24,7 +24,8 @@ export function exportDataToCSV(
   );
 
   const csv = Papa.unparse(y);
-
+  // console.log(csvData);
+  // console.log(angleColumn);
   // Create a Blob containing the CSV data
   const csvBlob = new Blob([csv], { type: "text/csv" });
 
@@ -34,7 +35,7 @@ export function exportDataToCSV(
   // Create an invisible link element to trigger the download
   const link = document.createElement("a");
   link.href = csvUrl;
-  link.download = `${fileName.toLowerCase()}_${chain.toLowerCase()}_torsion_angles.csv`;
+  link.download = `${fileName.toLowerCase()}_${chain.toLowerCase()}.csv`;
 
   link.click();
 

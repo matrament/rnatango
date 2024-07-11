@@ -6,7 +6,8 @@ import initResult from "../../json/initResultSecond.json";
 export function processingResponseSecond(
   taskId: string | null,
   setResult: any,
-  setLoading: any
+  setStatus: any,
+  status: any
 ) {
   const requestOptions = {
     method: "GET",
@@ -17,23 +18,45 @@ export function processingResponseSecond(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  fetch(config.SERVER_URL + "/one-many/" + taskId + "/result", requestOptions)
-    .then((response: any) => {
-      if (response.status == 404) {
-        setResult(initResult);
-        setLoading(false);
-        message.error(lang.rcsb_error);
-      } else {
-        return response.json();
+  let socket = new WebSocket(config.SERVER_WEB_SOCKET_URL + "/onemany");
+  let timer: any = null;
+
+  const request = { hashId: taskId };
+  socket.onopen = () => {
+    socket.send(JSON.stringify(request));
+    timer = setInterval(() => {
+      socket.send(JSON.stringify(request));
+    }, 2000);
+  };
+  socket.onmessage = (event) => {
+    let a = JSON.parse(event.data);
+    setStatus(a.status);
+
+    if (
+      a.status === "SUCCESS" ||
+      a.status === "FAILED"
+      // resultFile.structureName == ""
+    ) {
+      clearInterval(timer);
+      if (a.status === "SUCCESS") {
+        fetch(
+          config.SERVER_URL + "/one-many/" + taskId + "/result",
+          requestOptions
+        )
+          .then((response: any) => response.json())
+          .then((response: any) => {
+            setResult(response);
+            // clearInterval(timer);
+          })
+          .catch((error: any) => {
+            message.error("Processing error");
+            // clearInterval(timer);
+          });
+        socket.close();
       }
-    })
-    .then((response: any) => {
-      if (response != "" && response != undefined) {
-        setResult(response);
-      } else {
-        setResult(initResult);
-      }
-      setLoading(false);
-    })
-    .catch((error: any) => message.error("Something went wrong, try again"));
+    }
+  };
+  socket.onclose = socket.onerror = () => {
+    clearInterval(timer);
+  };
 }
