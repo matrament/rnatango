@@ -106,7 +106,7 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
                 models={selectedModels}
               />
               <h1 style={{ marginTop: "10px", marginBottom: "30px" }}>
-                Analysis for a specific model
+              Angular parameters per model
               </h1>
               <Tabs
                 centered

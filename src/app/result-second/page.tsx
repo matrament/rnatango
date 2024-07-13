@@ -6,7 +6,7 @@ import { Divider, Tooltip, message } from "antd";
 import { useSearchParams } from "next/navigation";
 import { processingResponseSecond } from "@/utils/secondScenario/processingResponseSecond";
 import ResultModelsTarget from "@/components/second-scenario/output/ResultModelsTarget";
-import LoadingCard from "@/components/LoadingCard";
+import LoadingCard from "@/components/common/LoadingCard";
 import StatusTask from "@/components/common/StatusTask";
 
 const initResult = {

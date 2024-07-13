@@ -35,7 +35,7 @@ const initModel: Target = {
 };
 
 const DefineTarget = (props: { structure: structure; fileName: string }) => {
-  const [finalSequence, setFinalSequence] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [sequenceRange, setSequenceRange] = useState<
     { id: number; chain: [number, number] }[]
   >([{ id: 1, chain: [0, 0] }]);
@@ -55,6 +55,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
   };
 
   const submit = () => {
+    setLoading(true);
     let start = 0;
     let stop = 0;
 
@@ -84,8 +85,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
       },
     };
 
-    console.log(result);
-    GetTargetId(result, router);
+    GetTargetId(result, router, setLoading);
   };
 
   useEffect(() => {
@@ -143,7 +143,6 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
           }
         }
       });
-      console.log(result);
       return result;
     } else {
       return [[0, mainList.length - 1]];
@@ -180,138 +179,134 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
   };
 
   return (
-    <div>
-      <div className={styles.scenarioTarget}>
-        <h2 style={{ marginBottom: 0 }}>
-          {props.structure.fileHashId.length < 5
-            ? props.structure.fileHashId.toUpperCase()
-            : props.fileName}
-        </h2>
-        <Divider />
-        <div className={styles.specifyTarget}>
-          <Row style={{ height: "40px" }}>
-            <Col span={5} style={{ display: "flex", alignItems: "center" }}>
-              <b>Select model:</b>
-            </Col>
-            <Col span={5} style={{ display: "flex", alignItems: "center" }}>
-              <Select
-                style={{ width: 100 }}
-                value={model}
-                placeholder="model"
-                onChange={chooseModel}
-                options={Object.keys(initialModels).map((model: string) => {
-                  return { value: model, label: model };
-                })}
-              />
-            </Col>
-          </Row>
-          <Row style={{ height: "40px" }}>
-            <Col
-              span={5}
-              style={{ display: "flex", alignItems: "center", gap: "5px" }}
-            >
-              <b>Select chain:</b>
-            </Col>
-            <Col span={5} style={{ display: "flex", alignItems: "center" }}>
-              <Select
-                style={{ width: 100 }}
-                value={selectedChain}
-                placeholder="chain"
-                onChange={chooseChains}
-                options={chainsToSelect.map((chain: string) => {
-                  return { value: chain, label: chain };
-                })}
-              />
-            </Col>
-          </Row>
-          <Row style={{ height: "40px" }}>
-            <Col
-              span={5}
-              style={{ display: "flex", alignItems: "center", gap: "5px" }}
-            >
-              <b>Analyse:</b>
-            </Col>
-          </Row>
-          <Radio.Group onChange={onChange} value={value}>
-            <Space
-              direction="vertical"
-              style={{ margin: "10px 0px 15px 30px" }}
-            >
-              <Radio value={1}>
-                {initialModels[model][selectedChain].residuesWithoutAtoms
-                  .length === 0
-                  ? "full chain"
-                  : "the longest continuous fragment of chain"}
-              </Radio>
-              <Radio value={2}>fragment of a chain</Radio>
-            </Space>
-          </Radio.Group>
-          {initialModels[model][selectedChain].residuesWithoutAtoms.length !=
-          0 ? (
-            <div style={{ maxWidth: "650px", margin: "15px" }}>
-              <Alert
-                message="The chain is discontinuous. To validate a task, select a continuous fragment of chain."
-                type="info"
-                showIcon
-              />
-            </div>
-          ) : null}
-
-          {selectedChain != "" &&
-            (value == 1 ? (
-              <FullChainAnalysis
-                sequence={initialModels[model][selectedChain].sequence}
-                residuesWithoutAtoms={
-                  initialModels[model][selectedChain].residuesWithoutAtoms
-                }
-                range={findLongestFragment(
-                  initialModels[model][selectedChain].continousFragments
-                )}
-                index={0}
-              />
-            ) : value == 2 ? (
-              <NucleotidePanel
-                multipleSequence={sequenceRange}
-                setMultipleSequence={setSequenceRange}
-                indexSequence={1}
-                arrayChain={initialModels[model][selectedChain]["sequence"]
-                  .toUpperCase()
-                  .split("")}
-                residuesWithoutAtoms={
-                  initialModels[model][selectedChain]["residuesWithoutAtoms"]
-                }
-                deleteChainRange={"h"}
-                deleteSequenceOption={false}
-              />
-            ) : null)}
-        </div>
-        <Divider />
-        {outOfRange ? (
-          <div style={{ maxWidth: "800px", marginBottom: "20px" }}>
+    <div className={styles.scenarioTarget}>
+      <h2 style={{ marginBottom: 0 }}>
+        {props.structure.fileHashId.length < 5
+          ? props.structure.fileHashId.toUpperCase()
+          : props.fileName}
+      </h2>
+      <Divider />
+      <div className={styles.specifyTarget}>
+        <Row style={{ height: "40px" }}>
+          <Col span={5} style={{ display: "flex", alignItems: "center" }}>
+            <b>Select model:</b>
+          </Col>
+          <Col span={5} style={{ display: "flex", alignItems: "center" }}>
+            <Select
+              style={{ width: 100 }}
+              value={model}
+              placeholder="model"
+              onChange={chooseModel}
+              options={Object.keys(initialModels).map((model: string) => {
+                return { value: model, label: model };
+              })}
+            />
+          </Col>
+        </Row>
+        <Row style={{ height: "40px" }}>
+          <Col
+            span={5}
+            style={{ display: "flex", alignItems: "center", gap: "5px" }}
+          >
+            <b>Select chain:</b>
+          </Col>
+          <Col span={5} style={{ display: "flex", alignItems: "center" }}>
+            <Select
+              style={{ width: 100 }}
+              value={selectedChain}
+              placeholder="chain"
+              onChange={chooseChains}
+              options={chainsToSelect.map((chain: string) => {
+                return { value: chain, label: chain };
+              })}
+            />
+          </Col>
+        </Row>
+        <Row style={{ height: "40px" }}>
+          <Col
+            span={5}
+            style={{ display: "flex", alignItems: "center", gap: "5px" }}
+          >
+            <b>Analyse:</b>
+          </Col>
+        </Row>
+        <Radio.Group onChange={onChange} value={value}>
+          <Space direction="vertical" style={{ margin: "10px 0px 15px 30px" }}>
+            <Radio value={1}>
+              {initialModels[model][selectedChain].residuesWithoutAtoms
+                .length === 0
+                ? "full chain"
+                : "the longest continuous fragment of chain"}
+            </Radio>
+            <Radio value={2}>fragment of a chain</Radio>
+          </Space>
+        </Radio.Group>
+        {initialModels[model][selectedChain].residuesWithoutAtoms.length !=
+        0 ? (
+          <div style={{ maxWidth: "650px", margin: "15px" }}>
             <Alert
-              message="Warning"
-              description="The selected fragment contains a discontinuity. To submit the task, select the fragment without grayed out elements."
-              type="warning"
+              message="The chain is discontinuous. To validate a task, select a continuous fragment of chain."
+              type="info"
               showIcon
             />
           </div>
         ) : null}
-        <Button
-          size="large"
-          style={{ marginBottom: "20px" }}
-          type="primary"
-          shape="round"
-          onClick={submit}
-          disabled={
-            ((sequenceRange[0].chain[1] - sequenceRange[0].chain[0] < 3 ||
-              sequenceRange[0].chain[0] === undefined) &&
-              value == 2) ||
-            outOfRange
-          }
-        >
-          Submit
-        </Button>
+
+        {selectedChain != "" &&
+          (value == 1 ? (
+            <FullChainAnalysis
+              sequence={initialModels[model][selectedChain].sequence}
+              residuesWithoutAtoms={
+                initialModels[model][selectedChain].residuesWithoutAtoms
+              }
+              range={findLongestFragment(
+                initialModels[model][selectedChain].continousFragments
+              )}
+              index={0}
+            />
+          ) : value == 2 ? (
+            <NucleotidePanel
+              multipleSequence={sequenceRange}
+              setMultipleSequence={setSequenceRange}
+              indexSequence={1}
+              arrayChain={initialModels[model][selectedChain]["sequence"]
+                .toUpperCase()
+                .split("")}
+              residuesWithoutAtoms={
+                initialModels[model][selectedChain]["residuesWithoutAtoms"]
+              }
+              deleteChainRange={"h"}
+              deleteSequenceOption={false}
+            />
+          ) : null)}
       </div>
+      <Divider />
+      {outOfRange ? (
+        <div style={{ maxWidth: "800px", marginBottom: "20px" }}>
+          <Alert
+            message="Warning"
+            description="The selected fragment contains a discontinuity. To submit the task, select the fragment without grayed out elements."
+            type="warning"
+            showIcon
+          />
+        </div>
+      ) : null}
+      <Button
+        size="large"
+        style={{ marginBottom: "20px" }}
+        type="primary"
+        shape="round"
+        loading={loading}
+        onClick={submit}
+        disabled={
+          ((sequenceRange[0].chain[1] - sequenceRange[0].chain[0] < 3 ||
+            sequenceRange[0].chain[0] === undefined) &&
+            value == 2) ||
+          outOfRange
+        }
+      >
+        Submit
+      </Button>
     </div>
   );
 };

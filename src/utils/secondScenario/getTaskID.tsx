@@ -3,7 +3,11 @@ import lang from "../lang.json";
 import { second_scenario_submit } from "../../types/modelsType";
 import config from "../../config.json";
 
-export function getTaskID(submit: second_scenario_submit, router: any) {
+export function getTaskID(
+  submit: second_scenario_submit,
+  router: any,
+  setLoading: any
+) {
   const requestOptions = {
     method: "POST",
     body: JSON.stringify(submit),
@@ -17,7 +21,7 @@ export function getTaskID(submit: second_scenario_submit, router: any) {
     .then((response: any) => {
       if (response.status == 404) {
         message.error(lang.rcsb_error);
-        // setLoading(false);
+        setLoading(false);
         return "";
       } else {
         return response.json();

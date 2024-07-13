@@ -7,7 +7,7 @@
   "wrong_value": "Improper data in ",
   "notification_turned_on": "Notification turned on.",
   "rcsb_error_with_name": "Invalid data or PDB ID: ",
-  "rcsb_error": "Non-existent structure.",
+  "rcsb_error": "Invalid structure",
   "turn_on_notification": "Turn notification on",
   "delete_model_success": "Successfully deleted model",
   "error_deleting": "Failed to delete model"

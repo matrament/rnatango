@@ -1,5 +1,5 @@
 "use client";
-import styles from "./components.module.css";
+import styles from "../components.module.css";
 
 const LoadingCard = () => {
   return (

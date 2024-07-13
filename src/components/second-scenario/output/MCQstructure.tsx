@@ -31,7 +31,7 @@ const MCQstructure = (props: { modelHashId: string }) => {
   return (
     <>
       <h2 style={{ textAlign: "center", marginTop: "0" }}>
-        Secondary stucture
+        Secondary structure colored acc residue-wise MCQ values
       </h2>
       <Image
         alt={"secondary_structure"}

@@ -59,12 +59,14 @@ export default function LoadData() {
   const submit = () => {
     setLoading(true);
     if (pdbId.name.length === 4) {
-      processingRequest(pdbId, setLoading, setStructure);
+      processingRequest(pdbId, setLoading, setStructure, setOpen);
+
       setModelQuery(true);
       setShowResult(true);
     }
     if (isUpload && structure.fileHashId != "") {
       setLoading(false);
+      setOpen([]);
       setModelQuery(true);
       setShowResult(true);
     }
@@ -240,9 +242,7 @@ export default function LoadData() {
                             modelQuery
                           }
                           loading={loading}
-                          onClick={() => {
-                            submit(), setOpen([]);
-                          }}
+                          onClick={submit}
                         >
                           Upload
                         </Button>

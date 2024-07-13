@@ -36,6 +36,7 @@ export default function RootLayout({
               borderRadius: 16,
               fontFamily: openSans.style.fontFamily,
               paddingLG: 30,
+              marginLG: 20,
             },
             components: {
               Button: {

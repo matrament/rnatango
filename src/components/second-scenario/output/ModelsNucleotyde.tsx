@@ -63,7 +63,7 @@ const ModelsNucleotyde = (props: {
   return (
     <div style={{ width: "100%" }}>
       <h2 style={{ textAlign: "center", marginTop: "0" }}>
-        Table of residues MCQ value
+        Residue-wise MCQ values for each model
       </h2>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}

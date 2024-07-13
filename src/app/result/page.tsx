@@ -5,7 +5,7 @@ import { single_result_angle } from "../../types/modelsType";
 import styles from "./page.module.css";
 import { processingResponce } from "../../utils/processingResponse";
 import { Button, Steps, Alert } from "antd";
-import LoadingCard from "../../components/LoadingCard";
+import LoadingCard from "../../components/common/LoadingCard";
 import { ReloadOutlined } from "@ant-design/icons";
 import DataResult from "../../components/first-scenario/DataResult";
 import { useMediaQuery } from "react-responsive";

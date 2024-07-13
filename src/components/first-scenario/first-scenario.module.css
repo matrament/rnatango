@@ -352,3 +352,10 @@
     width: 750px;
   }
 }
+
+.tableRow {
+  background-color: #ffffff;
+}
+.tableRowActive {
+  background-color: #e0f5f4;
+}

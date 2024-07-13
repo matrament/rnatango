@@ -98,8 +98,8 @@ const ParametersScenarioSecond = (props: {
       </Col>
       <Divider orientation="left">Set LCS-TA parameter:</Divider>
       <Row style={{ margin: "30px 50px 30px 50px" }}>
-        <Col span={3}>
-          <p>MCQ threshold:</p>
+        <Col span={3} style={{ display: "flex", alignItems: "center" }}>
+          <p style={{ margin: 0 }}>MCQ threshold:</p>
         </Col>
         <Col span={10}>
           <Slider
@@ -110,7 +110,7 @@ const ParametersScenarioSecond = (props: {
             value={props.params.threshold}
           />
         </Col>
-        <Col span={4}>
+        <Col span={4} style={{ display: "flex", alignItems: "center" }}>
           <InputNumber
             min={0}
             max={180}

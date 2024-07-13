@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./first-scenario.module.css";
-import { Select, Button, Modal, Row, Col } from "antd";
+import { Select, Button, Modal, Row, Col, Divider } from "antd";
 import { Models, structure } from "../../types/modelsType";
 import { QuestionOutlined } from "@ant-design/icons";
 import { GetTaskId } from "../../utils/getTaskId";
@@ -25,9 +25,11 @@ const RequestForm = (props: { structure: structure; fileName: string }) => {
   const [startingModels, setStartingModels] = useState<any>([]);
   const [optionsChains, setOptionsChains] = useState<string[]>([]);
   const [correctSubmit, setCorrectSubmit] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const submit = () => {
+    setLoading(true);
     let y: any = [];
     selectedChains.forEach((chain) =>
       y.push(
@@ -52,7 +54,7 @@ const RequestForm = (props: { structure: structure; fileName: string }) => {
         },
       ],
     };
-    GetTaskId(result, router);
+    GetTaskId(result, router, setLoading);
   };
 
   useEffect(() => {
@@ -138,11 +140,12 @@ const RequestForm = (props: { structure: structure; fileName: string }) => {
 
   return (
     <div className={styles.scenario}>
-      <h2>
+      <h2 style={{ marginBottom: 0 }}>
         {props.structure.fileHashId.length < 5
           ? props.structure.fileHashId.toUpperCase()
           : props.fileName}
       </h2>
+      <Divider />
       <Col>
         <Row>
           <Col span={5} style={{ display: "flex", alignItems: "center" }}>
@@ -214,6 +217,7 @@ const RequestForm = (props: { structure: structure; fileName: string }) => {
         type="primary"
         shape="round"
         onClick={submit}
+        loading={loading}
         disabled={!correctSubmit || selectedChains.length === 0}
       >
         Submit

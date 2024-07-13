@@ -191,7 +191,7 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
 
               {resultTorsionAngle.map((el, index) => (
                 <div
-                  style={{ paddingBottom: "25px", width: "100%" }}
+                  style={{ paddingBottom: "10px", width: "100%" }}
                   key={index}
                 >
                   <ResultTable
@@ -206,14 +206,12 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
                 </div>
               ))}
               {props.resultFile.containDiscontinuousSequences ? (
-                <div style={{ marginBottom: "15px" }}>
-                  <Alert
-                    message="The chain is discontinuous. Data are shown for each continuous
+                <Alert
+                  message="The chain is discontinuous. Data are shown for each continuous
                   fragment separately."
-                    type="info"
-                    showIcon
-                  />
-                </div>
+                  type="info"
+                  showIcon
+                />
               ) : null}
             </div>
             <Divider />

@@ -3,7 +3,11 @@ import lang from "../lang.json";
 import { second_scenario_target } from "../../types/modelsType";
 import config from "../../config.json";
 
-export function GetTargetId(target: second_scenario_target, router: any) {
+export function GetTargetId(
+  target: second_scenario_target,
+  router: any,
+  setLoading: any
+) {
   const requestOptions = {
     method: "POST",
     body: JSON.stringify(target),
@@ -17,7 +21,7 @@ export function GetTargetId(target: second_scenario_target, router: any) {
     .then((response: any) => {
       if (response.status == 404) {
         message.error(lang.rcsb_error);
-        // setLoading(false);
+        setLoading(false);
         return "";
       } else {
         return response.json();

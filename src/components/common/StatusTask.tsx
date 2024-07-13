@@ -49,7 +49,7 @@ const StatusTask = (props: {
           items={steps}
           status="wait"
         />
-        {status === "FAILED" ? (
+        {/* {status === "FAILED" ? (
           <Alert
             message="Server error"
             showIcon
@@ -59,7 +59,7 @@ const StatusTask = (props: {
           />
         ) : (
           <></>
-        )}
+        )} */}
       </div>
       <Divider />
       <div className={styles.resetSettings}>

@@ -126,8 +126,8 @@ const TargetModels = () => {
   }, []);
 
   const submit = () => {
-    // console.log(params);
-    getTaskID(params, router);
+    setLoading(true);
+    getTaskID(params, router, setLoading);
   };
 
   return (
@@ -184,10 +184,11 @@ const TargetModels = () => {
               />
               <ParametersScenarioSecond params={params} setParams={setParams} />
               <Button
-                style={{ marginBottom: "30px", marginTop: "15px" }}
+                style={{ marginBottom: "20px" }}
                 type="primary"
                 shape="round"
                 size="large"
+                loading={loading}
                 onClick={submit}
               >
                 Submit

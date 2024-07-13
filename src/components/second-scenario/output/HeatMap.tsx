@@ -7,36 +7,6 @@ import { DotChartOutlined, LineChartOutlined } from "@ant-design/icons";
 import { Divider, Space, Switch } from "antd";
 import { useMediaQuery } from "react-responsive";
 
-const hours = [
-  "(",
-  "(",
-  "(",
-  "(",
-  "(",
-  "(",
-  "(",
-  "(",
-  "(",
-  ".",
-  ".",
-  ".",
-  ".",
-  ".",
-  ".",
-  "[",
-  "[",
-  "[",
-  ".",
-  ".",
-  ".",
-  ".",
-];
-// prettier-ignore
-const days = [
-    'Saturday', 'Friday', 
-];
-// prettier-ignore
-
 type datasetModels = {
   [key: string]: string | number;
 };
@@ -73,13 +43,31 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
     tooltip: {
       position: "top",
       trigger: "axis",
-      valueFormatter: (value: any) =>
-        `${continous ? Math.round(Math.E ** value) : Number(value.toFixed(2))}`,
+      // valueFormatter: (value: any) =>
+      //   `${continous ? Math.round(Math.E ** value) : Number(value.toFixed(2))}`,
       axisPointer: {
         lineStyle: {
           color: "#b93636",
           width: 1,
         },
+      },
+      backgroundColor: "rgba(255, 255, 255, 0.9)",
+      formatter: function (params: any) {
+        return (
+          "MCQ values:" +
+          "<br/>" +
+          `<ul>` +
+          params
+            .map((param: any, index: number) => {
+              let value = continous
+                ? Number((Math.E ** param.data[2]).toFixed(2))
+                : param.data[2];
+              return `<li>${props.models[index]} : <b>${value}</b></li>`;
+            })
+            .reverse()
+            .join("") +
+          `</ul>`
+        );
       },
     },
     grid: {
@@ -159,7 +147,7 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
           { min: 60, label: ">60\u00B0", color: "#e31919" },
           { min: 30, max: 60, label: "30\u00B0 - 60\u00B0", color: "#fd8c3a" },
           { min: 15, max: 30, label: "15\u00B0 - 30\u00B0", color: "#fccc5c" },
-          { max: 15, label: ">15\u00B0", color: "#ffffb0" },
+          { max: 15, label: "0\u00B0 - 15\u00B0", color: "#ffffb0" },
         ],
         inRange: {
           color: [
@@ -188,10 +176,12 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
     ],
     series: [
       {
-        name: "value",
+        name: "MCQ value(s)",
         type: "heatmap",
         data: continous ? datasetContinous : datasetDiscrete,
-
+        tooltip: {
+          formatter: "{b0}: {c0}<br />{b1}: {c1}",
+        },
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -205,7 +195,7 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
   return (
     <div style={{ width: "100%" }}>
       <h2 style={{ textAlign: "center", marginTop: "0" }}>
-        Heatmap of MCQ Ranges
+        Residue-wise MCQ values for each model (heatmap)
       </h2>
       <Switch
         style={{ marginLeft: "30px" }}

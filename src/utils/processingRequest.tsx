@@ -9,7 +9,8 @@ type pdbId = {
 export function processingRequest(
   data: pdbId,
   setLoading: any,
-  setStructure: any
+  setStructure: any,
+  setOpen: any
 ) {
   const requestOptions = {
     method: "POST",
@@ -34,6 +35,7 @@ export function processingRequest(
       if (response != "") {
         setLoading(false);
         setStructure(response);
+        setOpen([]);
       }
     })
     .catch((error: any) => message.error("Something went wrong, try again"));

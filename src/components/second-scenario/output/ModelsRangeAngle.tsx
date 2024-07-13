@@ -118,7 +118,7 @@ const ModelsRangeAngle = (props: {
   const handleChange = (value: { key: string; description: string }[]) => {
     let x: TableColumnsType = value.map(
       (e: { key: string; description: string }, index: number) => ({
-        title: e.description,
+        title: `cutoff: ${e.description}`,
         key: index + 1,
         dataIndex: e.key,
         width: 30,
@@ -140,7 +140,7 @@ const ModelsRangeAngle = (props: {
   return (
     <div style={{ width: "100%" }}>
       <h2 style={{ textAlign: "center", marginTop: "0" }}>
-        Percentage of MCQ Ranges
+        Percentage of residues with MCQ &lt; cutoff
       </h2>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}
