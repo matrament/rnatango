@@ -186,7 +186,15 @@ export default function LoadData() {
                         <div className={styles.split_layout_rule}></div>
                       </div>
                       <div>
-                        <div style={{ minWidth: "350px" }}>
+                        <div
+                          style={{
+                            minWidth: "350px",
+                            display: "flex",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                            marginTop: "20px",
+                          }}
+                        >
                           <p style={{ fontSize: "16px" }}>
                             From Protein Data Bank:
                           </p>

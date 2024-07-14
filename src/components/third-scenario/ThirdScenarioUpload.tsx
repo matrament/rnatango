@@ -2,7 +2,7 @@
 const ThirdScenarioUpload = () => {
   return (
     <div>
-      <p>work in progress</p>
+      <p>Upload first model to get task ID</p>
     </div>
   );
 };

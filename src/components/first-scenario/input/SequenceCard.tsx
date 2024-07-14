@@ -72,6 +72,7 @@ const SequenceCard = (props: {
               residuesWithoutAtoms={props.residuesWithoutAtoms}
               key={sequence.id}
               deleteSequenceOption={true}
+              continousfragments={[[], []]}
             />
           ))}
         </div>

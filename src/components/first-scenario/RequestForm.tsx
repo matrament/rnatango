@@ -60,11 +60,18 @@ const RequestForm = (props: { structure: structure; fileName: string }) => {
   useEffect(() => {
     let x: Models = {};
     for (let i = 0; i < props.structure.models.length; i++) {
-      x[i + 1] = {};
-      for (let j = 0; j < props.structure.models[i].chains.length; j++) {
-        x[i + 1][props.structure.models[i].chains[j].name] =
-          props.structure.models[i].chains[j];
-      }
+      let combinedSequences: any = {};
+      props.structure.models[i].chains.forEach((obj) => {
+        if (combinedSequences[obj.name]) {
+          combinedSequences[obj.name].sequence += obj.sequence;
+          combinedSequences[obj.name].residuesWithoutAtoms.push(
+            ...obj.residuesWithoutAtoms
+          );
+        } else {
+          combinedSequences[obj.name] = { ...obj };
+        }
+      });
+      x[i + 1] = combinedSequences;
     }
     setStartingModels(x);
     let y = Object.fromEntries(Object.keys(x["1"]).map((chain) => [chain, []]));

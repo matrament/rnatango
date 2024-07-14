@@ -7,6 +7,7 @@ const Nucleobase = (props: {
   index: number;
   residuesWithoutAtoms: number[];
   range: number[];
+  discontinuity: number[][];
 }) => {
   return (
     <div className={styles.nucleobasesNonSelect}>
@@ -19,6 +20,12 @@ const Nucleobase = (props: {
             ? styles.activeC
             : styles.nonactiveNonselect
         }
+        ${
+          props.discontinuity[0].includes(props.index)
+            ? styles.startRange
+            : null
+        }
+        ${props.discontinuity[1].includes(props.index) ? styles.endRange : null}
       ${
         props.residuesWithoutAtoms.includes(props.index) ? styles.disable : null
       }`}
@@ -34,7 +41,23 @@ const FullChainAnalysis = (props: {
   residuesWithoutAtoms: number[];
   range: number[];
   index: number;
+  continousfragments: number[][];
 }) => {
+  const [discontinuity, setDiscontinuity] = useState<number[][]>([[], []]);
+
+  useEffect(() => {
+    const leftElements: number[] = [];
+    const rightElements: number[] = [];
+
+    props.continousfragments.forEach((subList) => {
+      leftElements.push(subList[0]);
+      rightElements.push(subList[1]);
+    });
+    leftElements.shift();
+    rightElements.pop();
+    setDiscontinuity([leftElements, rightElements]);
+  }, [props.continousfragments]);
+
   return (
     <div className={styles.sequencetarget}>
       {props.sequence
@@ -50,6 +73,7 @@ const FullChainAnalysis = (props: {
               { length: props.range[1] - props.range[0] + 1 },
               (v, i) => i + props.range[0]
             )}
+            discontinuity={discontinuity}
           />
         ))}
     </div>

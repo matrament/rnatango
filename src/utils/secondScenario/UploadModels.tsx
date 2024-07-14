@@ -39,7 +39,7 @@ const UploadModels = (props: UploadFileArguments) => {
     name: "file",
     multiple: false,
     action: config.SERVER_URL + "/one-many/form/add/model/" + props.taskID,
-    maxCount: 5,
+    maxCount: 1,
     beforeUpload: (file: File) => {
       let fileName = file.name.split(".");
       let fileNameLength = file.name.split(".").length;

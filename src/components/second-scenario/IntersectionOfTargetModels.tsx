@@ -39,6 +39,7 @@ const IntersectionOfTargetModels = (props: {
           residuesWithoutAtoms={[]}
           range={props.rangeIntersection}
           index={props.rangeTarget[0]}
+          continousfragments={[[], []]}
         />
       </div>
       <ul style={{ marginLeft: "30px" }}>

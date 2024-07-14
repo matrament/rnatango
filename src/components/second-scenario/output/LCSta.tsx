@@ -4,7 +4,16 @@ import { RenderLoader } from "../../common/RenderLoader";
 import MolStarWrapper from "./MolStarWrapper";
 import config from "../../../config.json";
 import { DownloadOutlined } from "@ant-design/icons";
-import { Button, Table, TableColumnsType } from "antd";
+import {
+  Button,
+  Col,
+  ConfigProvider,
+  Divider,
+  Radio,
+  Row,
+  Table,
+  TableColumnsType,
+} from "antd";
 import styles from "../../first-scenario/first-scenario.module.css";
 import { second_scenario_result_differences_lcs } from "../../../types/modelsType";
 import { exportDataToCSV } from "@/utils/exportDataToCSV";
@@ -17,12 +26,31 @@ interface DataType {
   key: React.Key;
   model: string;
   target: string;
+  mcq: number;
   lcs: number;
   fixed: any;
 }
 
+function downloadFile(type: any, url: any) {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  };
+  fetch(url, requestOptions)
+    .then((res) => res.blob())
+    .then((blob) => {
+      let url = URL.createObjectURL(blob);
+      let pom = document.createElement("a");
+      pom.setAttribute("href", url);
+      pom.setAttribute("download", type);
+      pom.click();
+    });
+}
+
 const LCSta = (props: {
-  targetSequence: string;
+  target: { sequence: string; targetId: string };
   lcs: {
     lcs: second_scenario_result_differences_lcs;
     name: string;
@@ -31,11 +59,12 @@ const LCSta = (props: {
 }) => {
   const [dataset, setDataset] = useState<any>([]);
   const [csvData, setCsvData] = useState<datasetModels[]>([]);
+  const [activeModel, setActiveModel] = useState(0);
 
   useEffect(() => {
     // FIXME: optimize this state, delete for loop
     let dataset_temp: any = [];
-    let length_seq = props.targetSequence.length;
+    let length_seq = props.target.sequence.length;
     props.lcs.map(
       (
         model: {
@@ -73,7 +102,7 @@ const LCSta = (props: {
     );
     setDataset(dataset_temp);
     setCsvData(dataset_temp);
-  }, [props.targetSequence, props.lcs]);
+  }, [props.target, props.lcs]);
 
   const columns: TableColumnsType<DataType> = [
     {
@@ -89,7 +118,7 @@ const LCSta = (props: {
           className={styles.tableAngleMono}
           style={{ letterSpacing: "5px", fontSize: "16px" }}
         >
-          {props.targetSequence ?? ""}
+          {props.target.sequence ?? ""}
         </p>
       ),
       dataIndex: "target",
@@ -121,16 +150,27 @@ const LCSta = (props: {
       width: 200,
       fixed: "right",
       sorter: {
-        compare: (a, b) => a.lcs - b.lcs,
+        compare: (a, b) => a.mcq - b.mcq,
       },
     },
   ];
 
   return (
-    <div style={{ width: "100%" }}>
-      <h2 style={{ textAlign: "center", marginTop: "0" }}>LCS-TA</h2>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <h2 style={{ textAlign: "center", marginTop: "0" }}>LCS-TA results</h2>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}
+        rowClassName={(record) =>
+          record.model === props.lcs[activeModel].name
+            ? styles.tableRowActive
+            : styles.tableRow
+        }
         columns={columns}
         dataSource={dataset}
         size="middle"
@@ -138,7 +178,7 @@ const LCSta = (props: {
         pagination={{ position: ["bottomCenter"] }}
         scroll={{ x: true }}
       />
-      <div className={styles.tableButton}>
+      <div className={styles.tableButton} style={{ marginBottom: "30px" }}>
         <Button
           type="primary"
           shape="round"
@@ -155,21 +195,68 @@ const LCSta = (props: {
           Download .csv
         </Button>
       </div>
+
+      <Row justify="center">
+        {
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: "#04afa4",
+              },
+            }}
+          >
+            <Radio.Group
+              size="small"
+              value={activeModel}
+              onChange={(e) => setActiveModel(e.target.value)}
+              optionType="button"
+              buttonStyle="solid"
+            >
+              {props.lcs.map((model, index) => {
+                return (
+                  <Radio.Button key={index} value={index}>
+                    <b>{model.name}</b>
+                  </Radio.Button>
+                );
+              })}
+            </Radio.Group>
+          </ConfigProvider>
+        }
+      </Row>
       <Suspense fallback={<RenderLoader />}>
-        <div
-          style={{ display: "block", marginTop: "50px", marginBottom: "50px" }}
-        >
-          {/* <MolStarWrapper
-            structure_file={
+        <div style={{ display: "block", margin: "30px 30px 0 30px" }}>
+          <MolStarWrapper
+            model_file={
               config.SERVER_URL +
-              "/one-many/tertiary/structure/575b1206-3340-47f4-9373-5d0c92782024"
+              "/one-many/tertiary/structure/" +
+              props.lcs[activeModel].modelId
             }
-            // motif_files={[]}
-            // contacts={inContact}
-            representation={"ball-and-stick"}
-          /> */}
+            target_file={
+              config.SERVER_URL +
+              "/one-many/tertiary/structure/" +
+              props.target.targetId
+            }
+            representation={"cartoon"}
+          />
         </div>
       </Suspense>
+      <div className={styles.tableButton} style={{ marginBottom: "25px" }}>
+        <Button
+          type="primary"
+          shape="round"
+          icon={<DownloadOutlined />}
+          onClick={() =>
+            downloadFile(
+              props.lcs[activeModel].name.split(".")[0] + ".cif",
+              config.SERVER_URL +
+                "/one-many/tertiary/structure/" +
+                props.lcs[activeModel].modelId
+            )
+          }
+        >
+          Download .cif
+        </Button>
+      </div>
     </div>
   );
 };

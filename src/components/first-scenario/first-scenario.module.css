@@ -172,6 +172,13 @@
   background: #eaeaea !important;
   color: #8a8a8a !important;
 }
+.startRange {
+  box-shadow: inset 2px 0px 0px 0px #000;
+}
+.endRange {
+  box-shadow: inset -2px 0px 0px 0px #000;
+}
+/* #00c6b9 */
 .requestCard {
   display: flex;
   flex-direction: row;

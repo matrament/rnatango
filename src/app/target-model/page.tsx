@@ -119,6 +119,7 @@ const TargetModels = () => {
       });
     }
     setDatasetModels(temp);
+    setUploadStructure(undefined);
   }, [modelsTarget, uploadStructure]);
 
   useEffect(() => {
@@ -190,6 +191,7 @@ const TargetModels = () => {
                 size="large"
                 loading={loading}
                 onClick={submit}
+                disabled={params.angles.length === 0}
               >
                 Submit
               </Button>

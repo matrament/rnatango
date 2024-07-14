@@ -15,6 +15,7 @@ const Nucleobases = (props: {
   onClick: any;
   selectedSequence: any;
   residuesWithoutAtoms: number[];
+  discontinuity: number[][];
 }) => {
   return (
     <div className={styles.nucleobases} onClick={props.onClick}>
@@ -27,9 +28,16 @@ const Nucleobases = (props: {
             ? styles.activeC
             : styles.nonactiveC
         }
+        ${
+          props.discontinuity[0].includes(props.index)
+            ? styles.startRange
+            : null
+        }
+        ${props.discontinuity[1].includes(props.index) ? styles.endRange : null}
       ${
         props.residuesWithoutAtoms.includes(props.index) ? styles.disable : null
-      }`}
+      }
+      `}
       >
         {props.name}
       </div>
@@ -45,8 +53,10 @@ const NucleotidePanel = (props: {
   residuesWithoutAtoms: number[];
   deleteChainRange: any;
   deleteSequenceOption: boolean;
+  continousfragments: number[][] | [];
 }) => {
   const [selectedSequence, setSelectedSequence] = useState<number[]>([0, 0]);
+  const [discontinuity, setDiscontinuity] = useState<number[][]>([[], []]);
 
   useEffect(() => {
     if (props.deleteSequenceOption) {
@@ -55,6 +65,17 @@ const NucleotidePanel = (props: {
     } else {
       setSelectedSequence([]);
     }
+
+    const leftElements: number[] = [];
+    const rightElements: number[] = [];
+
+    props.continousfragments.forEach((subList) => {
+      leftElements.push(subList[0]);
+      rightElements.push(subList[1]);
+    });
+    leftElements.shift();
+    rightElements.pop();
+    setDiscontinuity([leftElements, rightElements]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -204,6 +225,7 @@ const NucleotidePanel = (props: {
             onClick={() => handleAddSequence(index)}
             selectedSequence={selectedSequence}
             residuesWithoutAtoms={props.residuesWithoutAtoms}
+            discontinuity={discontinuity}
           />
         ))}
       </div>

@@ -13,9 +13,7 @@ const HistogramAngles = (props: {
   const [angleResult, setAngleResult] = useState<[number, number][]>([]);
 
   useEffect(() => {
-    if (angleResult.length === 0) {
-      dataProcess();
-    }
+    dataProcess();
   }, [props.angle]);
 
   const dataProcess: any = () => {

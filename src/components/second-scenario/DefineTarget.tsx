@@ -91,15 +91,28 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
   useEffect(() => {
     let x: Target = {};
     for (let i = 0; i < props.structure.models.length; i++) {
-      x[i + 1] = {};
-      for (let j = 0; j < props.structure.models[i].chains.length; j++) {
-        x[i + 1][props.structure.models[i].chains[j].name] = {
-          ...props.structure.models[i].chains[j],
-          continousFragments: findContinousFragments(
-            props.structure.models[i].chains[j]
-          ),
-        };
-      }
+      let combinedSequences: any = {};
+      props.structure.models[i].chains.forEach((obj) => {
+        if (combinedSequences[obj.name]) {
+          let continousFragments = findContinousFragments(
+            obj,
+            combinedSequences[obj.name].sequence.length
+          );
+          combinedSequences[obj.name].sequence += obj.sequence;
+          combinedSequences[obj.name].continousFragments.push(
+            ...continousFragments
+          );
+          combinedSequences[obj.name].residuesWithoutAtoms.push(
+            ...obj.residuesWithoutAtoms
+          );
+        } else {
+          combinedSequences[obj.name] = {
+            ...obj,
+            continousFragments: findContinousFragments(obj, 0),
+          };
+        }
+      });
+      x[i + 1] = combinedSequences;
     }
     setInitialModels(x);
     setChainsToSelect(Object.keys(x["1"]));
@@ -122,7 +135,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
     setSelectedChain(Object.keys(initialModels[model])[0]);
   };
 
-  const findContinousFragments = (chain: Chains) => {
+  const findContinousFragments = (chain: Chains, firstIndex: number) => {
     const mainList: string[] = chain.sequence.split("");
     const excludeList: number[] = chain.residuesWithoutAtoms;
 
@@ -145,7 +158,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
       });
       return result;
     } else {
-      return [[0, mainList.length - 1]];
+      return [[firstIndex, firstIndex + mainList.length - 1]];
     }
   };
 
@@ -233,16 +246,15 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
         <Radio.Group onChange={onChange} value={value}>
           <Space direction="vertical" style={{ margin: "10px 0px 15px 30px" }}>
             <Radio value={1}>
-              {initialModels[model][selectedChain].residuesWithoutAtoms
-                .length === 0
+              {initialModels[model][selectedChain].continousFragments.length ===
+              1
                 ? "full chain"
                 : "the longest continuous fragment of chain"}
             </Radio>
             <Radio value={2}>fragment of a chain</Radio>
           </Space>
         </Radio.Group>
-        {initialModels[model][selectedChain].residuesWithoutAtoms.length !=
-        0 ? (
+        {initialModels[model][selectedChain].continousFragments.length > 1 ? (
           <div style={{ maxWidth: "650px", margin: "15px" }}>
             <Alert
               message="The chain is discontinuous. To validate a task, select a continuous fragment of chain."
@@ -263,20 +275,26 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
                 initialModels[model][selectedChain].continousFragments
               )}
               index={0}
+              continousfragments={
+                initialModels[model][selectedChain].continousFragments
+              }
             />
           ) : value == 2 ? (
             <NucleotidePanel
               multipleSequence={sequenceRange}
               setMultipleSequence={setSequenceRange}
               indexSequence={1}
-              arrayChain={initialModels[model][selectedChain]["sequence"]
+              arrayChain={initialModels[model][selectedChain].sequence
                 .toUpperCase()
                 .split("")}
               residuesWithoutAtoms={
-                initialModels[model][selectedChain]["residuesWithoutAtoms"]
+                initialModels[model][selectedChain].residuesWithoutAtoms
               }
               deleteChainRange={"h"}
               deleteSequenceOption={false}
+              continousfragments={
+                initialModels[model][selectedChain].continousFragments
+              }
             />
           ) : null)}
       </div>

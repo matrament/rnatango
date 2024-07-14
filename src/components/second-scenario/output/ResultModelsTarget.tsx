@@ -54,11 +54,16 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
               props.result.differences[i].residues[index].dotBracketSymbol,
           });
         }
-        temp_comparsionModelsMCQ[index][props.result.differences[i].modelName] =
-          Number(props.result.differences[i].residueMCQs[index].toFixed(2));
+        temp_comparsionModelsMCQ[index][
+          `${props.result.differences[i].modelName}_${i + 1}`
+        ] = Number(props.result.differences[i].residueMCQs[index].toFixed(2));
       });
-      temp_models.push({ [props.result.differences[i].modelName]: model });
-      models_temp.push({ [i]: props.result.differences[i].modelName });
+      temp_models.push({
+        [`${props.result.differences[i].modelName}_${i + 1}`]: model,
+      });
+      models_temp.push({
+        [i]: `${props.result.differences[i].modelName}_${i + 1}`,
+      });
     }
 
     setDataset(temp_models);
@@ -106,7 +111,7 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
                 models={selectedModels}
               />
               <h1 style={{ marginTop: "10px", marginBottom: "30px" }}>
-              Angular parameters per model
+                Angular parameters per model
               </h1>
               <Tabs
                 centered
@@ -134,11 +139,14 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
                 </>
               )}
               <LCSta
-                targetSequence={sequence}
-                lcs={props.result.differences.map((diff) => {
+                target={{
+                  sequence: sequence,
+                  targetId: props.result.targetHashId,
+                }}
+                lcs={props.result.differences.map((diff, index) => {
                   return {
                     lcs: diff.modelLCS,
-                    name: diff.modelName,
+                    name: `${diff.modelName}_${index + 1}`,
                     modelId: diff.modelHashId,
                   };
                 })}
