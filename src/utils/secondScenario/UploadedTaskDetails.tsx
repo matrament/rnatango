@@ -17,7 +17,7 @@ export function UploadedTaskDetails(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  fetch(config.SERVER_URL + "/one-many/form/" + taskId, requestOptions)
+  fetch(config.SERVER_URL + "one-many/form/" + taskId, requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
         setModelsTarget(initTarget);

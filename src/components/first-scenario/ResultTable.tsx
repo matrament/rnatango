@@ -13,27 +13,27 @@ type CheckboxValueType = GetProp<typeof Checkbox.Group, "value">[number];
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
 const angleName: { [key: string]: string } = {
-  ["1-alpha"]: "alpha (\u03B1)",
+  ["1-alpha"]: "Alpha (\u03B1)",
 
-  ["2-beta"]: "beta (\u03B2)",
+  ["2-beta"]: "Beta (\u03B2)",
 
-  ["3-gamma"]: "gamma (\u03B3)",
+  ["3-gamma"]: "Gamma (\u03B3)",
 
-  ["4-delta"]: "delta (\u03B4)",
+  ["4-delta"]: "Delta (\u03B4)",
 
-  ["5-epsilon"]: "epsilon (\u03B5)",
+  ["5-epsilon"]: "Epsilon (\u03B5)",
 
-  ["6-zeta"]: "zeta (\u03B6)",
+  ["6-zeta"]: "Zeta (\u03B6)",
 
-  ["7-eta"]: "eta (\u03B7)",
+  ["7-eta"]: "Eta (\u03B7)",
 
-  ["8-theta"]: "theta (\u03B8)",
+  ["8-theta"]: "Theta (\u03B8)",
 
-  ["9-eta_prim"]: "eta prim (\u03B7')",
+  ["9-eta_prim"]: "Eta prim (\u03B7')",
 
-  ["10-theta_prim"]: "theta prim (\u03B8')",
+  ["10-theta_prim"]: "Theta prim (\u03B8')",
 
-  ["11-chi"]: "chi (\u03C7)",
+  ["11-chi"]: "Chi (\u03C7)",
 };
 
 interface tableAngle {
@@ -51,43 +51,47 @@ interface ItemProps {
 
 const options: ItemProps[] = [
   {
-    label: "alpha (\u03B1)",
+    label: "Alpha (\u03B1)",
     value: "1-alpha",
   },
   {
-    label: "beta (\u03B2)",
+    label: "Beta (\u03B2)",
     value: "2-beta",
   },
   {
-    label: "gamma (\u03B3)",
+    label: "Gamma (\u03B3)",
     value: "3-gamma",
   },
   {
-    label: "delta (\u03B4)",
+    label: "Delta (\u03B4)",
     value: "4-delta",
   },
   {
-    label: "zeta (\u03B6)",
+    label: "Epsilon (\u03B5)",
+    value: "5-epsilon",
+  },
+  {
+    label: "Zeta (\u03B6)",
     value: "6-zeta",
   },
   {
-    label: "eta (\u03B7)",
+    label: "Eta (\u03B7)",
     value: "7-eta",
   },
   {
-    label: "theta (\u03B8)",
+    label: "Theta (\u03B8)",
     value: "8-theta",
   },
   {
-    label: "eta prim (\u03B7')",
+    label: "Eta prim (\u03B7')",
     value: "9-eta_prim",
   },
   {
-    label: "theta prim (\u03B8')",
+    label: "Theta prim (\u03B8')",
     value: "10-theta_prim",
   },
   {
-    label: "chi (\u03C7)",
+    label: "Chi (\u03C7)",
     value: "11-chi",
   },
 ];
@@ -119,7 +123,7 @@ const ResultTable = (props: {
 
   const handleChange = (value: string[]) => {
     let x: TableColumnsType<tableAngle> = value.map((e) => ({
-      title: angleName[e],
+      title: angleName[e][0].toUpperCase() + angleName[e].slice(1),
       key: parseInt(e.split("-")[0]),
       dataIndex: e.split("-")[1],
       width: 30,

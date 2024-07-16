@@ -41,7 +41,7 @@ const UploadStructureFile = (props: UploadFileArguments) => {
   let uploader_props: UploadProps = {
     name: "file",
     multiple: false,
-    action: config.SERVER_URL + "/upload",
+    action: config.SERVER_URL + "upload",
     maxCount: 1,
     beforeUpload: (file: File) => {
       let fileName = file.name.split(".");
@@ -126,7 +126,7 @@ export function removeFile(fileId: string) {
     },
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
-  fetch(config.SERVER_URL + "/upload/remove/" + fileId, requestOptions)
+  fetch(config.SERVER_URL + "upload/remove/" + fileId, requestOptions)
     .then((response: any) => {
       if (response.status == 200) {
       }

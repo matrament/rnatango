@@ -23,17 +23,30 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
     let temp_discrete: number[][] = [];
     let xAxis: string[] = [];
 
+    // props.dataset.map((residue, index) => {
+    //   xAxis.push(residue["dotbracket"] as string);
+    //   for (let i = 0; i < props.models.length; i++) {
+    //     temp_discrete.push([index, i, residue[`${props.models[i]}`] as number]);
+    //     temp_continous.push([
+    //       index,
+    //       i,
+    //       Math.log(residue[`${props.models[i]}`] as number),
+    //     ]);
+    //   }
+    // });
+
     props.dataset.map((residue, index) => {
       xAxis.push(residue["dotbracket"] as string);
-      for (let i = 0; i < props.models.length; i++) {
-        temp_discrete.push([index, i, residue[`${props.models[i]}`] as number]);
+      props.models.map((model, i) => {
+        temp_discrete.push([index, i, residue[`${model}`] as number]);
         temp_continous.push([
           index,
           i,
-          Math.log(residue[`${props.models[i]}`] as number),
+          Math.log(residue[`${model}`] as number),
         ]);
-      }
+      });
     });
+
     setDatasetDiscrete(temp_discrete);
     setDatasetContinous(temp_continous);
     setResidue(xAxis);
@@ -80,6 +93,7 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
       feature: {
         saveAsImage: {
           excludeComponents: ["visualMap", "toolbox", "dataZoom"],
+          name: `heatmap_residue_wise_MCQ`,
         },
       },
     },

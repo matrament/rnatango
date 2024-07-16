@@ -10,6 +10,7 @@ import LoadingCard from "@/components/common/LoadingCard";
 import StatusTask from "@/components/common/StatusTask";
 
 const initResult = {
+  resultRemovedAfter: "",
   model: "",
   targetHashId: "",
   targetFileName: "",
@@ -46,7 +47,9 @@ const ResultSecondScenario = () => {
         taskId={searchParams.get("id")!}
         setSeedState={setSeedState}
         stepsNumber={stepsNumber}
-        removeDate={"..."}
+        removeDate={
+          result?.resultRemovedAfter ? result.resultRemovedAfter : "..."
+        }
       />
       {result && result.differences ? (
         result.differences.length === 0 ? (

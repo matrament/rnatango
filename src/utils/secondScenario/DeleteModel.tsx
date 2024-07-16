@@ -17,7 +17,7 @@ export function DeleteModel(
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
   fetch(
-    config.SERVER_URL + "/one-many/form/remove/model/" + taskId + "/" + modelId,
+    config.SERVER_URL + "one-many/form/remove/model/" + taskId + "/" + modelId,
     requestOptions
   )
     .then((response: any) => {

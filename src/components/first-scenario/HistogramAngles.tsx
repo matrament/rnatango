@@ -4,6 +4,7 @@ import { ReactECharts } from "../echarts/ReactECharts";
 import { ReactEChartsProps } from "../echarts/ReactECharts";
 import { AngleIcon } from "../icons/Icons";
 import styles from "./first-scenario.module.css";
+import angle_description from "./../../json/angles_description.json";
 
 const HistogramAngles = (props: {
   angle: (number | null)[];
@@ -135,7 +136,9 @@ const HistogramAngles = (props: {
           }}
         >
           <AngleIcon style={{ fontSize: "16px", color: "#fb5f4c" }} />
-          <h3>{props.title}</h3>
+          <h3>
+            {angle_description[props.title as keyof typeof angle_description]}
+          </h3>
         </div>
       </div>
       <ReactECharts option={option} style={{ height: "500px" }} />

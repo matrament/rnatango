@@ -19,7 +19,7 @@ export function processingResponce(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  let socket = new WebSocket(config.SERVER_WEB_SOCKET_URL + `/single`);
+  let socket = new WebSocket(config.SERVER_WEB_SOCKET_URL + `single`);
   let timer: any = null;
 
   const request = { hashId: taskId };
@@ -40,7 +40,7 @@ export function processingResponce(
       clearInterval(timer);
       if (a.status === "SUCCESS") {
         fetch(
-          config.SERVER_URL + "/single/" + taskId + "/result",
+          config.SERVER_URL + "single/" + taskId + "/result",
           requestOptions
         )
           .then((response: any) => response.json())

@@ -158,7 +158,7 @@ const TargetModels = () => {
         />
         {datasetModels.length != 0 ? (
           <Table
-            style={{ margin: "50px 30px 20px 30px" }}
+            style={{ margin: "0px 30px 10px 30px" }}
             dataSource={datasetModels}
             columns={columns}
             pagination={{ position: ["bottomCenter"] }}

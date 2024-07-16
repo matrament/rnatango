@@ -61,16 +61,17 @@ const StatusTask = (props: {
           <></>
         )} */}
       </div>
-      <Divider />
+
       <div className={styles.resetSettings}>
         <Button
           disabled={props.stepsNumber < 4}
+          size="small"
           icon={<ReloadOutlined />}
           onClick={() =>
             props.setSeedState((prevCount: number) => prevCount + 1)
           }
         >
-          Reset settings
+          Reload result page
         </Button>
       </div>
     </div>

@@ -11,6 +11,7 @@ import { Alert, Col, Divider, Row, Select } from "antd";
 import HistogramAngles from "./HistogramAngles";
 import ResultTable from "./ResultTable";
 import ChiStatistics from "./ChiStatistics";
+import ChiTest from "./ChiTest";
 
 const angleName = {
   alpha: "Alpha (\u03B1)",
@@ -44,47 +45,47 @@ interface ItemProps {
 const options: ItemProps[] = [
   {
     label: "Alpha (\u03B1)",
-    value: "1-alpha",
+    value: "alpha",
   },
   {
     label: "Beta (\u03B2)",
-    value: "2-beta",
+    value: "beta",
   },
   {
     label: "Gamma (\u03B3)",
-    value: "3-gamma",
+    value: "gamma",
   },
   {
     label: "Delta (\u03B4)",
-    value: "4-delta",
+    value: "delta",
   },
   {
     label: "Epsilon (\u03B5)",
-    value: "5-epsilon",
+    value: "epsilon",
   },
   {
     label: "Zeta (\u03B6)",
-    value: "6-zeta",
+    value: "zeta",
   },
   {
     label: "Eta (\u03B7)",
-    value: "7-eta",
+    value: "eta",
   },
   {
     label: "Theta (\u03B8)",
-    value: "8-theta",
+    value: "theta",
   },
   {
     label: "Eta prim (\u03B7')",
-    value: "9-eta_prim",
+    value: "eta_prim",
   },
   {
     label: "Theta prim (\u03B8')",
-    value: "10-theta_prim",
+    value: "theta_prim",
   },
   {
     label: "Chi (\u03C7)",
-    value: "11-chi",
+    value: "chi",
   },
 ];
 
@@ -187,7 +188,7 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
                 alignItems: "center",
               }}
             >
-              <h2 style={{ marginTop: 0 }}>Torsion Angle Table</h2>
+              <h2 style={{ marginTop: 0 }}>Torsion angle values</h2>
 
               {resultTorsionAngle.map((el, index) => (
                 <div
@@ -217,7 +218,7 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
             <Divider />
             <Col>
               <h2 style={{ textAlign: "center", marginTop: 0 }}>
-                Torsion Angle Histograms
+                Histograms of torsion angles
               </h2>
 
               <Row justify="center">
@@ -257,14 +258,13 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
                 ))}
               </div>
               <Divider />
-              <div className={styles.section} style={{ marginBottom: "30px" }}>
-                <h2 style={{ margin: 0 }}>Statistics of Chi Angle</h2>
+              <div className={styles.section} style={{ marginBottom: "10px" }}>
+                <h2 style={{ margin: 0 }}>
+                  {"Statistics for Chi (\u03C7) angle"}
+                </h2>
 
-                <ChiStatistics angle={concatResidues.map((el) => el.chi)} />
-                {/* <ChiTest
-                title={angleName.chi}
-                angle={concatResidues.map((el) => el.chi)}
-              /> */}
+                {/* <ChiStatistics angle={concatResidues.map((el) => el.chi)} /> */}
+                <ChiTest angle={concatResidues.map((el) => el.chi)} />
               </div>
             </Col>
           </div>

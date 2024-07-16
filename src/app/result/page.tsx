@@ -18,6 +18,7 @@ let emptyResult: single_result_angle = {
   resultRemovedAfter: "",
   structureMolecule: "",
   structureName: "",
+  structureTitle: "",
 };
 
 const ResultPage = (props: any) => {
@@ -37,6 +38,7 @@ const ResultPage = (props: any) => {
       setStatus,
       status
     );
+    console.log(resultFile);
   }, []);
 
   useEffect(() => {

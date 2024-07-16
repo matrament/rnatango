@@ -2,128 +2,103 @@
 import { useState, useEffect } from "react";
 import { ReactECharts } from "../echarts/ReactECharts";
 import { ReactEChartsProps } from "../echarts/ReactECharts";
-// import { AngleIcon } from "../icons/Icons";
-// import anglesnames from "../../angles.json";
-// import styles from "./first-scenario.module.css";
 
-const ChiTest = (props: { angle: (number | null)[]; title: string }) => {
-  const [angleResult, setAngleResult] = useState<[number, number][]>([]);
-  const [syn, setSyn] = useState<[number, number][]>([[2, 167.5]]);
-  const [anti, setAnti] = useState<[number, number][]>([
-    [2, 27.5],
-    [4, -32.25],
-  ]);
+const ChiBarStats = (props: { angle: any[] }) => {
+  const [syn, setSyn] = useState<number>(0);
+  const [anti, setAnti] = useState<number>(0);
 
   useEffect(() => {
-    let x: number[] = props.angle.filter(
-      (element): element is number => element !== null
-    );
-    x = x.map((e) => Math.floor((e + 180) / 15));
-    let counts: { [key: number]: [number, number] } = {};
-    for (let i = 0; i < 24; i++) {
-      counts[i] = [0, -172.5 + 15 * i];
-    }
-    x.forEach(function (x) {
-      counts[x][0] = (counts[x][0] || 0) + 1;
+    let x: number[] = props.angle.filter((e) => {
+      return e != null;
     });
-    setAngleResult(Object.values(counts).map((e) => [Math.sqrt(e[0]), e[1]]));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    let count = x.filter((e) => e < 120 && e > -30).length;
+    setSyn(count);
+    setAnti(x.length - count);
   }, [props.angle]);
 
   const option: ReactEChartsProps["option"] = {
-    polar: {},
+    legend: {
+      show: true,
+      // top: "bottom",
+      bottom: "0%",
+      itemWidth: 30,
+      itemHeight: 15,
+      orient: "horizontal",
+      align: "auto",
+      textStyle: {
+        fontSize: 14,
+      },
+      selectedMode: false,
+      borderRadius: 15,
+    },
+
     toolbox: {
       show: true,
       feature: {
         saveAsImage: {
-          name: `${props.title}`,
+          name: `syn_anti_statistics`,
         },
       },
       right: "15px",
     },
     tooltip: {
       formatter: function (params: any) {
-        return `from ${params.data[1] - 7.5}\u00B0 to ${
-          params.data[1] + 7.5
-        }\u00B0: ${Math.round(params.data[0] * params.data[0])} ${
-          params.data[0] === 1 ? "angle" : "angles"
+        return `${params.name}: ${params.data.value} ${
+          params.data.value === 1 ? "angle" : "angles"
         }`;
       },
     },
-    angleAxis: [
-      {
-        type: "value",
-        min: -180,
-        max: 180,
-        interval: 15,
-        startAngle: 180,
-        z: 2,
-        axisLabel: {
-          formatter: function (value: number) {
-            return value + "\u00B0";
-          },
-        },
-        splitLine: {
-          show: true,
-          lineStyle: {
-            color: "#dcdcdc",
-            type: "solid",
-          },
-        },
-      },
-    ],
 
-    radiusAxis: [
-      {
-        min: 0,
-        max: function (value) {
-          return value.max;
-        },
-        axisLabel: {
-          show: false,
-        },
-        splitLine: {
-          show: true,
-        },
-        axisTick: {
-          show: false,
-        },
-        axisLine: {
-          show: false,
-        },
-      },
-    ],
+    xAxis: {
+      type: "category",
+      data: ["Syn (-30\u00B0 < chi < 120\u00B0)", "Anti"],
+    },
+    yAxis: {
+      type: "value",
+    },
 
     series: [
       {
-        name: "syn",
+        data: [
+          {
+            value: syn,
+            itemStyle: {
+              color: "#04afa4",
+            },
+          },
+          {
+            value: anti,
+            itemStyle: {
+              color: "#fb5f4c",
+            },
+          },
+        ],
         type: "bar",
-        itemStyle: {
-          color: "#04afa4",
+        label: {
+          show: true,
+          fontWeight: "bold",
+          textBorderWidth: 3.5,
+
+          offset: [0, -10],
         },
-        z: 1,
-        coordinateSystem: "polar",
-        barWidth: "15",
-        data: syn,
-      },
-      {
-        name: "anti",
-        type: "bar",
-        itemStyle: {
-          color: "#fb5f4c",
-        },
-        z: 1,
-        coordinateSystem: "polar",
-        barWidth: "15",
-        data: anti,
       },
     ],
   };
 
   return (
-    <div>
-      <ReactECharts option={option} />
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        width: "500px",
+      }}
+    >
+      <div style={{ width: "100%" }}>
+        <ReactECharts option={option} style={{ height: "500px" }} />
+      </div>
     </div>
   );
 };
-export default ChiTest;
+
+export default ChiBarStats;

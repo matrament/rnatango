@@ -9,9 +9,10 @@ const SelectedModelsForAnalyse = (props: {
   selectedModels: string[];
   targetFileName: string;
 }) => {
-  // useEffect(() => {
-  //   console.log(props.selectedModels);
-  // }, [props.selectedModels]);
+  useEffect(() => {
+    console.log(props.selectedModels);
+    console.log(props.models);
+  }, [props.selectedModels]);
 
   const onChange = (value: string[]) => {
     props.setSelectedModels(value);
@@ -33,7 +34,7 @@ const SelectedModelsForAnalyse = (props: {
           options={props.models.map((model, index) => {
             return {
               label: Object.values(model)[0],
-              value: index,
+              value: Object.values(model)[0],
             };
           })}
           defaultValue={props.selectedModels}

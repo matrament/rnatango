@@ -72,59 +72,96 @@ const MolStarPluginSpec: PluginUISpec = {
 
 async function addComponents(
   plugin: PluginUIContext,
-  structure: StateObjectRef<SO.Molecule.Structure>,
-  representation: "cartoon" | "ball-and-stick" | "backbone"
+  structure_target: StateObjectRef<SO.Molecule.Structure>,
+  structure_model: StateObjectRef<SO.Molecule.Structure>
+  // representation: "cartoon" | "ball-and-stick" | "backbone"
 ) {
   console.log("addComponents check");
 
-  const otherNucleotides =
+  const target =
     await plugin.builders.structure.tryCreateComponentFromExpression(
-      structure,
+      structure_target,
       MS.struct.generator.atomGroups({ "residue-test": true }),
       `TEST-struct-component`,
-      { label: "test" }
+      { label: "target" }
     );
 
-  if (otherNucleotides) {
-    await plugin.builders.structure.representation.addRepresentation(
-      otherNucleotides,
-      { type: representation }
-    );
+  if (target) {
+    await plugin.builders.structure.representation.addRepresentation(target, {
+      type: "cartoon",
+    });
   }
+  const model =
+    await plugin.builders.structure.tryCreateComponentFromExpression(
+      structure_model,
+      MS.struct.generator.atomGroups({ "residue-test": true }),
+      `TEST-struct-component`,
+      { label: "model_[name]" }
+    );
 
-  // if (componentOther_structure)
-  //   return [list_of_rna_groups, componentOther_structure!.data];
+  if (model) {
+    await plugin.builders.structure.representation.addRepresentation(model, {
+      type: "cartoon",
+    });
+  }
 }
 
 const addStructure = async (
   plugin: PluginUIContext,
-  structure_file: string,
-  representation: "cartoon" | "ball-and-stick" | "backbone"
+  target_file: string,
+  model_file: string
+  // representation: "cartoon" | "ball-and-stick" | "backbone"
 ) => {
-  const data = await plugin.builders.data.download(
-    { url: structure_file },
+  const data_target = await plugin.builders.data.download(
+    { url: target_file },
     { state: { isGhost: true } }
   );
 
-  const trajectory = await plugin.builders.structure.parseTrajectory(
-    data,
+  const trajectory_target = await plugin.builders.structure.parseTrajectory(
+    data_target,
     "mmcif" // file_format
   );
-  const model = await plugin.builders.structure.createModel(trajectory);
-  const structure = await plugin.builders.structure.createStructure(model, {
-    name: "model",
-    params: {},
-  });
-  console.log("przed add components");
-  await addComponents(plugin, structure, representation);
+  const model_target = await plugin.builders.structure.createModel(
+    trajectory_target
+  );
+  const structure_target = await plugin.builders.structure.createStructure(
+    model_target,
+    {
+      name: "model",
+      params: {},
+    }
+  );
+
+  const data_model = await plugin.builders.data.download(
+    { url: model_file },
+    { state: { isGhost: true } }
+  );
+
+  const trajectory_model = await plugin.builders.structure.parseTrajectory(
+    data_model,
+    "mmcif" // file_format
+  );
+  const model_model = await plugin.builders.structure.createModel(
+    trajectory_model
+  );
+  const structure_model = await plugin.builders.structure.createStructure(
+    model_model,
+    {
+      name: "model",
+      params: {},
+    }
+  );
+
+  await addComponents(plugin, structure_target, structure_model);
 };
 
 const createPlugin = async (
   parent: HTMLDivElement,
-  structure_file: string,
+  target_file: string,
+  model_file: string
   //   motif_files: { file: string; molecule: string }[],
   // contacts: inContactType[],
-  representation: "cartoon" | "ball-and-stick" | "backbone"
+  // representation: "cartoon" | "ball-and-stick" | "backbone"
 ) => {
   let options = {
     target: parent,
@@ -148,7 +185,7 @@ const createPlugin = async (
   });
   // applyRNAsoloNeighbourhoodColorScheme(plugin!, parseResidues(contacts));
 
-  await addStructure(plugin, structure_file, representation);
+  await addStructure(plugin, target_file, model_file);
   plugin.behaviors.layout.leftPanelTabName.next("data");
   plugin.canvas3d?.camera.stateChanged
     .asObservable()
@@ -160,7 +197,6 @@ const createPlugin = async (
         minNear: 0.1,
       });
     });
-  console.log("gggg");
   return { plugin };
 };
 
@@ -169,7 +205,7 @@ type MolStarWrapperProps = {
   target_file: string;
   //   motif_files: { file: string; molecule: string }[];
   //   contacts: inContactType[];
-  representation: "cartoon" | "ball-and-stick";
+  // representation: "cartoon" | "ball-and-stick";
 };
 
 const MolStarWrapper = (props: MolStarWrapperProps) => {
@@ -178,33 +214,35 @@ const MolStarWrapper = (props: MolStarWrapperProps) => {
   let [plugin, setPlugin] = useState<PluginUIContext | undefined>(undefined);
 
   useEffect(() => {
-    console.log(props.model_file);
-
     if (!plugin) {
       createPlugin(
         parent_c.current!,
-        props.model_file,
+        props.target_file,
+        props.model_file
 
-        props.representation
+        // props.representation
       ).then((v) => {
-        console.log(v);
-
         setPlugin(v.plugin);
       });
     }
-  }, [props.model_file]);
+  }, []);
 
   useEffect(() => {
     if (plugin) {
       plugin.clear();
-      addStructure(plugin, props.model_file, props.representation);
+      addStructure(plugin, props.target_file, props.model_file);
       console.log(plugin);
     }
-  }, [props.representation]);
+  }, [props.model_file]);
 
   return (
     <div
-      style={{ height: "500px", width: "100%", position: "relative" }}
+      style={{
+        height: "700px",
+        width: "100%",
+        position: "relative",
+        zIndex: "9999",
+      }}
       ref={parent_c}
     ></div>
   );

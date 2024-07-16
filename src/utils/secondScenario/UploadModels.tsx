@@ -38,7 +38,7 @@ const UploadModels = (props: UploadFileArguments) => {
   let uploader_props: UploadProps = {
     name: "file",
     multiple: false,
-    action: config.SERVER_URL + "/one-many/form/add/model/" + props.taskID,
+    action: config.SERVER_URL + "one-many/form/add/model/" + props.taskID,
     maxCount: 1,
     beforeUpload: (file: File) => {
       let fileName = file.name.split(".");
@@ -90,6 +90,7 @@ const UploadModels = (props: UploadFileArguments) => {
           flexDirection: "column",
           marginBottom: "20px",
           width: "80%",
+          maxWidth: "500px",
           justifyContent: "center",
         }}
       >

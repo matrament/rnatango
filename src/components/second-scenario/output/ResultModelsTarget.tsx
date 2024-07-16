@@ -29,45 +29,48 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
     let temp_comparsionModelsMCQ: any = [];
     let temp_seq: string[] = [];
 
-    for (let i = 0; i < props.result.differences.length; i++) {
-      let model: any = [];
-      props.result.differences[i].residues.map((residue, index) => {
-        model.push({
-          key: index,
-          name: `${props.result.chain}.${residue.name}${residue.number}`,
-          mcq: Number(
-            props.result.differences[i].residueMCQs[index].toFixed(2)
-          ),
-        });
-        residue.torsionAngles.map((angle) => {
-          if (props.result.requestedAngles.includes(angle.angle)) {
-            model[index][`${angle.angle.toLowerCase()}`] =
-              angle.value !== null ? Number(angle.value.toFixed(2)) : null;
-          }
-        });
-        if (i === 0) {
-          temp_seq.push(residue.name);
-          temp_comparsionModelsMCQ.push({
+    props.result.differences
+      .sort((a, b) => a.modelMCQ - b.modelMCQ)
+      .map((el, i) => {
+        let model: any = [];
+        props.result.differences[i].residues.map((residue, index) => {
+          model.push({
             key: index,
             name: `${props.result.chain}.${residue.name}${residue.number}`,
-            dotbracket:
-              props.result.differences[i].residues[index].dotBracketSymbol,
+            mcq: Number(
+              props.result.differences[i].residueMCQs[index].toFixed(2)
+            ),
           });
-        }
-        temp_comparsionModelsMCQ[index][
-          `${props.result.differences[i].modelName}_${i + 1}`
-        ] = Number(props.result.differences[i].residueMCQs[index].toFixed(2));
+          residue.torsionAngles.map((angle) => {
+            if (props.result.requestedAngles.includes(angle.angle)) {
+              model[index][`${angle.angle.toLowerCase()}`] =
+                angle.value !== null ? Number(angle.value.toFixed(2)) : null;
+            }
+          });
+          if (i === 0) {
+            temp_seq.push(residue.name);
+            temp_comparsionModelsMCQ.push({
+              key: index,
+              name: `${props.result.chain}.${residue.name}${residue.number}`,
+              dotbracket:
+                props.result.differences[i].residues[index].dotBracketSymbol,
+            });
+          }
+          temp_comparsionModelsMCQ[index][
+            `${props.result.differences[i].modelName}`
+          ] = Number(props.result.differences[i].residueMCQs[index].toFixed(2));
+        });
+        temp_models.push({
+          [`${props.result.differences[i].modelName}`]: model,
+        });
+        models_temp.push({
+          [i]: `${props.result.differences[i].modelName}`,
+        });
       });
-      temp_models.push({
-        [`${props.result.differences[i].modelName}_${i + 1}`]: model,
-      });
-      models_temp.push({
-        [i]: `${props.result.differences[i].modelName}_${i + 1}`,
-      });
-    }
 
     setDataset(temp_models);
     setModels([...models_temp]);
+    console.log(models_temp);
     setSelectedModels(
       models_temp.map((model) => {
         return Object.values(model)[0];

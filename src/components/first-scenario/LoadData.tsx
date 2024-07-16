@@ -185,48 +185,47 @@ export default function LoadData() {
                         <div className={styles.split_layout_label}>or</div>
                         <div className={styles.split_layout_rule}></div>
                       </div>
-                      <div>
-                        <div
-                          style={{
-                            minWidth: "350px",
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            marginTop: "20px",
-                          }}
-                        >
-                          <p style={{ fontSize: "16px" }}>
-                            From Protein Data Bank:
-                          </p>
-                          <Form.Item>
-                            <Input
-                              size="large"
-                              name="rcsbPdbId"
-                              data-testid="rcsb-pdb-id-input"
-                              value={pdbId.name}
-                              status={pdbError ? "error" : ""}
-                              onChange={(e) =>
-                                setPdbId({
-                                  name: e.target.value.toUpperCase(),
-                                })
-                              }
-                              disabled={isUpload}
-                              style={{
-                                width: "200px",
-                                paddingTop: "2px",
-                                paddingBottom: "2px",
-                              }}
-                              placeholder={"PDB ID eg. 1FFK"}
-                              maxLength={4}
-                            />
-                          </Form.Item>
-                          {/* {pdbError ? (
+
+                      <div
+                        style={{
+                          minWidth: "350px",
+                          display: "flex",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                          marginTop: "20px",
+                        }}
+                      >
+                        <p style={{ fontSize: "16px" }}>
+                          From Protein Data Bank:
+                        </p>
+                        <Form.Item>
+                          <Input
+                            size="large"
+                            name="rcsbPdbId"
+                            data-testid="rcsb-pdb-id-input"
+                            value={pdbId.name}
+                            status={pdbError ? "error" : ""}
+                            onChange={(e) =>
+                              setPdbId({
+                                name: e.target.value.toUpperCase(),
+                              })
+                            }
+                            disabled={isUpload}
+                            style={{
+                              width: "200px",
+                              paddingTop: "2px",
+                              paddingBottom: "2px",
+                            }}
+                            placeholder={"PDB ID eg. 1FFK"}
+                            maxLength={4}
+                          />
+                        </Form.Item>
+                        {/* {pdbError ? (
                         <div style={{ paddingLeft: "15px" }}>
                         <CloseCircleFilled style={{ color: "red" }} /> Wrong
                           PDBid
                           </div>
                         ) : null} */}
-                        </div>
                       </div>
                     </div>
 

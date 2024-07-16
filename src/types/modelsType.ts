@@ -90,6 +90,7 @@ export type single_result_angle = {
   resultRemovedAfter: string;
   structureMolecule: string;
   structureName: string;
+  structureTitle: string;
 };
 //................................
 export type torsion_angles_residue = {
@@ -106,6 +107,7 @@ export type torsion_angles_residue = {
   eta_prim: number | null;
   theta_prim: number | null;
   chi: number | null;
+  P: number | null;
 };
 
 export type torsion_angles = {
@@ -190,6 +192,7 @@ export type second_scenario_submit = {
 };
 
 export type second_scenario_result = {
+  resultRemovedAfter: string;
   model: string;
   targetHashId: string;
   targetFileName: string;

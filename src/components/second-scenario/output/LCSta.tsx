@@ -228,15 +228,14 @@ const LCSta = (props: {
           <MolStarWrapper
             model_file={
               config.SERVER_URL +
-              "/one-many/tertiary/structure/" +
+              "one-many/tertiary/structure/" +
               props.lcs[activeModel].modelId
             }
             target_file={
               config.SERVER_URL +
-              "/one-many/tertiary/structure/" +
+              "one-many/tertiary/structure/" +
               props.target.targetId
             }
-            representation={"cartoon"}
           />
         </div>
       </Suspense>
@@ -249,7 +248,7 @@ const LCSta = (props: {
             downloadFile(
               props.lcs[activeModel].name.split(".")[0] + ".cif",
               config.SERVER_URL +
-                "/one-many/tertiary/structure/" +
+                "one-many/tertiary/structure/" +
                 props.lcs[activeModel].modelId
             )
           }
