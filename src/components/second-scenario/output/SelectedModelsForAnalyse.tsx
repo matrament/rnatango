@@ -9,10 +9,10 @@ const SelectedModelsForAnalyse = (props: {
   selectedModels: string[];
   targetFileName: string;
 }) => {
-  useEffect(() => {
-    console.log(props.selectedModels);
-    console.log(props.models);
-  }, [props.selectedModels]);
+  // useEffect(() => {
+  //   console.log(props.selectedModels);
+  //   console.log(props.models);
+  // }, [props.selectedModels]);
 
   const onChange = (value: string[]) => {
     props.setSelectedModels(value);

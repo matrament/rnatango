@@ -1,35 +1,37 @@
 "use client";
 import styles from "./page.module.css";
-import { second_scenario_result } from "@/types/modelsType";
+import { third_scenario_result } from "@/types/modelsType";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import ResultModelsTarget from "@/components/second-scenario/output/ResultModelsTarget";
 import LoadingCard from "@/components/common/LoadingCard";
 import StatusTask from "@/components/common/StatusTask";
+import ResultModelModel from "@/components/third-scenario/ResultModelModel";
 import { processingResponse } from "@/utils/processingResponse";
 
-const initResult = {
+const initModel = {
   resultRemovedAfter: "",
   model: "",
-  targetHashId: "",
-  targetFileName: "",
   chain: "",
-  lcsThreshold: 10,
   requestedAngles: [],
-  differences: [],
+  structureModels: [],
+  oneManyResults: [],
 };
 
-const ResultSecondScenario = () => {
+const ResultThirdScenario = () => {
   const searchParams = useSearchParams();
   const taskID = searchParams.get("id");
-  const [result, setResult] = useState<second_scenario_result>(initResult);
+  const [result, setResult] = useState<third_scenario_result>(initModel);
   const [status, setStatus] = useState("");
   const [stepsNumber, setStepsNumber] = useState(2);
   const [seedState, setSeedState] = useState(1);
 
   useEffect(() => {
-    processingResponse(taskID, setResult, setStatus, "one-many");
+    processingResponse(taskID, setResult, setStatus, "many-many");
   }, []);
+
+  useEffect(() => {
+    console.log(result);
+  }, [result]);
 
   useEffect(() => {
     if (status === "PROCESSING") {
@@ -50,12 +52,12 @@ const ResultSecondScenario = () => {
           result?.resultRemovedAfter ? result.resultRemovedAfter : "..."
         }
       />
-      {result && result.differences ? (
-        result.differences.length === 0 ? (
+      {result && result.oneManyResults ? (
+        result.oneManyResults.length === 0 ? (
           <LoadingCard />
         ) : (
           <div className={styles.scenario}>
-            <ResultModelsTarget result={result} key={seedState} />
+            <ResultModelModel result={result} taskId={taskID} key={seedState} />
           </div>
         )
       ) : null}
@@ -63,12 +65,12 @@ const ResultSecondScenario = () => {
   );
 };
 
-const PageSecondResult = () => {
+const PageThirdResult = () => {
   return (
     <Suspense>
-      <ResultSecondScenario />
+      <ResultThirdScenario />
     </Suspense>
   );
 };
 
-export default PageSecondResult;
+export default PageThirdResult;

@@ -14,7 +14,7 @@ function downloadFile(type: any, modelId: string) {
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
   fetch(
-    config.SERVER_URL + "one-many/secondary/structure/" + modelId,
+    config.SERVER_URL + "/one-many/secondary/structure/" + modelId,
     requestOptions
   )
     .then((res) => res.blob())
@@ -43,7 +43,7 @@ const MCQstructure = (props: { modelHashId: string }) => {
         width={700}
         height={700}
         // className="two-d-image"
-        src={`${config.SERVER_URL}one-many/secondary/structure/${props.modelHashId}`}
+        src={`${config.SERVER_URL}/one-many/secondary/structure/${props.modelHashId}`}
       />
       <Button
         type="text"

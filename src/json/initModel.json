@@ -1,0 +1,25 @@
+{
+  "taskHashId": "",
+  "models": [
+    {
+      "fileId": "",
+      "fileName": "",
+      "sequence": "",
+      "selection": null,
+      "sourceSelection": {
+        "modelName": "",
+        "chains": [
+          {
+            "name": "",
+            "sequence": "",
+            "nucleotideRange": {
+              "fromInclusive": 0,
+              "toInclusive": 0
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sequences": []
+}

@@ -44,12 +44,15 @@ const IntersectionOfTargetModels = (props: {
       </div>
       <ul style={{ marginLeft: "30px" }}>
         <li>
-          {" "}
-          Target range: {props.rangeTarget[0]}-{props.rangeTarget[1]}
+          {`Target range: ${props.rangeTarget[0]}-${props.rangeTarget[1]}  (${
+            props.rangeTarget[1] - props.rangeTarget[0]
+          } nts)`}
         </li>
         <li>
-          Largest common fragment: {props.rangeIntersection[0]}-
-          {props.rangeIntersection[1]}
+          {`Largest common fragment: ${props.rangeIntersection[0]}-
+          ${props.rangeIntersection[1]}  (${
+            props.rangeIntersection[1] - props.rangeIntersection[0]
+          } nts)`}
         </li>
       </ul>
     </div>

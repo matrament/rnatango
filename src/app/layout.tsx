@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { ConfigProvider } from "antd";
 import { Montserrat } from "next/font/google";
+import { Roboto_Mono } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "RNAtango",
@@ -16,6 +17,12 @@ const openSans = Montserrat({
 });
 
 const openSansBold = Montserrat({
+  style: "normal",
+  weight: "500",
+  subsets: ["latin"],
+});
+
+const monoSpace = Roboto_Mono({
   style: "normal",
   weight: "500",
   subsets: ["latin"],
@@ -83,6 +90,9 @@ export default function RootLayout({
               },
               Grid: {
                 fontSize: 16,
+              },
+              Tag: {
+                fontFamily: monoSpace.style.fontFamily,
               },
             },
           }}

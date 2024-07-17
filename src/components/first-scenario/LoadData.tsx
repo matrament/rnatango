@@ -11,7 +11,7 @@ import {
   Space,
   Tooltip,
 } from "antd";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { UploadFile } from "antd/lib/upload/interface";
 import { pdb_id, structure, scenario } from "../../types/modelsType";
 import { checkRcsbMaxModel } from "../../utils/checkRcsbMaxModel";
@@ -20,8 +20,9 @@ import UploadStructureFile from "./input/UploadStructureFile";
 import RequestForm from "./RequestForm";
 import DefineTarget from "../second-scenario/DefineTarget";
 import scenarios from "../../json/scenarios.json";
+import ExamplesTaskId from "../common/ExamplesTaskId";
 
-export default function LoadData() {
+const LoadData = () => {
   const searchParams = useSearchParams();
   const selectedScenario = searchParams.get("scenario") || "1";
 
@@ -52,9 +53,11 @@ export default function LoadData() {
   const [isUpload, setIsUpload] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [open, setOpen] = useState<string | string[]>(["1"]);
   const [uploadStructure, setUploadStructure] = useState<
     UploadFile[] | undefined
   >(undefined);
+  const router = useRouter();
 
   const submit = () => {
     setLoading(true);
@@ -88,7 +91,6 @@ export default function LoadData() {
     }
   }, [isUpload]);
 
-  const [open, setOpen] = useState<string | string[]>(["1"]);
   const onChange = (key: string | string[]) => {
     setOpen(key);
   };
@@ -120,16 +122,17 @@ export default function LoadData() {
                 }}
               >
                 <Col>
-                  {selectedScenario === "1" || selectedScenario === "2" ? (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: "15px",
-                      }}
-                    >
-                      <p style={{ margin: 0 }}>From example collection:</p>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: "15px",
+                    }}
+                  >
+                    <p style={{ margin: 0 }}>From example collection:</p>
+
+                    {selectedScenario === "1" ? (
                       <Space.Compact>
                         {scenarios[selectedScenario].example.map(
                           (
@@ -153,8 +156,15 @@ export default function LoadData() {
                           )
                         )}
                       </Space.Compact>
-                    </div>
-                  ) : null}
+                    ) : (
+                      <ExamplesTaskId
+                        scenario={"one-many"}
+                        router={router}
+                        loading={loading}
+                        setLoading={setLoading}
+                      />
+                    )}
+                  </div>
                   <Form labelCol={{ span: 16 }} wrapperCol={{ span: 30 }}>
                     <div className={styles.requestCard}>
                       <div>
@@ -275,4 +285,6 @@ export default function LoadData() {
       </div>
     </div>
   );
-}
+};
+
+export default LoadData;

@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { single_result_angle } from "../../types/modelsType";
 import styles from "./page.module.css";
-import { processingResponce } from "../../utils/processingResponse";
+import { processingResponse } from "../../utils/processingResponse";
 import { Button, Steps, Alert } from "antd";
 import LoadingCard from "../../components/common/LoadingCard";
 import { ReloadOutlined } from "@ant-design/icons";
@@ -31,14 +31,12 @@ const ResultPage = (props: any) => {
   const [seedState, setSeedState] = useState(1);
 
   useEffect(() => {
-    processingResponce(
+    processingResponse(
       searchParams.get("id")!,
-      resultFile,
       setResultFile,
       setStatus,
-      status
+      "single"
     );
-    console.log(resultFile);
   }, []);
 
   useEffect(() => {

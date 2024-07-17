@@ -102,6 +102,20 @@ const LCSta = (props: {
     );
     setDataset(dataset_temp);
     setCsvData(dataset_temp);
+    // console.log(
+    //   `${
+    //     config.SERVER_URL +
+    //     "/one-many/tertiary/structure/" +
+    //     props.lcs[activeModel].modelId
+    //   }`
+    // );
+    // console.log(
+    //   `${
+    //     config.SERVER_URL +
+    //     "/one-many/tertiary/structure/" +
+    //     props.target.targetId
+    //   }`
+    // );
   }, [props.target, props.lcs]);
 
   const columns: TableColumnsType<DataType> = [
@@ -223,22 +237,39 @@ const LCSta = (props: {
           </ConfigProvider>
         }
       </Row>
-      <Suspense fallback={<RenderLoader />}>
+      {/* <Suspense fallback={<RenderLoader />}>
         <div style={{ display: "block", margin: "30px 30px 0 30px" }}>
           <MolStarWrapper
             model_file={
               config.SERVER_URL +
-              "one-many/tertiary/structure/" +
+              "/one-many/tertiary/structure/" +
               props.lcs[activeModel].modelId
             }
             target_file={
               config.SERVER_URL +
-              "one-many/tertiary/structure/" +
+              "/one-many/tertiary/structure/" +
               props.target.targetId
             }
           />
         </div>
-      </Suspense>
+      </Suspense> */}
+      <div className={styles.tableButton} style={{ marginBottom: "25px" }}>
+        <Button
+          type="primary"
+          shape="round"
+          icon={<DownloadOutlined />}
+          onClick={() =>
+            downloadFile(
+              props.target.targetId + ".cif",
+              config.SERVER_URL +
+                "/one-many/tertiary/structure/" +
+                props.target.targetId
+            )
+          }
+        >
+          Download .cif
+        </Button>
+      </div>
       <div className={styles.tableButton} style={{ marginBottom: "25px" }}>
         <Button
           type="primary"
@@ -248,7 +279,7 @@ const LCSta = (props: {
             downloadFile(
               props.lcs[activeModel].name.split(".")[0] + ".cif",
               config.SERVER_URL +
-                "one-many/tertiary/structure/" +
+                "/one-many/tertiary/structure/" +
                 props.lcs[activeModel].modelId
             )
           }

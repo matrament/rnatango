@@ -70,7 +70,6 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
 
     setDataset(temp_models);
     setModels([...models_temp]);
-    console.log(models_temp);
     setSelectedModels(
       models_temp.map((model) => {
         return Object.values(model)[0];

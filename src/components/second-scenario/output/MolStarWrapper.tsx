@@ -1,3 +1,4 @@
+"use client";
 import React, { Key, useEffect, useState } from "react";
 import {
   DefaultPluginUISpec,

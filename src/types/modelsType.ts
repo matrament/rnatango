@@ -107,7 +107,7 @@ export type torsion_angles_residue = {
   eta_prim: number | null;
   theta_prim: number | null;
   chi: number | null;
-  P: number | null;
+  p: number | null;
 };
 
 export type torsion_angles = {
@@ -268,4 +268,54 @@ export type angles_result = {
   eta_prim: string;
   theta_prim: string;
   chi: string;
+};
+
+export type third_scenario_set_model = {
+  taskHashId: string;
+  models: third_scenario_set_model_model[];
+  sequences: third_scenario_set_model_sequences[];
+};
+
+export type third_scenario_set_model_model = {
+  fileId: string;
+  fileName: string;
+  sequence: string;
+  selection: {
+    modelName: string;
+    chains: third_scenario_set_model_model_chain[];
+  } | null;
+  sourceSelection: {
+    modelName: string;
+    chains: third_scenario_set_model_model_chain[];
+  };
+};
+
+export type third_scenario_set_model_model_chain = {
+  name: string;
+  sequence: string;
+  nucleotideRange: {
+    fromInclusive: number;
+    toInclusive: number;
+  };
+};
+
+export type third_scenario_set_model_sequences = {
+  name: string;
+  sequence: string;
+};
+
+export type third_scenario_result = {
+  resultRemovedAfter: string;
+  model: string;
+  chain: string;
+  requestedAngles: string[];
+  structureModels: string[];
+  oneManyResults: third_scenario_result_oneManyResults[];
+};
+
+export type third_scenario_result_oneManyResults = {
+  targetHashId: string;
+  targetFileName: string;
+  lcsThreshold: number;
+  differences: second_scenario_result_differences[];
 };

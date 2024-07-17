@@ -7,14 +7,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { UploadFile } from "antd/lib/upload/interface";
-import {
-  Button,
-  Table,
-  TableColumnsType,
-  message,
-  Tooltip,
-  Divider,
-} from "antd";
+import { Button, Table, TableColumnsType, message, Tooltip } from "antd";
 import {
   second_scenario_models_target,
   second_scenario_submit,
@@ -123,7 +116,7 @@ const TargetModels = () => {
   }, [modelsTarget, uploadStructure]);
 
   useEffect(() => {
-    UploadedTaskDetails(targetID, setModelsTarget, setError);
+    UploadedTaskDetails(targetID, setModelsTarget, setError, "2");
   }, []);
 
   const submit = () => {
@@ -155,6 +148,7 @@ const TargetModels = () => {
           setLoading={setLoading}
           taskID={searchParams.get("id")}
           error={error}
+          scenario={"2"}
         />
         {datasetModels.length != 0 ? (
           <Table

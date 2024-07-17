@@ -5,8 +5,9 @@ import initTarget from "../../json/initTarget.json";
 
 export function UploadedTaskDetails(
   taskId: string | null,
-  setModelsTarget: any,
-  setError: any
+  setModels: any,
+  setError: any,
+  scenario: string
 ) {
   const requestOptions = {
     method: "GET",
@@ -17,10 +18,15 @@ export function UploadedTaskDetails(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  fetch(config.SERVER_URL + "one-many/form/" + taskId, requestOptions)
+  fetch(
+    config.SERVER_URL +
+      `${(scenario = "2" ? "/one-many/form/" : "/many-many/form/")}` +
+      taskId,
+    requestOptions
+  )
     .then((response: any) => {
       if (response.status == 404) {
-        setModelsTarget(initTarget);
+        // setModels(initTarget);
         setError(true);
         message.error(lang.rcsb_error);
       } else {
@@ -29,9 +35,9 @@ export function UploadedTaskDetails(
     })
     .then((response: any) => {
       if (response != "" && response != undefined) {
-        setModelsTarget(response);
+        setModels(response);
       } else {
-        setModelsTarget(initTarget);
+        // setModels(initTarget);
         setError(true);
       }
     })

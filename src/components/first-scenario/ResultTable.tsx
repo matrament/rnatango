@@ -1,7 +1,7 @@
 "use client";
 import styles from "./first-scenario.module.css";
 import { useState, useEffect } from "react";
-import { Table, Collapse, Select, Button, Checkbox } from "antd";
+import { Table, Collapse, Select, Button, Checkbox, Tag } from "antd";
 import { torsion_angles_residue } from "../../types/modelsType";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
@@ -34,6 +34,21 @@ const angleName: { [key: string]: string } = {
   ["10-theta_prim"]: "Theta prim (\u03B8')",
 
   ["11-chi"]: "Chi (\u03C7)",
+
+  ["12-p"]: "P",
+};
+
+const P_angle_label = {
+  0: { name: "C3'-exo", color: "volcano" },
+  1: { name: "C4'-endo", color: "cyan" },
+  2: { name: "O4'-exo", color: "volcano" },
+  3: { name: "C1'-endo", color: "cyan" },
+  4: { name: "C2'-exo", color: "volcano" },
+  5: { name: "C3'-endo", color: "cyan" },
+  6: { name: "C4'-exo", color: "volcano" },
+  7: { name: "O4'-endo", color: "cyan" },
+  8: { name: "C1'-exo", color: "volcano" },
+  9: { name: "C2'-endo", color: "cyan" },
 };
 
 interface tableAngle {
@@ -94,6 +109,10 @@ const options: ItemProps[] = [
     label: "Chi (\u03C7)",
     value: "11-chi",
   },
+  {
+    label: "P",
+    value: "12-p",
+  },
 ];
 
 const ResultTable = (props: {
@@ -112,24 +131,54 @@ const ResultTable = (props: {
   useEffect(() => {
     handleChange(Object.keys(angleName));
     setCsvData(props.dataAngle);
-    // console.log(props.dataAngle);
     setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(
-    Object.values(angleName)
-  );
-
   const handleChange = (value: string[]) => {
-    let x: TableColumnsType<tableAngle> = value.map((e) => ({
-      title: angleName[e][0].toUpperCase() + angleName[e].slice(1),
-      key: parseInt(e.split("-")[0]),
-      dataIndex: e.split("-")[1],
-      width: 30,
-      fixed: false,
-      render: (e: string) => <p className={styles.tableAngleMono}>{e}</p>,
-    }));
+    let x: TableColumnsType<tableAngle> = value.map((e) => {
+      const [key, dataIndex] = e.split("-");
+
+      if (dataIndex === "p") {
+        return {
+          title: `P`,
+          key: parseInt(key),
+          dataIndex: dataIndex,
+          width: 50,
+          fixed: true,
+          render: (value: string) => {
+            if (e != null) {
+              const label =
+                P_angle_label[
+                  Math.floor(
+                    (Number(value) + 180) / 36
+                  ) as keyof typeof P_angle_label
+                ];
+              return (
+                <>
+                  <p className={styles.tableAngleMono}>{value}</p>
+                  <Tag color={label.color}>{label.name}</Tag>
+                </>
+              );
+            } else {
+              null;
+            }
+          },
+        };
+      }
+
+      // Domyślna konfiguracja, jeśli value nie jest równe "p"
+      return {
+        title: angleName[e][0].toUpperCase() + angleName[e].slice(1),
+        key: parseInt(key),
+        dataIndex: dataIndex,
+        width: 30,
+        fixed: false,
+        render: (e: string) => {
+          return <p className={styles.tableAngleMono}>{e}</p>;
+        },
+      };
+    });
     x.splice(0, 0, {
       title: "Residue",
       key: 0,

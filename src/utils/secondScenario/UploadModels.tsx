@@ -32,13 +32,26 @@ interface UploadFileArguments {
   setLoading: any;
   taskID: string | null;
   error: boolean;
+  scenario: "2" | "3";
 }
+
+const getActionUrl = (scenario: string, taskID: string | null) => {
+  if (scenario === "2") {
+    return `${config.SERVER_URL}/one-many/form/add/model/${taskID}`;
+  } else {
+    if (taskID != null && taskID !== "") {
+      return `${config.SERVER_URL}/many-many/form/add/model/${taskID}`;
+    } else {
+      return `${config.SERVER_URL}/many-many/set`;
+    }
+  }
+};
 
 const UploadModels = (props: UploadFileArguments) => {
   let uploader_props: UploadProps = {
     name: "file",
     multiple: false,
-    action: config.SERVER_URL + "one-many/form/add/model/" + props.taskID,
+    action: getActionUrl(props.scenario, props.taskID),
     maxCount: 1,
     beforeUpload: (file: File) => {
       let fileName = file.name.split(".");

@@ -17,7 +17,7 @@ export function getTaskID(
     },
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
-  fetch(config.SERVER_URL + "one-many/submit", requestOptions)
+  fetch(config.SERVER_URL + "/one-many/submit", requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
         message.error(lang.rcsb_error);

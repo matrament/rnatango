@@ -25,8 +25,8 @@ const DesktopHeader = () => {
           <Image src={Logo} alt="RNAtango" height={40} />
         </Link>
         <div className={styles.pages}>
-          <Link href="/about">
-            <p className={pathname == "/about" ? styles.active : ""}>About</p>
+          <Link href="/">
+            <p className={pathname == "/" ? styles.active : ""}>Home</p>
           </Link>
           <Link href="/cite_us">
             <p className={pathname == "/cite_us" ? styles.active : ""}>
@@ -88,10 +88,8 @@ const HeaderMobile = () => {
           <Link href="/" onClick={handleClick}>
             <h4 className={pathname === "/" ? styles.active : ""}>Home</h4>
           </Link>
-          <Link href="/about" onClick={handleClick}>
-            <h4 className={pathname === "/about" ? styles.active : ""}>
-              About
-            </h4>
+          <Link href="/" onClick={handleClick}>
+            <h4 className={pathname === "/" ? styles.active : ""}>Home</h4>
           </Link>
           <Link href="/cite_us" onClick={handleClick}>
             <h4 className={pathname === "/cite_us" ? styles.active : ""}>

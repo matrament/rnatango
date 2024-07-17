@@ -11,7 +11,8 @@ import { Alert, Col, Divider, Row, Select } from "antd";
 import HistogramAngles from "./HistogramAngles";
 import ResultTable from "./ResultTable";
 import ChiStatistics from "./ChiStatistics";
-import ChiTest from "./ChiTest";
+import ChiTest from "./BarPlotStats";
+import BarPlotStats from "./BarPlotStats";
 
 const angleName = {
   alpha: "Alpha (\u03B1)",
@@ -35,6 +36,8 @@ const angleName = {
   theta_prim: "Theta prim (\u03B8')",
 
   chi: "Chi (\u03C7)",
+
+  p: "P",
 };
 
 interface ItemProps {
@@ -86,6 +89,10 @@ const options: ItemProps[] = [
   {
     label: "Chi (\u03C7)",
     value: "chi",
+  },
+  {
+    label: "P",
+    value: "p",
   },
 ];
 
@@ -167,8 +174,8 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
               ? props.resultFile.structureName.toLowerCase()
               : props.resultFile.structureName}
           </h1>
-          <p style={{ margin: 0, color: "#8c8c8c" }}>
-            {props.resultFile.structureMolecule}
+          <p style={{ marginBottom: 0, color: "#8c8c8c" }}>
+            {props.resultFile.structureTitle}
           </p>
           <Divider />
           <div
@@ -259,12 +266,23 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
               </div>
               <Divider />
               <div className={styles.section} style={{ marginBottom: "10px" }}>
-                <h2 style={{ margin: 0 }}>
-                  {"Statistics for Chi (\u03C7) angle"}
-                </h2>
+                <Col>
+                  <h2 style={{ margin: 0 }}>
+                    {"Statistics for Chi (\u03C7) angle"}
+                  </h2>
 
-                {/* <ChiStatistics angle={concatResidues.map((el) => el.chi)} /> */}
-                <ChiTest angle={concatResidues.map((el) => el.chi)} />
+                  <BarPlotStats
+                    angle={concatResidues.map((el) => el.chi)}
+                    type={"chi"}
+                  />
+                </Col>
+                <Col>
+                  <h2 style={{ margin: 0 }}>{"Statistics for P angle"}</h2>
+                  <BarPlotStats
+                    angle={concatResidues.map((el) => el.p)}
+                    type={"p"}
+                  />
+                </Col>
               </div>
             </Col>
           </div>

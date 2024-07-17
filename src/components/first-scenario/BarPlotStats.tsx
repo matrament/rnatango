@@ -3,17 +3,25 @@ import { useState, useEffect } from "react";
 import { ReactECharts } from "../echarts/ReactECharts";
 import { ReactEChartsProps } from "../echarts/ReactECharts";
 
-const ChiBarStats = (props: { angle: any[] }) => {
+const BarPlotStats = (props: { angle: any[]; type: string }) => {
   const [syn, setSyn] = useState<number>(0);
   const [anti, setAnti] = useState<number>(0);
+  const [endo, setEndo] = useState<number>(0);
+  const [exo, setExo] = useState<number>(0);
 
   useEffect(() => {
     let x: number[] = props.angle.filter((e) => {
       return e != null;
     });
-    let count = x.filter((e) => e < 120 && e > -30).length;
-    setSyn(count);
-    setAnti(x.length - count);
+    if (props.type == "chi") {
+      let count = x.filter((e) => e < 120 && e > -30).length;
+      setSyn(count);
+      setAnti(x.length - count);
+    } else {
+      let count = x.filter((e) => Math.floor((e + 180) / 36) % 2 == 0).length;
+      setExo(x.length - count);
+      setEndo(count);
+    }
   }, [props.angle]);
 
   const option: ReactEChartsProps["option"] = {
@@ -51,7 +59,10 @@ const ChiBarStats = (props: { angle: any[] }) => {
 
     xAxis: {
       type: "category",
-      data: ["Syn (-30\u00B0 < chi < 120\u00B0)", "Anti"],
+      data:
+        props.type == "chi"
+          ? ["Syn (-30\u00B0 < chi < 120\u00B0)", "Anti"]
+          : ["endo", "exo"],
     },
     yAxis: {
       type: "value",
@@ -61,13 +72,13 @@ const ChiBarStats = (props: { angle: any[] }) => {
       {
         data: [
           {
-            value: syn,
+            value: props.type == "chi" ? syn : exo,
             itemStyle: {
               color: "#04afa4",
             },
           },
           {
-            value: anti,
+            value: props.type == "chi" ? anti : endo,
             itemStyle: {
               color: "#fb5f4c",
             },
@@ -101,4 +112,4 @@ const ChiBarStats = (props: { angle: any[] }) => {
   );
 };
 
-export default ChiBarStats;
+export default BarPlotStats;
