@@ -150,8 +150,10 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
                     lcs: diff.modelLCS,
                     name: `${diff.modelName}_${index + 1}`,
                     modelId: diff.modelHashId,
+                    residue: diff.residues,
                   };
                 })}
+                chain={props.result.chain}
               />
             </>
           ) : (

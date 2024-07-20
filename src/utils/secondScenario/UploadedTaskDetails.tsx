@@ -7,7 +7,7 @@ export function UploadedTaskDetails(
   taskId: string | null,
   setModels: any,
   setError: any,
-  scenario: string
+  scenario: "/one-many/form/" | "/many-many/form/"
 ) {
   const requestOptions = {
     method: "GET",
@@ -18,12 +18,7 @@ export function UploadedTaskDetails(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  fetch(
-    config.SERVER_URL +
-      `${(scenario = "2" ? "/one-many/form/" : "/many-many/form/")}` +
-      taskId,
-    requestOptions
-  )
+  fetch(`${config.SERVER_URL}${scenario}${taskId}`, requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
         // setModels(initTarget);

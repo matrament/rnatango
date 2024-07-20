@@ -47,7 +47,7 @@ const Home = () => {
       </div>
       {selectedScenario === "1" ? <LoadData /> : null}
       {selectedScenario === "2" ? <LoadData /> : null}
-      {selectedScenario === "3" ? <>wip</> : null}
+      {selectedScenario === "3" ? <ThirdScenarioUpload /> : null}
     </>
   );
 };

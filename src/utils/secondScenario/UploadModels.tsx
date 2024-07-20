@@ -33,6 +33,7 @@ interface UploadFileArguments {
   taskID: string | null;
   error: boolean;
   scenario: "2" | "3";
+  router: any,
 }
 
 const getActionUrl = (scenario: string, taskID: string | null) => {
@@ -82,6 +83,13 @@ const UploadModels = (props: UploadFileArguments) => {
         props.setModelsTarget(event.file.response);
         props.setLoading(false);
         props.setUploadStructure([event.file]);
+        if (
+          (props.taskID === null || props.taskID == "") &&
+          props.scenario == "3"
+        ) {
+          console.log(event.file.response.taskHashId);
+          props.router.push(`/?scenario=3&id=${event.file.response.taskHashId}`);
+        }
       } else if (status === "error") {
         message.error(lang.error_uploading + `${event.file.name}`);
 

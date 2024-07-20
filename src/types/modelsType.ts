@@ -211,16 +211,13 @@ export type second_scenario_result_differences = {
   residueMCQs: number[];
   modelLCS: second_scenario_result_differences_lcs;
 };
-
+export type range = {
+  fromInclusive: number;
+  toInclusive: number;
+};
 export type second_scenario_result_differences_lcs = {
-  targetNucleotideRange: {
-    fromInclusive: number;
-    toInclusive: number;
-  };
-  modelNucleotideRange: {
-    fromInclusive: number;
-    toInclusive: number;
-  };
+  targetNucleotideRange: range;
+  modelNucleotideRange: range;
   validResidues: number;
   coveragePercent: number;
   fragmentMCQ: number;
@@ -304,6 +301,13 @@ export type third_scenario_set_model_sequences = {
   sequence: string;
 };
 
+export type third_scenario_submit = {
+  taskHashId: string;
+  chain: string;
+  angles: string[];
+  threshold: number;
+};
+
 export type third_scenario_result = {
   resultRemovedAfter: string;
   model: string;
@@ -318,4 +322,16 @@ export type third_scenario_result_oneManyResults = {
   targetFileName: string;
   lcsThreshold: number;
   differences: second_scenario_result_differences[];
+};
+
+export type clustering = {
+  numberClusters: number;
+  models: clustering_models[];
+};
+
+export type clustering_models = {
+  x: number;
+  y: number;
+  name: string;
+  clusterNumber: number;
 };

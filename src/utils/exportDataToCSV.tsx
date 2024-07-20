@@ -15,8 +15,8 @@ export function exportDataToCSV(
   });
 
   let y: angleObject[] = csvData.map((residue: angleObject) =>
-    Object.keys(residue)
-      .filter((objKey) => filterAngle.includes(objKey))
+    filterAngle
+      .filter((objKey) => Object.keys(residue).includes(objKey))
       .reduce((newObj: angleObject, key) => {
         newObj[key] = residue[key];
         return newObj;
@@ -24,7 +24,7 @@ export function exportDataToCSV(
   );
 
   const csv = Papa.unparse(y);
-  // console.log(csvData);
+  // console.log(y);
   // console.log(angleColumn);
   // Create a Blob containing the CSV data
   const csvBlob = new Blob([csv], { type: "text/csv" });

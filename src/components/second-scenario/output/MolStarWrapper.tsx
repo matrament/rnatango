@@ -1,4 +1,3 @@
-"use client";
 import React, { Key, useEffect, useState } from "react";
 import {
   DefaultPluginUISpec,
@@ -10,9 +9,6 @@ import { PluginUIContext } from "molstar/lib/mol-plugin-ui/context";
 import { PluginCommands } from "molstar/lib/mol-plugin/commands";
 
 import "molstar/build/viewer/molstar.css";
-import { Structure, StructureElement } from "molstar/lib/mol-model/structure";
-import { ColorTheme } from "molstar/lib/mol-theme/color";
-import { ThemeDataContext } from "molstar/lib/mol-theme/theme";
 import { ColorNames } from "molstar/lib/mol-util/color/names";
 import { ParamDefinition as PD } from "molstar/lib/mol-util/param-definition";
 
@@ -34,16 +30,12 @@ import { renderReact18 } from "molstar/lib/mol-plugin-ui/react18";
 import { Expression } from "molstar/lib/mol-script/language/expression";
 import { Type } from "molstar/lib/mol-script/language/type";
 import { Collapse, Tooltip } from "antd";
+import {
+  range,
+  second_scenario_result_differences_lcs,
+} from "@/types/modelsType";
 const { Panel } = Collapse;
 
-// export const COLORS: Record<string, number> = {
-//   PROTEIN: 0xff0000,
-//   ION: 0x00ff00,
-//   DNA: 0x000fff,
-//   LIGAND: 0xff00ff,
-//   RNAn: 0xcccccc,
-//   RNA: 0xefb115,
-// };
 const MolStarPluginSpec: PluginUISpec = {
   ...DefaultPluginUISpec(),
   config: [
@@ -73,45 +65,65 @@ const MolStarPluginSpec: PluginUISpec = {
 
 async function addComponents(
   plugin: PluginUIContext,
-  structure_target: StateObjectRef<SO.Molecule.Structure>,
-  structure_model: StateObjectRef<SO.Molecule.Structure>
-  // representation: "cartoon" | "ball-and-stick" | "backbone"
+  structure: StateObjectRef<SO.Molecule.Structure>,
+  lcs: range,
+  isTarget: boolean
 ) {
-  console.log("addComponents check");
+  // For each expression in nucleotides expression array, create tetrad component
 
-  const target =
+  const commonComponent =
     await plugin.builders.structure.tryCreateComponentFromExpression(
-      structure_target,
-      MS.struct.generator.atomGroups({ "residue-test": true }),
-      `TEST-struct-component`,
-      { label: "target" }
+      structure,
+      MS.struct.generator.atomGroups({
+        "residue-test": MS.core.logic.and([
+          // Check if chain name is corresponding
+          MS.core.rel.gre([MS.ammp("auth_seq_id"), lcs.fromInclusive]),
+          MS.core.rel.lte([MS.ammp("auth_seq_id"), lcs.toInclusive]),
+        ]),
+      }),
+      isTarget ? "target-component-common" : `model-component-common`,
+      isTarget ? { label: `Target common` } : { label: `Model common` }
+    );
+  const otherComponent =
+    await plugin.builders.structure.tryCreateComponentFromExpression(
+      structure,
+      MS.struct.generator.atomGroups({
+        "residue-test": MS.core.logic.or([
+          // Check if chain name is corresponding
+          MS.core.rel.lt([lcs.toInclusive, MS.ammp("auth_seq_id")]),
+          MS.core.rel.gr([lcs.fromInclusive, MS.ammp("auth_seq_id")]),
+        ]),
+      }),
+      isTarget ? "target-component-other" : `model-component-other`,
+      isTarget ? { label: `Target other` } : { label: `Model other` }
     );
 
-  if (target) {
-    await plugin.builders.structure.representation.addRepresentation(target, {
+  await plugin.builders.structure.representation.addRepresentation(
+    commonComponent!,
+    {
       type: "cartoon",
-    });
-  }
-  const model =
-    await plugin.builders.structure.tryCreateComponentFromExpression(
-      structure_model,
-      MS.struct.generator.atomGroups({ "residue-test": true }),
-      `TEST-struct-component`,
-      { label: "model_[name]" }
-    );
+      color: "uniform", // Użyj stałego koloru
+      colorParams: isTarget ? { value: 0x00c6b9 } : { value: 0xfb5f4c },
+    }
+  );
 
-  if (model) {
-    await plugin.builders.structure.representation.addRepresentation(model, {
+  await plugin.builders.structure.representation.addRepresentation(
+    otherComponent!,
+    {
       type: "cartoon",
-    });
-  }
+      typeParams: { alpha: 0.2 },
+      // alpha: 0.5,
+      color: "uniform", // Użyj stałego koloru
+      colorParams: isTarget ? { value: 0x00c6b9 } : { value: 0xfb5f4c },
+    }
+  );
 }
 
 const addStructure = async (
   plugin: PluginUIContext,
   target_file: string,
-  model_file: string
-  // representation: "cartoon" | "ball-and-stick" | "backbone"
+  model_file: string,
+  lcs: second_scenario_result_differences_lcs
 ) => {
   const data_target = await plugin.builders.data.download(
     { url: target_file },
@@ -153,16 +165,20 @@ const addStructure = async (
     }
   );
 
-  await addComponents(plugin, structure_target, structure_model);
+  await addComponents(plugin, structure_model, lcs.modelNucleotideRange, false);
+  await addComponents(
+    plugin,
+    structure_target,
+    lcs.targetNucleotideRange,
+    true
+  );
 };
 
 const createPlugin = async (
   parent: HTMLDivElement,
   target_file: string,
-  model_file: string
-  //   motif_files: { file: string; molecule: string }[],
-  // contacts: inContactType[],
-  // representation: "cartoon" | "ball-and-stick" | "backbone"
+  model_file: string,
+  lcs: second_scenario_result_differences_lcs
 ) => {
   let options = {
     target: parent,
@@ -186,7 +202,7 @@ const createPlugin = async (
   });
   // applyRNAsoloNeighbourhoodColorScheme(plugin!, parseResidues(contacts));
 
-  await addStructure(plugin, target_file, model_file);
+  await addStructure(plugin, target_file, model_file, lcs);
   plugin.behaviors.layout.leftPanelTabName.next("data");
   plugin.canvas3d?.camera.stateChanged
     .asObservable()
@@ -204,9 +220,7 @@ const createPlugin = async (
 type MolStarWrapperProps = {
   model_file: string;
   target_file: string;
-  //   motif_files: { file: string; molecule: string }[];
-  //   contacts: inContactType[];
-  // representation: "cartoon" | "ball-and-stick";
+  lcs: second_scenario_result_differences_lcs;
 };
 
 const MolStarWrapper = (props: MolStarWrapperProps) => {
@@ -219,9 +233,8 @@ const MolStarWrapper = (props: MolStarWrapperProps) => {
       createPlugin(
         parent_c.current!,
         props.target_file,
-        props.model_file
-
-        // props.representation
+        props.model_file,
+        props.lcs
       ).then((v) => {
         setPlugin(v.plugin);
       });
@@ -231,7 +244,7 @@ const MolStarWrapper = (props: MolStarWrapperProps) => {
   useEffect(() => {
     if (plugin) {
       plugin.clear();
-      addStructure(plugin, props.target_file, props.model_file);
+      addStructure(plugin, props.target_file, props.model_file, props.lcs);
       console.log(plugin);
     }
   }, [props.model_file]);

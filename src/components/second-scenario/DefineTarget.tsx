@@ -3,25 +3,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../first-scenario/first-scenario.module.css";
-import {
-  Select,
-  Button,
-  Alert,
-  Radio,
-  Space,
-  InputNumber,
-  Divider,
-  Col,
-  Row,
-} from "antd";
+import { Select, Button, Alert, Radio, Space, Divider, Col, Row } from "antd";
 import { Target, structure, Chains } from "../../types/modelsType";
-import { QuestionOutlined } from "@ant-design/icons";
-import SequenceCard from "../first-scenario/input/SequenceCard";
 import type { RadioChangeEvent } from "antd";
 import FullChainAnalysis from "./FullChainAnalysis";
 import NucleotidePanel from "../first-scenario/NucleotidePanel";
-import Link from "next/link";
-import { GetTargetId } from "@/utils/secondScenario/getTargetID";
+import { getTaskId } from "@/utils/getTaskId";
 
 const initModel: Target = {
   "1": {
@@ -85,7 +72,7 @@ const DefineTarget = (props: { structure: structure; fileName: string }) => {
       },
     };
 
-    GetTargetId(result, router, setLoading);
+    getTaskId(result, router, setLoading, "one-many/set", "target-model");
   };
 
   useEffect(() => {

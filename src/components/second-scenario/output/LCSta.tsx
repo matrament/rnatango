@@ -15,7 +15,10 @@ import {
   TableColumnsType,
 } from "antd";
 import styles from "../../first-scenario/first-scenario.module.css";
-import { second_scenario_result_differences_lcs } from "../../../types/modelsType";
+import {
+  second_scenario_result_differences_lcs,
+  second_scenario_result_differences_residues,
+} from "../../../types/modelsType";
 import { exportDataToCSV } from "@/utils/exportDataToCSV";
 
 type datasetModels = {
@@ -55,22 +58,26 @@ const LCSta = (props: {
     lcs: second_scenario_result_differences_lcs;
     name: string;
     modelId: string;
+    residue: second_scenario_result_differences_residues[];
   }[];
+  chain: string;
 }) => {
   const [dataset, setDataset] = useState<any>([]);
   const [csvData, setCsvData] = useState<datasetModels[]>([]);
   const [activeModel, setActiveModel] = useState(0);
+  const [intersection, setIntersection] = useState([]);
 
   useEffect(() => {
     // FIXME: optimize this state, delete for loop
     let dataset_temp: any = [];
-    let length_seq = props.target.sequence.length;
+    let intersection_temp: any = [];
     props.lcs.map(
       (
         model: {
           lcs: second_scenario_result_differences_lcs;
           name: string;
           modelId: string;
+          residue: second_scenario_result_differences_residues[];
         },
         index
       ) => {
@@ -81,25 +88,50 @@ const LCSta = (props: {
           mcq: Number(model.lcs.fragmentMCQ.toFixed(2)),
           lcs: Number(model.lcs.coveragePercent.toFixed(2)),
         };
-        let model_seq = [];
-        for (let i = 0; i < length_seq; i++) {
+        let model_seq: string[] = [];
+        let target_residues: string[] = [];
+        let model_residues: string[] = [];
+
+        model.residue.map((res) => {
           let residue = "-";
           if (
-            i >=
-              model.lcs.modelNucleotideRange.fromInclusive -
-                model.lcs.targetNucleotideRange.fromInclusive &&
-            i <=
-              model.lcs.modelNucleotideRange.toInclusive -
-                model.lcs.targetNucleotideRange.fromInclusive
+            res.number >= model.lcs.modelNucleotideRange.fromInclusive &&
+            res.number <= model.lcs.modelNucleotideRange.toInclusive
           ) {
             residue = "1";
           }
           model_seq.push(residue);
-        }
+        });
+        model_residues.push(
+          `${props.chain}.${model.residue[0].name}${model.lcs.modelNucleotideRange.fromInclusive}`
+        );
+        model_residues.push(
+          `${props.chain}.${model.residue[model.residue.length - 1].name}${
+            model.lcs.modelNucleotideRange.toInclusive
+          }`
+        );
+        target_residues.push(
+          `${props.chain}.${model.residue[0].name}${model.lcs.targetNucleotideRange.fromInclusive}`
+        );
+        target_residues.push(
+          `${props.chain}.${model.residue[model.residue.length - 1].name}${
+            model.lcs.targetNucleotideRange.toInclusive
+          }`
+        );
+        let target_res = target_residues.join("-");
+        let model_res = model_residues.join("-");
+        intersection_temp.push([
+          {
+            target: model.lcs.modelNucleotideRange,
+            model: model.lcs.modelNucleotideRange,
+          },
+        ]);
         rowData.target = model_seq.join("");
         dataset_temp.push(rowData);
       }
     );
+    console.log(intersection_temp);
+    setIntersection(intersection_temp);
     setDataset(dataset_temp);
     setCsvData(dataset_temp);
     // console.log(
@@ -237,23 +269,62 @@ const LCSta = (props: {
           </ConfigProvider>
         }
       </Row>
-      {/* <Suspense fallback={<RenderLoader />}>
-        <div style={{ display: "block", margin: "30px 30px 0 30px" }}>
-          <MolStarWrapper
-            model_file={
-              config.SERVER_URL +
-              "/one-many/tertiary/structure/" +
-              props.lcs[activeModel].modelId
-            }
-            target_file={
-              config.SERVER_URL +
-              "/one-many/tertiary/structure/" +
-              props.target.targetId
-            }
-          />
-        </div>
-      </Suspense> */}
-      <div className={styles.tableButton} style={{ marginBottom: "25px" }}>
+      {intersection.length != 0 ? (
+        <Suspense fallback={<RenderLoader />}>
+          <div style={{ display: "block", margin: "30px 30px 0 30px" }}>
+            <MolStarWrapper
+              model_file={
+                config.SERVER_URL +
+                "/one-many/tertiary/structure/" +
+                props.lcs[activeModel].modelId
+              }
+              target_file={
+                config.SERVER_URL +
+                "/one-many/tertiary/structure/" +
+                props.target.targetId
+              }
+              lcs={props.lcs[activeModel].lcs}
+            />
+          </div>
+        </Suspense>
+      ) : null}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          margin: "15px",
+        }}
+      >
+        <tr>
+          <th>
+            <div>
+              <span>model</span>
+              <div
+                style={{
+                  backgroundColor: "#04afa4",
+                  height: "10px",
+                  width: "100px",
+                  borderRadius: "5px",
+                }}
+              ></div>
+            </div>
+          </th>
+          <th>
+            <div>
+              <span>target</span>
+              <div
+                style={{
+                  backgroundColor: "#fb5f4c",
+                  height: "10px",
+                  width: "100px",
+                  borderRadius: "5px",
+                }}
+              ></div>
+            </div>
+          </th>
+        </tr>
+      </div>
+      <div className={styles.tableButtonlcs} style={{ marginBottom: "25px" }}>
         <Button
           type="primary"
           shape="round"
@@ -267,10 +338,9 @@ const LCSta = (props: {
             )
           }
         >
-          Download .cif
+          target.cif
         </Button>
-      </div>
-      <div className={styles.tableButton} style={{ marginBottom: "25px" }}>
+
         <Button
           type="primary"
           shape="round"
@@ -284,7 +354,7 @@ const LCSta = (props: {
             )
           }
         >
-          Download .cif
+          model.cif
         </Button>
       </div>
     </div>

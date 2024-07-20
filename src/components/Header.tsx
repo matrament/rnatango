@@ -88,9 +88,6 @@ const HeaderMobile = () => {
           <Link href="/" onClick={handleClick}>
             <h4 className={pathname === "/" ? styles.active : ""}>Home</h4>
           </Link>
-          <Link href="/" onClick={handleClick}>
-            <h4 className={pathname === "/" ? styles.active : ""}>Home</h4>
-          </Link>
           <Link href="/cite_us" onClick={handleClick}>
             <h4 className={pathname === "/cite_us" ? styles.active : ""}>
               Cite us

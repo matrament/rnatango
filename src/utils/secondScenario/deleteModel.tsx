@@ -2,10 +2,11 @@ import { message } from "antd";
 import lang from "../lang.json";
 import config from "../../config.json";
 
-export function DeleteModel(
+export function deleteModel(
   taskId: string | null,
   modelId: any,
-  setModelsTarget: any
+  setModelsTarget: any,
+  scenario: "one-many" | "many-many"
 ) {
   const requestOptions = {
     method: "GET",
@@ -17,7 +18,7 @@ export function DeleteModel(
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
   fetch(
-    config.SERVER_URL + "/one-many/form/remove/model/" + taskId + "/" + modelId,
+    `${config.SERVER_URL}/${scenario}/form/remove/model/${taskId}/${modelId}`,
     requestOptions
   )
     .then((response: any) => {

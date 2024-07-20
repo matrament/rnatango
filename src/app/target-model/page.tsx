@@ -14,9 +14,9 @@ import {
 } from "@/types/modelsType";
 import { UploadedTaskDetails } from "@/utils/secondScenario/UploadedTaskDetails";
 import { DeleteOutlined } from "@ant-design/icons";
-import { DeleteModel } from "@/utils/secondScenario/DeleteModel";
+import { deleteModel } from "@/utils/secondScenario/deleteModel";
 import initTarget from "../../json/initTarget.json";
-import { getTaskID } from "../../utils/secondScenario/getTaskID";
+import { getTaskId } from "@/utils/getTaskId";
 
 interface DataType {
   key: React.Key;
@@ -87,7 +87,12 @@ const TargetModels = () => {
           type="link"
           icon={<DeleteOutlined />}
           onClick={() =>
-            DeleteModel(searchParams.get("id"), record.key, setModelsTarget)
+            deleteModel(
+              searchParams.get("id"),
+              record.key,
+              setModelsTarget,
+              "one-many"
+            )
           }
         >
           delete
@@ -116,12 +121,12 @@ const TargetModels = () => {
   }, [modelsTarget, uploadStructure]);
 
   useEffect(() => {
-    UploadedTaskDetails(targetID, setModelsTarget, setError, "2");
+    UploadedTaskDetails(targetID, setModelsTarget, setError, "/one-many/form/");
   }, []);
 
   const submit = () => {
     setLoading(true);
-    getTaskID(params, router, setLoading);
+    getTaskId(params, router, setLoading, "one-many/submit", "result-second");
   };
 
   return (
@@ -149,6 +154,7 @@ const TargetModels = () => {
           taskID={searchParams.get("id")}
           error={error}
           scenario={"2"}
+          router={router}
         />
         {datasetModels.length != 0 ? (
           <Table
@@ -176,6 +182,7 @@ const TargetModels = () => {
                   modelsTarget.target.selection.chains[0].nucleotideRange
                     .toInclusive,
                 ]}
+                scenario={"2"}
               />
               <ParametersScenarioSecond params={params} setParams={setParams} />
               <Button

@@ -67,7 +67,7 @@ const ModelvsTarget = (props: {
 
   return (
     <div style={{ width: "100%" }}>
-      <h2 style={{ textAlign: "center" }}>Residue-wise angular differences</h2>
+      <h2 style={{ textAlign: "center" }}></h2>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}
         columns={column}

@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import UploadModels from "@/utils/secondScenario/UploadModels";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "../first-scenario/first-scenario.module.css";
 import {
   third_scenario_set_model,
-  second_scenario_submit,
+  third_scenario_submit,
 } from "@/types/modelsType";
 import { UploadFile } from "antd/lib/upload/interface";
 import {
@@ -16,12 +16,17 @@ import {
   message,
   Tooltip,
   Divider,
+  Select,
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import ParametersScenarioSecond from "../second-scenario/ParametersScenarioSecond";
 import { UploadedTaskDetails } from "@/utils/secondScenario/UploadedTaskDetails";
 import initModel from "../../json/initModel.json";
 import ExamplesTaskId from "../common/ExamplesTaskId";
+import IntersectionOfTargetModels from "../second-scenario/IntersectionOfTargetModels";
+import { getTaskId } from "@/utils/getTaskId";
+import { stringify } from "querystring";
+import { deleteModel } from "@/utils/secondScenario/deleteModel";
 
 interface DataType {
   key: React.Key;
@@ -35,14 +40,18 @@ const ThirdScenarioUpload = () => {
 
   const [modelsTarget, setModelsTarget] =
     useState<third_scenario_set_model>(initModel);
-  const [datasetModels, setDatasetModels] = useState<DataType[]>([]);
+  const [datasetModels, setDatasetModels] = useState<
+    { chain: string; data: DataType[] }[]
+  >([{ chain: "A", data: [{ key: 0, sequence: "", name: "", range: "" }] }]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const [options, setOptions] = useState<string[]>([]);
+  const [selection, setSelection] = useState<number>(0);
   const searchParams = useSearchParams();
   const taskID = searchParams.get("id");
-  const [params, setParams] = useState<second_scenario_submit>({
+  const [params, setParams] = useState<third_scenario_submit>({
     taskHashId: searchParams.get("id") ?? "",
+    chain: "",
     angles: [
       "ALPHA",
       "BETA",
@@ -64,26 +73,62 @@ const ThirdScenarioUpload = () => {
   >(undefined);
 
   useEffect(() => {
-    let temp: DataType[] = [];
-    if (modelsTarget.taskHashId != "") {
-      temp = modelsTarget.models.map((model, index) => {
-        let x = {
-          key: model.fileId,
-          name: model.fileName,
-          sequence: model.sequence,
-          range: `${model.sourceSelection.chains[0].nucleotideRange.fromInclusive}-${model.sourceSelection.chains[0].nucleotideRange.toInclusive}`,
-        };
-        return x;
-      });
-      router.push(`?scenario=3&id=${modelsTarget.taskHashId}`);
+    let tempData: any = [];
+    let tempOptions: string[] = [];
+    if (modelsTarget && modelsTarget.models) {
+      modelsTarget.sequences.map(
+        (chain: { name: string; sequence: string }) => {
+          tempOptions.push(chain.name);
+          let temp: DataType[] = [];
+          temp = modelsTarget.models.map((model, index) => {
+            let currentChain = model.sourceSelection.chains.find(
+              (obj) => obj.name === chain.name
+            );
+            let x = {
+              key: model.fileId,
+              name: model.fileName,
+              sequence: currentChain?.sequence || "",
+              range:
+                `${currentChain?.nucleotideRange.fromInclusive}-${currentChain?.nucleotideRange.toInclusive}` ||
+                "",
+            };
+            return x;
+          });
+          tempData.push({ chain: [chain.name], data: temp });
+        }
+      );
+      if (modelsTarget.sequences.length === 0) {
+        modelsTarget.models[0].sourceSelection.chains.map((chain) => {
+          tempOptions.push(chain.name);
+          tempData.push({
+            chain: [chain.name],
+            data: [
+              {
+                key: modelsTarget.models[0].fileId,
+                name: modelsTarget.models[0].fileName,
+                sequence: "",
+                range: "",
+              },
+            ],
+          });
+        });
+      }
+      setDatasetModels(tempData);
+      setOptions(tempOptions);
     }
-    setDatasetModels(temp);
     setUploadStructure(undefined);
-  }, [modelsTarget, uploadStructure]);
+  }, [modelsTarget, uploadStructure, taskID]);
 
   useEffect(() => {
-    taskID ? UploadedTaskDetails(taskID, setModelsTarget, setError, "3") : null;
-  }, []);
+    taskID
+      ? UploadedTaskDetails(
+          taskID,
+          setModelsTarget,
+          setError,
+          "/many-many/form/"
+        )
+      : null;
+  }, [taskID]);
 
   const columns: TableColumnsType<DataType> = [
     {
@@ -114,7 +159,12 @@ const ThirdScenarioUpload = () => {
           type="link"
           icon={<DeleteOutlined />}
           onClick={() =>
-            console.log(searchParams.get("id"), record.key, setModelsTarget)
+            deleteModel(
+              searchParams.get("id"),
+              record.key,
+              setModelsTarget,
+              "many-many"
+            )
           }
         >
           delete
@@ -127,6 +177,16 @@ const ThirdScenarioUpload = () => {
 
   const submit = () => {
     setLoading(true);
+    let result = {
+      ...params,
+      chain: options[selection],
+      taskHashId: searchParams.get("id") ?? "",
+    };
+    getTaskId(result, router, setLoading, "many-many/submit", "result-third");
+  };
+
+  const handleChange = (value: string) => {
+    setSelection(Number(value));
   };
 
   return (
@@ -138,7 +198,7 @@ const ThirdScenarioUpload = () => {
             <span
               onClick={() => {
                 window.navigator["clipboard"].writeText(taskID!);
-                message.success("Request task id has been saved to clipboard.");
+                message.success("Request task ID has been saved to clipboard.");
               }}
             >
               <Tooltip title="Click here to copy to clipboard.">
@@ -177,40 +237,69 @@ const ThirdScenarioUpload = () => {
         taskID={taskID}
         error={error}
         scenario={"3"}
+        router={router}
       />
-      {taskID ? (
-        // modelsTarget?.models?.length != 0 ? (
-        <>
-          {/* <IntersectionOfTargetModels
-                sequence={modelsTarget.target.sequence}
-                rangeTarget={[
-                  modelsTarget.target.sourceSelection.chains[0].nucleotideRange
-                    .fromInclusive,
-                  modelsTarget.target.sourceSelection.chains[0].nucleotideRange
-                    .toInclusive,
-                ]}
-                rangeIntersection={[
-                  modelsTarget.target.selection.chains[0].nucleotideRange
-                    .fromInclusive,
-                  modelsTarget.target.selection.chains[0].nucleotideRange
-                    .toInclusive,
-                ]}
-              /> */}
-          <ParametersScenarioSecond params={params} setParams={setParams} />
-          <Button
-            style={{ marginBottom: "20px" }}
-            type="primary"
-            shape="round"
-            size="large"
-            loading={loading}
-            onClick={submit}
-            disabled={params.angles.length === 0}
-          >
-            Submit
-          </Button>
-        </>
-      ) : // ) : null
-      null}
+      <Suspense>
+        {taskID && modelsTarget && modelsTarget?.models?.length != 0 ? (
+          <>
+            {datasetModels.length != 0 ? (
+              <>
+                <Select
+                  style={{ width: "200px", marginBottom: "15px" }}
+                  defaultValue={String(selection)}
+                  options={options.map((e, index) => ({
+                    value: String(index),
+                    label: `chain ${e}`,
+                  }))}
+                  onChange={handleChange}
+                />
+
+                <Table
+                  style={{ margin: "0px 30px 10px 30px" }}
+                  dataSource={datasetModels[selection].data}
+                  columns={columns}
+                  pagination={{ position: ["bottomCenter"] }}
+                  scroll={{ x: true }}
+                />
+              </>
+            ) : null}
+
+            {modelsTarget?.sequences?.length != 0 ? (
+              <>
+                <IntersectionOfTargetModels
+                  sequence={modelsTarget.sequences[0].sequence}
+                  rangeTarget={[
+                    0,
+                    modelsTarget.sequences[0].sequence.length - 1,
+                  ]}
+                  rangeIntersection={[
+                    0,
+                    modelsTarget.sequences[0].sequence.length - 1,
+                  ]}
+                  scenario={"3"}
+                />
+                <ParametersScenarioSecond
+                  params={params}
+                  setParams={setParams}
+                />
+                <Button
+                  style={{ marginBottom: "20px" }}
+                  type="primary"
+                  shape="round"
+                  size="large"
+                  loading={loading}
+                  onClick={submit}
+                  disabled={
+                    params.angles.length === 0 || modelsTarget.models.length < 3
+                  }
+                >
+                  Submit
+                </Button>
+              </>
+            ) : null}
+          </>
+        ) : null}
+      </Suspense>
     </div>
   );
 };

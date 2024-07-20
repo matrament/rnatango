@@ -6,7 +6,7 @@ import styles from "./first-scenario.module.css";
 import { Select, Button, Modal, Row, Col, Divider } from "antd";
 import { Models, structure } from "../../types/modelsType";
 import { QuestionOutlined } from "@ant-design/icons";
-import { GetTaskId } from "../../utils/getTaskId";
+import { getTaskId } from "../../utils/getTaskId";
 import SequenceCard from "./input/SequenceCard";
 
 const filterOption = (
@@ -54,7 +54,7 @@ const RequestForm = (props: { structure: structure; fileName: string }) => {
         },
       ],
     };
-    GetTaskId(result, router, setLoading);
+    getTaskId(result, router, setLoading, "single", "result");
   };
 
   useEffect(() => {

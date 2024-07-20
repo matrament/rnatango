@@ -28,24 +28,24 @@ const ExamplesTaskId = (props: {
     <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
       <Space.Compact>
         {example.map((el) => (
-          <Tooltip key={el.name} title={el.tooltip}>
-            <Button
-              key={el.name}
-              disabled={loading}
-              onClick={(e) => {
-                getTaskId(
-                  el.name,
-                  props.scenario,
-                  props.router,
-                  props.setLoading
-                );
-                setLoading(true);
-                props.setLoading(true);
-              }}
-            >
-              {el.name}
-            </Button>
-          </Tooltip>
+          // <Tooltip key={el.name} title={el.tooltip}>
+          <Button
+            key={el.name}
+            disabled={loading}
+            onClick={(e) => {
+              getTaskId(
+                el.name,
+                props.scenario,
+                props.router,
+                props.setLoading
+              );
+              setLoading(true);
+              props.setLoading(true);
+            }}
+          >
+            {el.name}
+          </Button>
+          // </Tooltip>
         ))}
       </Space.Compact>
       {loading ? (

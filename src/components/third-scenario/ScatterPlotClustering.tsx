@@ -2,77 +2,70 @@
 import { useEffect, useState } from "react";
 import { ReactECharts } from "../../components/echarts/ReactECharts";
 import { ReactEChartsProps } from "../../components/echarts/ReactECharts";
+import { Divider, Select } from "antd";
+import { getClustering } from "@/utils/getClustering";
+import { clustering } from "../../types/modelsType";
 
-const example = {
-  numberClusters: 2,
-  models: [
-    {
-      x: 126.20813235915996,
-      y: 47.17293264396919,
-      name: "18_RNAComposer_5_rpr.pdb",
-      clusterNumber: 2,
-    },
-    {
-      x: 0,
-      y: 285.9985556070871,
-      name: "18_YagoubAli_1.pdb",
-      clusterNumber: 1,
-    },
-    {
-      x: 192.27708550068854,
-      y: 145.49461516891915,
-      name: "18_Lee_1.pdb",
-      clusterNumber: 2,
-    },
-    {
-      x: 293.28940440242235,
-      y: 320,
-      name: "18_Dokholyan_1.pdb",
-      clusterNumber: 2,
-    },
-    {
-      x: 8.231137541894185,
-      y: 17.895699479229364,
-      name: "18_Das_1.pdb",
-      clusterNumber: 1,
-    },
-    {
-      x: 320,
-      y: 0,
-      name: "18_Chen_1.pdb",
-      clusterNumber: 2,
-    },
-  ],
-};
-const ScatterPlotClustering = () => {
-  const [data, setData] = useState<any>([]);
-
-  useEffect(() => {
-    let temp: any[] = [];
-    for (let i = 0; i < example.numberClusters; i++) {
-      temp.push({
+const ScatterPlotClustering = (props: {
+  taskId: string | null;
+  models: string[];
+}) => {
+  const [result, setResult] = useState<clustering[]>([]);
+  const [data, setData] = useState<{ [key: number]: any[] }>({
+    2: [
+      {
         symbolSize: 15,
         type: "scatter",
         data: [],
-        label: {
-          show: true,
-          position: "bottom",
-          align: "center",
-          verticalAlign: "top",
-          distance: 10,
-          formatter: function (d: any) {
-            return d.data[2];
-          },
-        },
+      },
+    ],
+  });
+  const [options, setOptions] = useState<string[]>([]);
+  const [selection, setSelection] = useState<number>(2);
 
-        fontSize: 16,
-      });
-    }
-    example.models.map((model) =>
-      temp[model.clusterNumber - 1].data.push([model.x, model.y, model.name])
-    );
-    setData(temp);
+  useEffect(() => {
+    getClustering(props.taskId, setResult);
   }, []);
+
+  useEffect(() => {
+    if (result.length != 0) {
+      let tempData: { [key: number]: any[] } = {};
+      result.map((cluster) => {
+        let temp: any[] = [];
+        for (let i = 0; i < props.models.length; i++) {
+          temp.push({
+            symbolSize: 15,
+            type: "scatter",
+            data: [],
+            animation: false,
+            label: {
+              show: true,
+              position: "bottom",
+              align: "center",
+              verticalAlign: "top",
+              distance: 10,
+              formatter: function (d: any) {
+                return d.data[2];
+              },
+              // fontWeight: "bold",
+              fontSize: 14,
+            },
+          });
+        }
+        cluster.models.map((model) =>
+          temp[model.clusterNumber as number].data.push([
+            model.x,
+            model.y,
+            model.name,
+          ])
+        );
+        tempData[cluster.numberClusters] = temp;
+      });
+      console.log(tempData);
+      setData(tempData);
+      setOptions(Object.keys(tempData));
+    }
+  }, [result]);
 
   const option: ReactEChartsProps["option"] = {
     toolbox: {
@@ -83,17 +76,50 @@ const ScatterPlotClustering = () => {
         },
       },
     },
-    xAxis: {},
-    yAxis: {},
-    series: data,
+    grid: {
+      show: true,
+    },
+    xAxis: { axisLabel: { show: false } },
+    yAxis: {
+      axisLabel: { show: false },
+    },
+    series: data[selection],
+  };
+
+  const handleChange = (value: string) => {
+    setSelection(Number(value));
   };
 
   return (
-    <div style={{ width: "100%" }}>
-      <ReactECharts
-        option={option}
-        style={{ height: "60dvh", marginLeft: "30px", marginRight: "30px" }}
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <h2 style={{ marginTop: 0 }}>Clustering</h2>
+      <Select
+        style={{ width: "200px" }}
+        defaultValue="2"
+        options={options.map((e) => ({
+          value: e,
+          label: `number of clusters ${e}`,
+        }))}
+        onChange={handleChange}
       />
+      <div
+        style={{
+          width: "100%",
+        }}
+      >
+        <ReactECharts
+          option={option}
+          style={{ height: "60dvh", marginLeft: "30px", marginRight: "30px" }}
+        />
+      </div>
+      <Divider />
     </div>
   );
 };
