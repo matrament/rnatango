@@ -25,7 +25,7 @@ const SelectedModelsForAnalyse = (props: {
           <b>Target file name: </b> {props.targetFileName}
         </p>
         <p>
-          <b>Select Model(s) for analysis: </b>
+          <b>Select model(s) for analysis: </b>
         </p>
 
         <Select

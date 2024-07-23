@@ -15,8 +15,8 @@ import {
   TableColumnsType,
   message,
   Tooltip,
-  Divider,
   Select,
+  Row,
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import ParametersScenarioSecond from "../second-scenario/ParametersScenarioSecond";
@@ -25,7 +25,6 @@ import initModel from "../../json/initModel.json";
 import ExamplesTaskId from "../common/ExamplesTaskId";
 import IntersectionOfTargetModels from "../second-scenario/IntersectionOfTargetModels";
 import { getTaskId } from "@/utils/getTaskId";
-import { stringify } from "querystring";
 import { deleteModel } from "@/utils/secondScenario/deleteModel";
 
 interface DataType {
@@ -190,69 +189,69 @@ const ThirdScenarioUpload = () => {
   };
 
   return (
-    <div className={styles.scenario}>
+    <div className={styles.scenario} style={{ width: "100%" }}>
       {taskID ? (
-        <>
-          <h1>
-            Task id:{" "}
-            <span
-              onClick={() => {
-                window.navigator["clipboard"].writeText(taskID!);
-                message.success("Request task ID has been saved to clipboard.");
-              }}
-            >
-              <Tooltip title="Click here to copy to clipboard.">
-                {taskID}
-              </Tooltip>
-            </span>
-          </h1>
-        </>
+        <h1>
+          Task id:{" "}
+          <span
+            onClick={() => {
+              window.navigator["clipboard"].writeText(taskID!);
+              message.success("Request task ID has been saved to clipboard.");
+            }}
+          >
+            <Tooltip title="Click here to copy to clipboard.">{taskID}</Tooltip>
+          </span>
+        </h1>
       ) : (
-        // <p>Upload first model or get result from example:</p>
-        <div
-          style={{
-            marginTop: "20px",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: "15px",
-          }}
-        >
-          <p style={{ margin: 0 }}>From example collection:</p>
+        <Row justify={"center"}>
+          <div
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "15px",
+            }}
+          >
+            <p style={{ margin: 0 }}>From example collection:</p>
 
-          <ExamplesTaskId
-            scenario={"many-many"}
-            router={router}
-            loading={loading}
-            setLoading={setLoading}
-          />
-        </div>
+            <ExamplesTaskId
+              scenario={"many-many"}
+              router={router}
+              loading={loading}
+              setLoading={setLoading}
+            />
+          </div>
+        </Row>
       )}
-
-      <UploadModels
-        uploadStructure={uploadStructure}
-        setUploadStructure={setUploadStructure}
-        setModelsTarget={setModelsTarget}
-        setLoading={setLoading}
-        taskID={taskID}
-        error={error}
-        scenario={"3"}
-        router={router}
-      />
+      <Row justify={"center"} style={{ marginBottom: "15px" }}>
+        <UploadModels
+          uploadStructure={uploadStructure}
+          setUploadStructure={setUploadStructure}
+          setModelsTarget={setModelsTarget}
+          setLoading={setLoading}
+          taskID={taskID}
+          error={error}
+          scenario={"3"}
+          router={router}
+        />
+      </Row>
       <Suspense>
         {taskID && modelsTarget && modelsTarget?.models?.length != 0 ? (
           <>
             {datasetModels.length != 0 ? (
               <>
-                <Select
-                  style={{ width: "200px", marginBottom: "15px" }}
-                  defaultValue={String(selection)}
-                  options={options.map((e, index) => ({
-                    value: String(index),
-                    label: `chain ${e}`,
-                  }))}
-                  onChange={handleChange}
-                />
+                <Row justify={"center"}>
+                  <Select
+                    style={{ width: "200px", marginBottom: "15px" }}
+                    defaultValue={String(selection)}
+                    options={options.map((e, index) => ({
+                      value: String(index),
+                      label: `chain ${e}`,
+                    }))}
+                    onChange={handleChange}
+                  />
+                </Row>
 
                 <Table
                   style={{ margin: "0px 30px 10px 30px" }}
@@ -282,19 +281,22 @@ const ThirdScenarioUpload = () => {
                   params={params}
                   setParams={setParams}
                 />
-                <Button
-                  style={{ marginBottom: "20px" }}
-                  type="primary"
-                  shape="round"
-                  size="large"
-                  loading={loading}
-                  onClick={submit}
-                  disabled={
-                    params.angles.length === 0 || modelsTarget.models.length < 3
-                  }
-                >
-                  Submit
-                </Button>
+                <Row justify={"center"}>
+                  <Button
+                    style={{ marginBottom: "20px", width: "150px" }}
+                    type="primary"
+                    shape="round"
+                    size="large"
+                    loading={loading}
+                    onClick={submit}
+                    disabled={
+                      params.angles.length === 0 ||
+                      modelsTarget.models.length < 3
+                    }
+                  >
+                    Submit
+                  </Button>
+                </Row>
               </>
             ) : null}
           </>

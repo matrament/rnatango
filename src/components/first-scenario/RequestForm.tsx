@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import styles from "./first-scenario.module.css";
 import { Select, Button, Modal, Row, Col, Divider } from "antd";
 import { Models, structure } from "../../types/modelsType";
-import { QuestionOutlined } from "@ant-design/icons";
 import { getTaskId } from "../../utils/getTaskId";
 import SequenceCard from "./input/SequenceCard";
 
@@ -128,23 +127,6 @@ const RequestForm = (props: { structure: structure; fileName: string }) => {
     setSelectedChains(newChains);
   };
 
-  const info = () => {
-    Modal.info({
-      title: "How to submit a task?",
-      content: (
-        <div>
-          <p>
-            Select at least one chain. By default, the entire range of
-            nucleotides is selected. If you want to change the range, be sure to
-            mark at least 3 nucleobases. Otherwise the submit button will be
-            unavailable.
-          </p>
-        </div>
-      ),
-      onOk() {},
-    });
-  };
-
   return (
     <div className={styles.scenario}>
       <h2 style={{ marginBottom: 0 }}>
@@ -153,54 +135,53 @@ const RequestForm = (props: { structure: structure; fileName: string }) => {
           : props.fileName}
       </h2>
       <Divider />
-      <Col>
-        <Row>
-          <Col span={5} style={{ display: "flex", alignItems: "center" }}>
-            <p>Select model for analysis: </p>
-          </Col>
-          <Col span={5} style={{ display: "flex", alignItems: "center" }}>
-            <Select
-              showSearch
-              style={{ width: 100 }}
-              defaultValue={selectedModel}
-              optionFilterProp="children"
-              onChange={chooseModel}
-              filterOption={filterOption}
-              options={Object.keys(startingModels).map((e) => {
-                return { value: e, label: e };
-              })}
-            />
-          </Col>
-        </Row>
 
-        <Row style={{ marginBottom: "10px" }}>
-          <Col
-            span={5}
-            style={{ display: "flex", alignItems: "center", gap: "5px" }}
-          >
-            <p>Select chain(s):</p>
-            <Button
-              size="small"
-              type="text"
-              onClick={info}
-              icon={<QuestionOutlined />}
-            />
-          </Col>
-          <Col span={5} style={{ display: "flex", alignItems: "center" }}>
-            <Select
-              mode="multiple"
-              style={{ width: "100%" }}
-              value={selectedChains}
-              placeholder="Please select"
-              onChange={chooseChains}
-              options={optionsChains.map((chain: string) => {
-                return { value: chain, label: chain };
-              })}
-            />
-          </Col>
-        </Row>
+      <Row>
+        <Col
+          offset={2}
+          span={5}
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          <p>Select model for analysis</p>
+        </Col>
+        <Col span={5} style={{ display: "flex", alignItems: "center" }}>
+          <Select
+            showSearch
+            style={{ minWidth: "150px" }}
+            defaultValue={selectedModel}
+            optionFilterProp="children"
+            onChange={chooseModel}
+            filterOption={filterOption}
+            options={Object.keys(startingModels).map((e) => {
+              return { value: e, label: e };
+            })}
+          />
+        </Col>
+      </Row>
 
-        <>
+      <Row style={{ marginBottom: "10px" }}>
+        <Col
+          offset={2}
+          span={5}
+          style={{ display: "flex", alignItems: "center", gap: "5px" }}
+        >
+          <p>Select chain(s)</p>
+        </Col>
+        <Col span={5} style={{ display: "flex", alignItems: "center" }}>
+          <Select
+            mode="multiple"
+            style={{ minWidth: "150px" }}
+            value={selectedChains}
+            placeholder="Please select"
+            onChange={chooseChains}
+            options={optionsChains.map((chain: string) => {
+              return { value: chain, label: chain };
+            })}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col offset={2}>
           {selectedChains.map((chain) => (
             <SequenceCard
               key={chain}
@@ -215,20 +196,22 @@ const RequestForm = (props: { structure: structure; fileName: string }) => {
               selectedChains={selectedChains}
             />
           ))}
-        </>
-      </Col>
+        </Col>
+      </Row>
 
-      <Button
-        size="large"
-        style={{ marginBottom: "20px" }}
-        type="primary"
-        shape="round"
-        onClick={submit}
-        loading={loading}
-        disabled={!correctSubmit || selectedChains.length === 0}
-      >
-        Submit
-      </Button>
+      <Row justify={"center"}>
+        <Button
+          size="large"
+          style={{ marginBottom: "20px", width: "150px" }}
+          type="primary"
+          shape="round"
+          onClick={submit}
+          loading={loading}
+          disabled={!correctSubmit || selectedChains.length === 0}
+        >
+          Submit
+        </Button>
+      </Row>
     </div>
   );
 };

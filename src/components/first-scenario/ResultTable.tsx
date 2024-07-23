@@ -13,29 +13,29 @@ type CheckboxValueType = GetProp<typeof Checkbox.Group, "value">[number];
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
 
 const angleName: { [key: string]: string } = {
-  ["1-alpha"]: "Alpha (\u03B1)",
+  ["1-alpha"]: "Alpha (\u03B1) [\u00B0]",
 
-  ["2-beta"]: "Beta (\u03B2)",
+  ["2-beta"]: "Beta (\u03B2) [\u00B0]",
 
-  ["3-gamma"]: "Gamma (\u03B3)",
+  ["3-gamma"]: "Gamma (\u03B3) [\u00B0]",
 
-  ["4-delta"]: "Delta (\u03B4)",
+  ["4-delta"]: "Delta (\u03B4) [\u00B0]",
 
-  ["5-epsilon"]: "Epsilon (\u03B5)",
+  ["5-epsilon"]: "Epsilon (\u03B5) [\u00B0]",
 
-  ["6-zeta"]: "Zeta (\u03B6)",
+  ["6-zeta"]: "Zeta (\u03B6) [\u00B0]",
 
-  ["7-eta"]: "Eta (\u03B7)",
+  ["7-eta"]: "Eta (\u03B7) [\u00B0]",
 
-  ["8-theta"]: "Theta (\u03B8)",
+  ["8-theta"]: "Theta (\u03B8) [\u00B0]",
 
-  ["9-eta_prim"]: "Eta prim (\u03B7')",
+  ["9-eta_prim"]: "Eta prim (\u03B7') [\u00B0]",
 
-  ["10-theta_prim"]: "Theta prim (\u03B8')",
+  ["10-theta_prim"]: "Theta prim (\u03B8') [\u00B0]",
 
-  ["11-chi"]: "Chi (\u03C7)",
+  ["11-chi"]: "Chi (\u03C7) [\u00B0]",
 
-  ["12-p"]: "P",
+  ["12-p"]: "P  [\u00B0]",
 };
 
 const P_angle_label = {
@@ -141,7 +141,7 @@ const ResultTable = (props: {
 
       if (dataIndex === "p") {
         return {
-          title: `P`,
+          title: <p style={{ whiteSpace: "nowrap" }}>{`P [\u00B0]`}</p>,
           key: parseInt(key),
           dataIndex: dataIndex,
           width: 50,
@@ -169,7 +169,11 @@ const ResultTable = (props: {
 
       // Domyślna konfiguracja, jeśli value nie jest równe "p"
       return {
-        title: angleName[e][0].toUpperCase() + angleName[e].slice(1),
+        title: (
+          <p style={{ whiteSpace: "nowrap" }}>{`${
+            angleName[e][0].toUpperCase() + angleName[e].slice(1)
+          }`}</p>
+        ),
         key: parseInt(key),
         dataIndex: dataIndex,
         width: 30,
@@ -226,7 +230,7 @@ const ResultTable = (props: {
             children: (
               <div>
                 <div style={{ padding: "10px" }}>
-                  Select/deselect column:
+                  Show/hide column:
                   <Select
                     mode="multiple"
                     style={{ width: "100%" }}
@@ -242,7 +246,7 @@ const ResultTable = (props: {
                   rowSelection={rowSelection}
                   rowClassName={styles.rowStyle}
                   dataSource={props.dataAngle}
-                  size="middle"
+                  size="small"
                   bordered
                   pagination={{ position: ["bottomCenter"] }}
                   scroll={{ x: true }}
@@ -256,8 +260,8 @@ const ResultTable = (props: {
                       exportDataToCSV(
                         csvData.sort((a: any, b: any) => a.key - b.key),
                         angleColumn,
-                        props.fileName,
-                        props.chain
+                        `${props.fileName}_${props.chain.toUpperCase()}`,
+                        "_angles"
                       )
                     }
                   >

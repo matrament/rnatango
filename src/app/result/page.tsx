@@ -40,11 +40,17 @@ const ResultPage = (props: any) => {
   }, []);
 
   useEffect(() => {
+    if (status === "WAITING") {
+      setStepsNumber(2);
+    }
     if (status === "PROCESSING") {
       setStepsNumber(3);
     }
     if (status === "SUCCESS") {
       setStepsNumber(4);
+    }
+    if (status === "FAILED") {
+      setStepsNumber(5);
     }
   }, [status]);
 

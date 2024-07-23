@@ -11,6 +11,7 @@ import {
   Divider,
   Radio,
   Row,
+  Space,
   Table,
   TableColumnsType,
 } from "antd";
@@ -31,6 +32,7 @@ interface DataType {
   target: string;
   mcq: number;
   lcs: number;
+  lcs_count: string;
   fixed: any;
 }
 
@@ -61,16 +63,15 @@ const LCSta = (props: {
     residue: second_scenario_result_differences_residues[];
   }[];
   chain: string;
+  lcsThreshold: number;
 }) => {
   const [dataset, setDataset] = useState<any>([]);
   const [csvData, setCsvData] = useState<datasetModels[]>([]);
   const [activeModel, setActiveModel] = useState(0);
-  const [intersection, setIntersection] = useState([]);
 
   useEffect(() => {
     // FIXME: optimize this state, delete for loop
     let dataset_temp: any = [];
-    let intersection_temp: any = [];
     props.lcs.map(
       (
         model: {
@@ -87,10 +88,9 @@ const LCSta = (props: {
           target: "",
           mcq: Number(model.lcs.fragmentMCQ.toFixed(2)),
           lcs: Number(model.lcs.coveragePercent.toFixed(2)),
+          lcs_count: `${model.lcs.validResidues}/${model.residue.length}`,
         };
         let model_seq: string[] = [];
-        let target_residues: string[] = [];
-        let model_residues: string[] = [];
 
         model.residue.map((res) => {
           let residue = "-";
@@ -102,36 +102,11 @@ const LCSta = (props: {
           }
           model_seq.push(residue);
         });
-        model_residues.push(
-          `${props.chain}.${model.residue[0].name}${model.lcs.modelNucleotideRange.fromInclusive}`
-        );
-        model_residues.push(
-          `${props.chain}.${model.residue[model.residue.length - 1].name}${
-            model.lcs.modelNucleotideRange.toInclusive
-          }`
-        );
-        target_residues.push(
-          `${props.chain}.${model.residue[0].name}${model.lcs.targetNucleotideRange.fromInclusive}`
-        );
-        target_residues.push(
-          `${props.chain}.${model.residue[model.residue.length - 1].name}${
-            model.lcs.targetNucleotideRange.toInclusive
-          }`
-        );
-        let target_res = target_residues.join("-");
-        let model_res = model_residues.join("-");
-        intersection_temp.push([
-          {
-            target: model.lcs.modelNucleotideRange,
-            model: model.lcs.modelNucleotideRange,
-          },
-        ]);
+
         rowData.target = model_seq.join("");
         dataset_temp.push(rowData);
       }
     );
-    console.log(intersection_temp);
-    setIntersection(intersection_temp);
     setDataset(dataset_temp);
     setCsvData(dataset_temp);
     // console.log(
@@ -179,6 +154,13 @@ const LCSta = (props: {
       ),
     },
     {
+      title: "LCS [nt]",
+      dataIndex: "lcs_count",
+      key: "lcs_count",
+      width: 200,
+      fixed: "right",
+    },
+    {
       title: "LCS [%]",
       dataIndex: "lcs",
       key: "lcs",
@@ -209,7 +191,14 @@ const LCSta = (props: {
         flexDirection: "column",
       }}
     >
-      <h2 style={{ textAlign: "center", marginTop: "0" }}>LCS-TA results</h2>
+      <h2 style={{ textAlign: "center", margin: "0" }}>LCS-TA results</h2>
+      <Row>
+        <Col offset={1}>
+          <ul>
+            <li>{`MCQ threshold: ${props.lcsThreshold}\u00B0`}</li>
+          </ul>
+        </Col>
+      </Row>
       <Table
         style={{ marginLeft: "30px", marginRight: "30px" }}
         rowClassName={(record) =>
@@ -269,94 +258,99 @@ const LCSta = (props: {
           </ConfigProvider>
         }
       </Row>
-      {intersection.length != 0 ? (
-        <Suspense fallback={<RenderLoader />}>
-          <div style={{ display: "block", margin: "30px 30px 0 30px" }}>
-            <MolStarWrapper
-              model_file={
-                config.SERVER_URL +
-                "/one-many/tertiary/structure/" +
-                props.lcs[activeModel].modelId
-              }
-              target_file={
-                config.SERVER_URL +
-                "/one-many/tertiary/structure/" +
-                props.target.targetId
-              }
-              lcs={props.lcs[activeModel].lcs}
-            />
-          </div>
-        </Suspense>
-      ) : null}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          margin: "15px",
-        }}
-      >
-        <tr>
-          <th>
-            <div>
-              <span>model</span>
-              <div
-                style={{
-                  backgroundColor: "#04afa4",
-                  height: "10px",
-                  width: "100px",
-                  borderRadius: "5px",
-                }}
-              ></div>
-            </div>
-          </th>
-          <th>
-            <div>
-              <span>target</span>
-              <div
-                style={{
-                  backgroundColor: "#fb5f4c",
-                  height: "10px",
-                  width: "100px",
-                  borderRadius: "5px",
-                }}
-              ></div>
-            </div>
-          </th>
-        </tr>
-      </div>
-      <div className={styles.tableButtonlcs} style={{ marginBottom: "25px" }}>
-        <Button
-          type="primary"
-          shape="round"
-          icon={<DownloadOutlined />}
-          onClick={() =>
-            downloadFile(
-              props.target.targetId + ".cif",
-              config.SERVER_URL +
-                "/one-many/tertiary/structure/" +
-                props.target.targetId
-            )
-          }
-        >
-          target.cif
-        </Button>
 
-        <Button
-          type="primary"
-          shape="round"
-          icon={<DownloadOutlined />}
-          onClick={() =>
-            downloadFile(
-              props.lcs[activeModel].name.split(".")[0] + ".cif",
+      <Suspense fallback={<RenderLoader />}>
+        <div style={{ display: "block", margin: "30px 30px 0 30px" }}>
+          <MolStarWrapper
+            model_file={
               config.SERVER_URL +
-                "/one-many/tertiary/structure/" +
-                props.lcs[activeModel].modelId
-            )
-          }
-        >
-          model.cif
-        </Button>
-      </div>
+              "/one-many/tertiary/structure/" +
+              props.lcs[activeModel].modelId
+            }
+            target_file={
+              config.SERVER_URL +
+              "/one-many/tertiary/structure/" +
+              props.target.targetId
+            }
+            lcs={props.lcs[activeModel].lcs}
+          />
+        </div>
+      </Suspense>
+
+      <Row
+        style={{
+          padding: "15px",
+          margin: "20px 100px 20px 100px",
+          border: "1px #dcdcdc solid",
+          borderRadius: "30px",
+        }}
+        justify={"center"}
+      >
+        <Col span={10}>
+          <Row>
+            <span style={{ textAlign: "center", width: "100%" }}>model</span>
+          </Row>
+          <div
+            style={{
+              backgroundColor: "#04afa4",
+              height: "10px",
+              width: "100%",
+
+              borderRadius: "5px",
+            }}
+          ></div>
+        </Col>
+
+        <Col span={10} offset={1}>
+          <Row>
+            <span style={{ textAlign: "center", width: "100%" }}>target</span>
+          </Row>
+          <div
+            style={{
+              backgroundColor: "#fb5f4c",
+              height: "10px",
+
+              borderRadius: "5px",
+            }}
+          ></div>
+        </Col>
+      </Row>
+
+      <Row justify={"center"} style={{ marginBottom: "25px" }}>
+        <Space.Compact>
+          <Button
+            type="primary"
+            shape="round"
+            icon={<DownloadOutlined />}
+            onClick={() =>
+              downloadFile(
+                props.target.targetId + ".cif",
+                config.SERVER_URL +
+                  "/one-many/tertiary/structure/" +
+                  props.target.targetId
+              )
+            }
+          >
+            target.cif
+          </Button>
+
+          <Button
+            type="primary"
+            shape="round"
+            icon={<DownloadOutlined />}
+            onClick={() =>
+              downloadFile(
+                props.lcs[activeModel].name.split(".")[0] + ".cif",
+                config.SERVER_URL +
+                  "/one-many/tertiary/structure/" +
+                  props.lcs[activeModel].modelId
+              )
+            }
+          >
+            model.cif
+          </Button>
+        </Space.Compact>
+      </Row>
     </div>
   );
 };

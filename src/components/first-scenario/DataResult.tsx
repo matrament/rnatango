@@ -174,7 +174,14 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
               ? props.resultFile.structureName.toLowerCase()
               : props.resultFile.structureName}
           </h1>
-          <p style={{ marginBottom: 0, color: "#8c8c8c" }}>
+          <p
+            style={{
+              marginBottom: 0,
+              color: "#8c8c8c",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
             {props.resultFile.structureTitle}
           </p>
           <Divider />

@@ -33,7 +33,9 @@ const ModelsNucleotyde = (props: {
       key: index + 1,
       dataIndex: e,
       width: 30,
-      render: (e: string) => <p className={styles.tableAngleMono}>{e}</p>,
+      render: (e: string) => (
+        <p className={styles.tableAngleMono}>{`${e}\u00B0`}</p>
+      ),
     }));
     x.splice(0, 0, {
       title: "Residue",

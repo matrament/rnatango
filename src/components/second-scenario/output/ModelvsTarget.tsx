@@ -33,7 +33,9 @@ const ModelvsTarget = (props: {
 
   const handleChange = (value: string[]) => {
     let x: TableColumnsType = value.map((e, index) => ({
-      title: `${angles_description[e.toLowerCase() as keyof angles_result]}`,
+      title: `${
+        angles_description[e.toLowerCase() as keyof angles_result]
+      } [\u00B0]`,
       key: index + 1,
       dataIndex: `${e.toLowerCase()}`,
       width: 30,

@@ -3,11 +3,13 @@ import styles from "./page.module.css";
 import ThirdScenarioUpload from "../components/third-scenario/ThirdScenarioUpload";
 import LoadData from "../components/first-scenario/LoadData";
 import scenarios from "../json/scenarios.json";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 const Home = () => {
+  const router = useRouter();
+  const [seedState, setSeedState] = useState(1);
   const searchParams = useSearchParams();
   const selectedScenario = searchParams.get("scenario") || "1";
   const scenariosVariants: { [key: string]: string } = {
@@ -30,24 +32,29 @@ const Home = () => {
         <div className={styles.buttond}>
           {Object.keys(scenariosVariants).map(
             (version: string, index: number) => (
-              <Link
+              <div
                 key={index}
-                href={`?scenario=${version}`}
                 className={`${styles.buttonscenario} ${
                   selectedScenario === version
                     ? styles.active
                     : styles.nonactive
                 }`}
+                onClick={() => {
+                  router.push(`/?scenario=${version}`);
+                  setSeedState((prevCount: number) => prevCount + 1);
+                }}
               >
                 {scenariosVariants[version]}
-              </Link>
+              </div>
             )
           )}
         </div>
       </div>
-      {selectedScenario === "1" ? <LoadData /> : null}
-      {selectedScenario === "2" ? <LoadData /> : null}
-      {selectedScenario === "3" ? <ThirdScenarioUpload /> : null}
+      {selectedScenario === "1" ? <LoadData key={seedState} /> : null}
+      {selectedScenario === "2" ? <LoadData key={seedState} /> : null}
+      {selectedScenario === "3" ? (
+        <ThirdScenarioUpload key={seedState} />
+      ) : null}
     </>
   );
 };

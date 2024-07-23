@@ -135,7 +135,7 @@ const HistogramAngles = (props: {
             paddingBottom: "15px",
           }}
         >
-          <AngleIcon style={{ fontSize: "16px", color: "#fb5f4c" }} />
+          <AngleIcon style={{ fontSize: "16px", color: "#000" }} />
           <h3>
             {angle_description[props.title as keyof typeof angle_description]}
           </h3>

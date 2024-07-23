@@ -154,6 +154,7 @@ const ResultModelsTarget = (props: { result: second_scenario_result }) => {
                   };
                 })}
                 chain={props.result.chain}
+                lcsThreshold={props.result.lcsThreshold}
               />
             </>
           ) : (

@@ -34,10 +34,11 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
     //     ]);
     //   }
     // });
+    let models_reverse = props.models.reverse();
 
     props.dataset.map((residue, index) => {
       xAxis.push(residue["dotbracket"] as string);
-      props.models.map((model, i) => {
+      models_reverse.map((model, i) => {
         temp_discrete.push([index, i, residue[`${model}`] as number]);
         temp_continous.push([
           index,
@@ -75,7 +76,7 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
               let value = continous
                 ? Number((Math.E ** param.data[2]).toFixed(2))
                 : param.data[2];
-              return `<li>${props.models[index]} : <b>${value}</b></li>`;
+              return `<li>${props.models[index]} : <b>${value}\u00B0</b></li>`;
             })
             .reverse()
             .join("") +
@@ -184,7 +185,9 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
         },
         itemHeight: continous ? 180 : 30,
         formatter: function (value: any) {
-          return `${continous ? Math.round(Math.E ** value) : value}`;
+          return `${
+            continous ? `${Math.round(Math.E ** value)}\u00B0` : value
+          }`;
         },
       },
     ],

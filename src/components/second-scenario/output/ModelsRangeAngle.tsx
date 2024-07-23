@@ -123,7 +123,9 @@ const ModelsRangeAngle = (props: {
         dataIndex: e.key,
         width: 30,
         fixed: false,
-        render: (e: string) => <p className={styles.tableAngleMono}>{e}</p>,
+        render: (e: string) => (
+          <p className={styles.tableAngleMono}>{`${e}%`}</p>
+        ),
       })
     );
     x.splice(0, 0, {

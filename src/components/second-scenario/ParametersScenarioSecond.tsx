@@ -68,9 +68,7 @@ const ParametersScenarioSecond = (props: {
 
   return (
     <div style={{ width: "100%" }}>
-      <Divider orientation="left">
-        Select torsion angles to compute MCQ:
-      </Divider>
+      <Divider orientation="left">Select torsion angles to compute MCQ</Divider>
       <Col
         style={{
           margin: "30px 50px 30px 50px",
@@ -96,10 +94,21 @@ const ParametersScenarioSecond = (props: {
           />
         </Row>
       </Col>
-      <Divider orientation="left">Set LCS-TA parameter:</Divider>
+      <Divider orientation="left">
+        Select MCQ threshold to compute LCS-TA
+      </Divider>
       <Row style={{ margin: "30px 50px 30px 50px" }}>
         <Col span={3} style={{ display: "flex", alignItems: "center" }}>
           <p style={{ margin: 0 }}>MCQ threshold:</p>
+        </Col>
+        <Col span={2} style={{ display: "flex", alignItems: "center" }}>
+          <InputNumber
+            min={0}
+            max={180}
+            style={{ width: "90%" }}
+            value={props.params.threshold}
+            onChange={changeMCQ}
+          />
         </Col>
         <Col span={10}>
           <Slider
@@ -108,15 +117,6 @@ const ParametersScenarioSecond = (props: {
             marks={marks}
             onChange={changeMCQ}
             value={props.params.threshold}
-          />
-        </Col>
-        <Col span={4} style={{ display: "flex", alignItems: "center" }}>
-          <InputNumber
-            min={0}
-            max={180}
-            style={{ margin: "0 25px" }}
-            value={props.params.threshold}
-            onChange={changeMCQ}
           />
         </Col>
       </Row>

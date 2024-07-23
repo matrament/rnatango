@@ -43,8 +43,14 @@ const ModelsMatrix = (props: {
           let text = e.split(",");
           return (
             <>
-              <p className={styles.tableAngleMono}>{`MCQ: ${text[0]}\u00B0`}</p>
-              <p className={styles.tableAngleMono}>{`LCS: ${text[1]}%`}</p>
+              <p
+                style={{ whiteSpace: "nowrap" }}
+                className={styles.tableAngleMono}
+              >{`MCQ: ${text[0]}\u00B0`}</p>
+              <p
+                style={{ whiteSpace: "nowrap" }}
+                className={styles.tableAngleMono}
+              >{`LCS: ${text[1]}%`}</p>
             </>
           );
         } else return null;

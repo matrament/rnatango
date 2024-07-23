@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Button, Divider, Steps, Tooltip, message } from "antd";
+import { Alert, Button, Divider, Row, Steps, Tooltip, message } from "antd";
 import { useMediaQuery } from "react-responsive";
 import styles from "../../components/first-scenario/first-scenario.module.css";
 import { ReloadOutlined } from "@ant-design/icons";
@@ -28,7 +28,7 @@ const StatusTask = (props: {
   ];
 
   return (
-    <div className={styles.scenario}>
+    <div className={styles.scenario} style={{ width: "100%" }}>
       <h1>
         Task ID:{" "}
         <span
@@ -42,25 +42,27 @@ const StatusTask = (props: {
           </Tooltip>
         </span>
       </h1>
-      <div className={styles.steps}>
-        <Steps
-          direction={isDesktop ? "horizontal" : "vertical"}
-          current={props.stepsNumber}
-          items={steps}
-          status="wait"
-        />
-        {/* {status === "FAILED" ? (
-          <Alert
-            message="Server error"
-            showIcon
-            // description={resultSet.error_message}
-            type="error"
-            style={{ margin: "20px" }}
+      <Row justify={"center"}>
+        <div className={styles.steps}>
+          <Steps
+            direction={isDesktop ? "horizontal" : "vertical"}
+            current={props.stepsNumber}
+            items={steps}
+            status="wait"
           />
-        ) : (
-          <></>
-        )} */}
-      </div>
+          {props.stepsNumber === 5 ? (
+            <Alert
+              message="Your task failed"
+              showIcon
+              // description={resultSet.error_message}
+              type="error"
+              style={{ margin: "20px" }}
+            />
+          ) : (
+            <></>
+          )}
+        </div>
+      </Row>
 
       <div className={styles.resetSettings}>
         <Button

@@ -87,15 +87,19 @@ h3 {
 }
 
 h5 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   margin: 0;
+  width: 100%;
+  text-align: start;
 }
 
 h6 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   margin: 0;
+  width: 100%;
+  text-align: start;
 }
 
 Row {
