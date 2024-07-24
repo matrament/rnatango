@@ -15,7 +15,7 @@ import MCQstructure from "./MCQstructure";
 import SelectedModelsForAnalyse from "./SelectedModelsForAnalyse";
 import LCSta from "./LCSta";
 
-const ResultModelsTarget = (props: { result: second_scenario_result }) => {
+const ResultModelsTarget = (props: { result: second_scenario_result, scenario: "one-many"|"many-many" }) => {
   const [models, setModels] = useState<{ [key: number]: string }[]>([]);
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [comparsionModelsMCQ, setComparsionModelsMCQ] = useState([]);

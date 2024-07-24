@@ -288,6 +288,19 @@ const LCSta = (props: {
       >
         <Col span={10}>
           <Row>
+            <span style={{ textAlign: "center", width: "100%" }}>target</span>
+          </Row>
+          <div
+            style={{
+              backgroundColor: "#fb5f4c",
+              height: "10px",
+
+              borderRadius: "5px",
+            }}
+          ></div>
+        </Col>
+        <Col span={10} offset={1}>
+          <Row>
             <span style={{ textAlign: "center", width: "100%" }}>model</span>
           </Row>
           <div
@@ -295,20 +308,6 @@ const LCSta = (props: {
               backgroundColor: "#04afa4",
               height: "10px",
               width: "100%",
-
-              borderRadius: "5px",
-            }}
-          ></div>
-        </Col>
-
-        <Col span={10} offset={1}>
-          <Row>
-            <span style={{ textAlign: "center", width: "100%" }}>target</span>
-          </Row>
-          <div
-            style={{
-              backgroundColor: "#fb5f4c",
-              height: "10px",
 
               borderRadius: "5px",
             }}

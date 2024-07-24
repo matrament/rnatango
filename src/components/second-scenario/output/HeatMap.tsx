@@ -17,11 +17,16 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
   const [residue, setResidue] = useState<string[]>([]);
   const [continous, setContinous] = useState<boolean>(true);
   const isDesktop = useMediaQuery({ query: "(min-width: 1200px)" });
+  const [firstIndex, setFirstIndex] = useState<number>(0);
 
   useEffect(() => {
+  
     let temp_continous: number[][] = [];
     let temp_discrete: number[][] = [];
     let xAxis: string[] = [];
+    const temp = String(props.dataset[0].name);
+    const parts = parseInt(temp.split(".")[1].substring(1), 10);
+    setFirstIndex(parts);
 
     // props.dataset.map((residue, index) => {
     //   xAxis.push(residue["dotbracket"] as string);
@@ -67,6 +72,7 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
       },
       backgroundColor: "rgba(255, 255, 255, 0.9)",
       formatter: function (params: any) {
+  
         return (
           "MCQ values:" +
           "<br/>" +
@@ -139,6 +145,13 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
         start: 0,
         end: 100,
         top: "top",
+        labelFormatter: function (value) {
+          return `${value + firstIndex}`;
+        },
+        textStyle: {
+          fontWeight: "bold",
+        },
+        // handleLabelShow: false,
       },
       {
         type: "inside",

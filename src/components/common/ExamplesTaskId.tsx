@@ -17,35 +17,61 @@ const ExamplesTaskId = (props: {
   const example = [
     {
       name: "1",
-      tooltip:
-        "target:18_solution_0.pdb \n models: 18_Szachniuk_1.pdb,  18_Lee_1.pdb, 18_YagoubAli_1.pdb",
+      tooltip: {
+        "one-many":
+          "Models (predicted in RNA-Puzzles 18 by Lee, Szachniuk, and YagoubAli) vs target (5TPY)",
+        "many-many":
+          "5TPY and its predictions from RNA-Puzzles 18 (by Lee, Szachniuk, and YagoubAli)",
+      },
     },
-    { name: "2", tooltip: "empty" },
-    { name: "3", tooltip: "empty" },
+    {
+      name: "2",
+      tooltip: {
+        "one-many":
+          "Models (predicted in RNA-Puzzles 18 by Chen, Das, and YagoubAli) vs target (Ding's prediction)",
+        "many-many": "1A9N and its 9 decoys generated in silico",
+      },
+    },
+    {
+      name: "3",
+      tooltip: {
+        "one-many":
+          "Models (predicted in RNA-Puzzles 18 by Dokholyan, Szachniuk, and YagoubAli) vs target (Chen's prediction)",
+        "many-many":
+          "4 predictions from RNA-Puzzles 18 (by Chen, Dokholyan, Szachniuk, and YagoubAli)",
+      },
+    },
   ];
 
   return (
     <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
       <Space.Compact>
         {example.map((el) => (
-          // <Tooltip key={el.name} title={el.tooltip}>
-          <Button
+          <Tooltip
             key={el.name}
-            disabled={loading}
-            onClick={(e) => {
-              getTaskId(
-                el.name,
-                props.scenario,
-                props.router,
-                props.setLoading
-              );
-              setLoading(true);
-              props.setLoading(true);
-            }}
+            title={
+              props.scenario == "one-many"
+                ? el.tooltip["one-many"]
+                : el.tooltip["many-many"]
+            }
           >
-            {el.name}
-          </Button>
-          // </Tooltip>
+            <Button
+              key={el.name}
+              disabled={loading}
+              onClick={(e) => {
+                getTaskId(
+                  el.name,
+                  props.scenario,
+                  props.router,
+                  props.setLoading
+                );
+                setLoading(true);
+                props.setLoading(true);
+              }}
+            >
+              {el.name}
+            </Button>
+          </Tooltip>
         ))}
       </Space.Compact>
       {loading ? (

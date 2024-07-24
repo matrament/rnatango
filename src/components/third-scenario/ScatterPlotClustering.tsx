@@ -61,7 +61,6 @@ const ScatterPlotClustering = (props: {
         );
         tempData[cluster.numberClusters] = temp;
       });
-      console.log(tempData);
       setData(tempData);
       setOptions(Object.keys(tempData));
     }

@@ -55,7 +55,11 @@ const ResultSecondScenario = () => {
           <LoadingCard />
         ) : (
           <div className={styles.scenario}>
-            <ResultModelsTarget result={result} key={seedState} />
+            <ResultModelsTarget
+              result={result}
+              scenario={"one-many"}
+              key={seedState}
+            />
           </div>
         )
       ) : null}

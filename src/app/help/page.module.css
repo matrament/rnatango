@@ -22,3 +22,55 @@ h6 {
   font-weight: 600;
   margin: 0;
 } */
+
+.orderedList {
+  counter-reset: item;
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+.orderedList > li {
+  counter-increment: item;
+  margin-bottom: 10px;
+}
+
+.orderedList > li::before {
+  content: counters(item, ".") " ";
+  margin-right: 5px;
+}
+
+.nestedList {
+  counter-reset: item;
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+.nestedList > li {
+  counter-increment: item;
+}
+
+.nestedList > li::before {
+  content: counters(item, ".") " ";
+  margin-right: 5px;
+}
+
+.table {
+  border-collapse: collapse;
+  border-top: 2px solid gray;
+  border-bottom: 1px solid gray;
+  text-align: start;
+}
+
+.headerCell {
+  border-bottom: 2px solid black;
+  padding: 8px;
+}
+
+.cell {
+  /* border-bottom: 1px solid gray; */
+  padding: 8px;
+}
+
+.lastRowCell {
+  border-bottom: 2px solid black;
+}

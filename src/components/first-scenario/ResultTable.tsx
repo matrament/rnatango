@@ -1,7 +1,7 @@
 "use client";
 import styles from "./first-scenario.module.css";
 import { useState, useEffect } from "react";
-import { Table, Collapse, Select, Button, Checkbox, Tag } from "antd";
+import { Table, Collapse, Select, Button, Checkbox, Tag, Tooltip } from "antd";
 import { torsion_angles_residue } from "../../types/modelsType";
 import type { TableColumnsType, TableProps } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
@@ -125,17 +125,27 @@ const ResultTable = (props: {
   fileName: string;
 }) => {
   const [angleColumn, setAngleColumn] = useState<any>();
+  const [selectedAngles, setSelectedAngles] = useState<string[]>([]);
   const [csvData, setCsvData] = useState<torsion_angles_residue[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   useEffect(() => {
     handleChange(Object.keys(angleName));
+    setSelectedAngles(Object.keys(angleName));
     setCsvData(props.dataAngle);
     setSelectedRowKeys(Array.from(Array(props.dataAngle.length).keys()));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (value: string[]) => {
+    value.sort((a, b) => {
+      const numA = parseInt(a.split("-")[0], 10);
+      const numB = parseInt(b.split("-")[0], 10);
+      return numA - numB;
+    });
+
+    setSelectedAngles(value);
+
     let x: TableColumnsType<tableAngle> = value.map((e) => {
       const [key, dataIndex] = e.split("-");
 
@@ -235,7 +245,7 @@ const ResultTable = (props: {
                     mode="multiple"
                     style={{ width: "100%" }}
                     options={options}
-                    defaultValue={Object.keys(angleName)}
+                    value={selectedAngles}
                     onChange={handleChange}
                     placeholder="Select Item..."
                     maxTagCount="responsive"
@@ -252,21 +262,23 @@ const ResultTable = (props: {
                   scroll={{ x: true }}
                 />
                 <div className={styles.downloadButton}>
-                  <Button
-                    type="primary"
-                    shape="round"
-                    icon={<DownloadOutlined />}
-                    onClick={() =>
-                      exportDataToCSV(
-                        csvData.sort((a: any, b: any) => a.key - b.key),
-                        angleColumn,
-                        `${props.fileName}_${props.chain.toUpperCase()}`,
-                        "_angles"
-                      )
-                    }
-                  >
-                    Download .csv
-                  </Button>
+                  <Tooltip title="The file will contain selected rows & columns">
+                    <Button
+                      type="primary"
+                      shape="round"
+                      icon={<DownloadOutlined />}
+                      onClick={() =>
+                        exportDataToCSV(
+                          csvData.sort((a: any, b: any) => a.key - b.key),
+                          angleColumn,
+                          `${props.fileName}_${props.chain.toUpperCase()}`,
+                          "_angles"
+                        )
+                      }
+                    >
+                      Download .csv
+                    </Button>
+                  </Tooltip>
                 </div>
               </div>
             ),

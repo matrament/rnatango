@@ -56,8 +56,10 @@ a {
 }
 h4 {
   font-weight: 600;
-  font-size: 26px;
+  font-size: 22px;
   margin: 25px;
+  width: 100%;
+  text-align: start;
 }
 
 h2 {
@@ -79,7 +81,7 @@ h1 {
   text-align: center;
   color: black;
   font-weight: 700;
-  font-size: 26px;
+  font-size: 28px;
 }
 
 h3 {
@@ -96,6 +98,13 @@ h5 {
 
 h6 {
   font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  width: 100%;
+  text-align: start;
+}
+h7 {
+  font-size: 22px;
   font-weight: 600;
   margin: 0;
   width: 100%;

@@ -29,9 +29,7 @@ const ResultThirdScenario = () => {
     processingResponse(taskID, setResult, setStatus, "many-many");
   }, []);
 
-  useEffect(() => {
-    console.log(result);
-  }, [result]);
+ 
 
   useEffect(() => {
     if (status === "PROCESSING") {

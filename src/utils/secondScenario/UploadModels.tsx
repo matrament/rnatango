@@ -87,7 +87,6 @@ const UploadModels = (props: UploadFileArguments) => {
           (props.taskID === null || props.taskID == "") &&
           props.scenario == "3"
         ) {
-          console.log(event.file.response.taskHashId);
           props.router.push(
             `/?scenario=3&id=${event.file.response.taskHashId}`
           );

@@ -245,7 +245,7 @@ const MolStarWrapper = (props: MolStarWrapperProps) => {
     if (plugin) {
       plugin.clear();
       addStructure(plugin, props.target_file, props.model_file, props.lcs);
-      console.log(plugin);
+    
     }
   }, [props.model_file]);
 

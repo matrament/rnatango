@@ -33,7 +33,6 @@ const ResultModelModel = (props: {
       tempMatrix.push(temp);
     });
     setDataset(tempMatrix);
-    console.log(tempMatrix);
   }, [props.result]);
   return (
     <>
@@ -78,7 +77,12 @@ const ResultModelModel = (props: {
               models={props.result.structureModels}
             />
           </Suspense>
-          <h1>Target vs Models</h1>
+          <h1>{`Models vs Target (${props.result.oneManyResults[modelSelection].targetFileName})`}</h1>
+          <p style={{ margin: 0 }}>
+            The following sections show the details corresponding to the
+            Model(s) vs Target scenario for the selected row of the Model vs
+            Model table
+          </p>
           <ResultModelsTarget
             result={{
               ...props.result.oneManyResults[modelSelection],
@@ -87,6 +91,7 @@ const ResultModelModel = (props: {
               chain: props.result.chain,
               requestedAngles: props.result.requestedAngles,
             }}
+            scenario={"many-many"}
           />
         </>
       ) : null}

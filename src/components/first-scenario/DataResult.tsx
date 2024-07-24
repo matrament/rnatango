@@ -10,34 +10,33 @@ import { Alert, Col, Divider, Row, Select } from "antd";
 
 import HistogramAngles from "./HistogramAngles";
 import ResultTable from "./ResultTable";
-import ChiStatistics from "./ChiStatistics";
-import ChiTest from "./BarPlotStats";
+import angles_new from "../../json/angles_new.json";
 import BarPlotStats from "./BarPlotStats";
 
 const angleName = {
-  alpha: "Alpha (\u03B1)",
+  ["1-alpha"]: "Alpha (\u03B1) [\u00B0]",
 
-  beta: "Beta (\u03B2)",
+  ["2-beta"]: "Beta (\u03B2) [\u00B0]",
 
-  gamma: "Gamma (\u03B3)",
+  ["3-gamma"]: "Gamma (\u03B3) [\u00B0]",
 
-  delta: "Delta (\u03B4)",
+  ["4-delta"]: "Delta (\u03B4) [\u00B0]",
 
-  epsilon: "Epsilon (\u03B5)",
+  ["5-epsilon"]: "Epsilon (\u03B5) [\u00B0]",
 
-  zeta: "Zeta (\u03B6)",
+  ["6-zeta"]: "Zeta (\u03B6) [\u00B0]",
 
-  eta: "Eta (\u03B7)",
+  ["7-eta"]: "Eta (\u03B7) [\u00B0]",
 
-  theta: "Theta (\u03B8)",
+  ["8-theta"]: "Theta (\u03B8) [\u00B0]",
 
-  eta_prim: "Eta prim (\u03B7')",
+  ["9-eta_prim"]: "Eta prim (\u03B7') [\u00B0]",
 
-  theta_prim: "Theta prim (\u03B8')",
+  ["10-theta_prim"]: "Theta prim (\u03B8') [\u00B0]",
 
-  chi: "Chi (\u03C7)",
+  ["11-chi"]: "Chi (\u03C7) [\u00B0]",
 
-  p: "P",
+  ["12-p"]: "P  [\u00B0]",
 };
 
 interface ItemProps {
@@ -48,51 +47,51 @@ interface ItemProps {
 const options: ItemProps[] = [
   {
     label: "Alpha (\u03B1)",
-    value: "alpha",
+    value: "1-alpha",
   },
   {
     label: "Beta (\u03B2)",
-    value: "beta",
+    value: "2-beta",
   },
   {
     label: "Gamma (\u03B3)",
-    value: "gamma",
+    value: "3-gamma",
   },
   {
     label: "Delta (\u03B4)",
-    value: "delta",
+    value: "4-delta",
   },
   {
     label: "Epsilon (\u03B5)",
-    value: "epsilon",
+    value: "5-epsilon",
   },
   {
     label: "Zeta (\u03B6)",
-    value: "zeta",
+    value: "6-zeta",
   },
   {
     label: "Eta (\u03B7)",
-    value: "eta",
+    value: "7-eta",
   },
   {
     label: "Theta (\u03B8)",
-    value: "theta",
+    value: "8-theta",
   },
   {
     label: "Eta prim (\u03B7')",
-    value: "eta_prim",
+    value: "9-eta_prim",
   },
   {
     label: "Theta prim (\u03B8')",
-    value: "theta_prim",
+    value: "10-theta_prim",
   },
   {
     label: "Chi (\u03C7)",
-    value: "chi",
+    value: "11-chi",
   },
   {
     label: "P",
-    value: "p",
+    value: "12-p",
   },
 ];
 
@@ -103,14 +102,13 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
   const [concatResidues, setConcatResidues] = useState<
     torsion_angles_residue[]
   >([]);
-  const [anglesHistogram, setAnglesHistogram] = useState<string[]>(
-    Object.keys(angleName)
-  );
   const [selectedRows, setSelectedRows] = useState<{
     [key: number]: torsion_angles_residue[];
   }>([]);
+  const [selectedAngles, setSelectedAngles] = useState<string[]>([]);
 
   useEffect(() => {
+    setSelectedAngles(Object.keys(angleName));
     let x: any = [];
     for (let i = 0; i < props.resultFile.torsionAngles.length; i++) {
       x[i] = {
@@ -159,9 +157,15 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
     Object.keys(selectedRows).length != 0 ? setConcatResidues(x) : null;
   }, [selectedRows]);
 
-  type ObjectKey = keyof typeof angleName;
+  type ObjectKey = keyof typeof angles_new;
 
   const handleChange = (value: string[]) => {
+    value.sort((a, b) => {
+      const numA = parseInt(a.split("-")[0], 10);
+      const numB = parseInt(b.split("-")[0], 10);
+      return numA - numB;
+    });
+    setSelectedAngles(value);
     let x: string[][] = value.map((e: string) => e.split("-"));
   };
 
@@ -240,7 +244,7 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
                   <p>Show/hide histograms:{"   "}</p>
                 </Col>
                 <Col
-                  span={10}
+                  span={15}
                   style={{
                     display: "flex",
 
@@ -251,7 +255,7 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
                     mode="multiple"
                     style={{ width: "100%" }}
                     options={options}
-                    defaultValue={Object.keys(angleName)}
+                    value={selectedAngles}
                     onChange={handleChange}
                     placeholder="Select angle(s) to display histogram(s)"
                     maxTagCount="responsive"
@@ -260,12 +264,12 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
               </Row>
 
               <div className={styles.angle}>
-                {anglesHistogram.map((angleName) => (
+                {selectedAngles.map((angleName) => (
                   <HistogramAngles
-                    key={angleName}
-                    title={angleName}
+                    key={angleName.split("-")[1]}
+                    title={angleName.split("-")[1]}
                     angle={concatResidues.map(
-                      (el) => el[angleName as ObjectKey]
+                      (el) => el[angleName.split("-")[1] as ObjectKey]
                     )}
                     fileName={props.resultFile.structureName}
                   />
