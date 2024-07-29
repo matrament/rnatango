@@ -27,7 +27,8 @@ const ResultPage = (props: any) => {
   const [resultFile, setResultFile] =
     useState<single_result_angle>(emptyResult);
   const [status, setStatus] = useState("");
-  const [stepsNumber, setStepsNumber] = useState(2);
+  const [stepsNumber, setStepsNumber] = useState(1);
+  const [error, setError] = useState<boolean>(false);
   const [seedState, setSeedState] = useState(1);
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const ResultPage = (props: any) => {
       searchParams.get("id")!,
       setResultFile,
       setStatus,
+      setError,
       "single"
     );
   }, []);
@@ -50,7 +52,7 @@ const ResultPage = (props: any) => {
       setStepsNumber(4);
     }
     if (status === "FAILED") {
-      setStepsNumber(5);
+      setStepsNumber(0);
     }
   }, [status]);
 
@@ -60,6 +62,7 @@ const ResultPage = (props: any) => {
         taskId={searchParams.get("id")!}
         setSeedState={setSeedState}
         stepsNumber={stepsNumber}
+        error={error}
         removeDate={resultFile.resultRemovedAfter}
       />
       {resultFile.structureName === "" ? (

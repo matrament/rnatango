@@ -35,6 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={openSans.className}>
+      {/* <link rel="icon" href="/favicon.ico" sizes="any" /> */}
       <body>
         <ConfigProvider
           theme={{

@@ -5,6 +5,7 @@ export function processingResponse(
   taskId: string | null,
   setResultFile: any,
   setStatus: any,
+  setError: any,
   scenario: "single" | "one-many" | "many-many"
 ) {
   const requestOptions = {
@@ -53,6 +54,7 @@ export function processingResponse(
     };
     socket.onclose = socket.onerror = () => {
       clearInterval(timer);
+      setError(true);
     };
   };
 
@@ -60,6 +62,7 @@ export function processingResponse(
     fetch(`${config.SERVER_URL}/${scenario}/${taskId}/result`, requestOptions)
       .then((response) => {
         if (!response.ok) {
+          setError(true);
           throw new Error("Network response was not ok");
         }
         return response.json();
@@ -69,14 +72,15 @@ export function processingResponse(
         setStatus("SUCCESS");
       })
       .catch((error) => {
-        console.error("Error fetching initial data:", error);
+        // console.error("Error fetching initial data:", error);
+        setError(true);
       });
   };
 
   fetch(`${config.SERVER_URL}/${scenario}/${taskId}`, requestOptions)
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        setError(true);
       }
       return response.json();
     })
@@ -85,10 +89,12 @@ export function processingResponse(
         getResult();
       }
       if (response.status == "PROCESSING" || response.status == "WAITING") {
+        setStatus(response.status);
         openWebSocket();
       }
     })
     .catch((error) => {
-      console.error("Error fetching initial data:", error);
+      // console.error("Error fetching initial data:", error);
+      setError(true);
     });
 }

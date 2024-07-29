@@ -20,7 +20,6 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
   const [firstIndex, setFirstIndex] = useState<number>(0);
 
   useEffect(() => {
-  
     let temp_continous: number[][] = [];
     let temp_discrete: number[][] = [];
     let xAxis: string[] = [];
@@ -72,7 +71,6 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
       },
       backgroundColor: "rgba(255, 255, 255, 0.9)",
       formatter: function (params: any) {
-  
         return (
           "MCQ values:" +
           "<br/>" +
@@ -172,7 +170,7 @@ const HeatMap = (props: { dataset: datasetModels[]; models: string[] }) => {
         itemWidth: 26,
         splitNumber: 4,
         pieces: [
-          { min: 60, label: ">60\u00B0", color: "#e31919" },
+          { min: 60, label: "> 60\u00B0", color: "#e31919" },
           { min: 30, max: 60, label: "30\u00B0 - 60\u00B0", color: "#fd8c3a" },
           { min: 15, max: 30, label: "15\u00B0 - 30\u00B0", color: "#fccc5c" },
           { max: 15, label: "0\u00B0 - 15\u00B0", color: "#ffffb0" },

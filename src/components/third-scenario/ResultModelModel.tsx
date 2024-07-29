@@ -1,6 +1,6 @@
 "use client";
 import { third_scenario_result } from "@/types/modelsType";
-import { Button, message, Image, Divider } from "antd";
+import { Button, message, Image, Divider, Col, Row } from "antd";
 import config from "../../config.json";
 import { DownloadOutlined } from "@ant-design/icons";
 import { Suspense, useEffect, useState } from "react";
@@ -35,7 +35,7 @@ const ResultModelModel = (props: {
     setDataset(tempMatrix);
   }, [props.result]);
   return (
-    <>
+    <div style={{ width: "100%" }}>
       {dataset.length != 0 ? (
         <>
           <ModelsMatrix
@@ -46,29 +46,46 @@ const ResultModelModel = (props: {
 
           <>
             <h2 style={{ marginTop: 0 }}>Dendrogram</h2>
-            <Image
-              alt={"secondary_structure"}
-              style={{
-                width: "100%",
-                objectFit: "contain",
-                objectPosition: "50% 50%",
-              }}
-              width={700}
-              // className="two-d-image"
-              src={`${config.SERVER_URL}/many-many/${props.taskId}/dendrogram`}
-            />
-            <Button
-              type="text"
-              size="large"
-              style={{ marginTop: "15px" }}
-              icon={<DownloadOutlined />}
-              onClick={() => {
-                downloadFile(
-                  "dendrogram.svg",
-                  `/many-many/${props.taskId}/dendrogram`
-                );
-              }}
-            />
+            <Row>
+              <Col
+                flex="auto"
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <div
+                  style={{
+                    marginLeft: "75px",
+                    width: "70%",
+                    maxWidth: "600px",
+                  }}
+                >
+                  <Image
+                    alt={"dendrogram"}
+                    style={{
+                      width: "100%",
+                      objectFit: "contain",
+                      objectPosition: "50% 50%",
+                    }}
+                    width={"100%"}
+                    // className="two-d-image"
+                    src={`${config.SERVER_URL}/many-many/${props.taskId}/dendrogram`}
+                  />
+                </div>
+              </Col>
+              <Col flex="75px">
+                <Button
+                  type="text"
+                  size="large"
+                  style={{ marginTop: "15px" }}
+                  icon={<DownloadOutlined />}
+                  onClick={() => {
+                    downloadFile(
+                      "dendrogram.svg",
+                      `/many-many/${props.taskId}/dendrogram`
+                    );
+                  }}
+                />
+              </Col>
+            </Row>
             <Divider />
           </>
           <Suspense fallback={<div>Loading...</div>}>
@@ -78,11 +95,19 @@ const ResultModelModel = (props: {
             />
           </Suspense>
           <h1>{`Models vs Target (${props.result.oneManyResults[modelSelection].targetFileName})`}</h1>
-          <p style={{ margin: 0 }}>
-            The following sections show the details corresponding to the
-            Model(s) vs Target scenario for the selected row of the Model vs
-            Model table
-          </p>
+          <div style={{ width: "100%", textAlign: "center" }}>
+            <b
+              style={{
+                margin: "0",
+                color: "#fb5f4c",
+                width: "100%",
+              }}
+            >
+              The following sections show the details corresponding to the
+              Model(s) vs Target scenario for the selected row of the Model vs
+              Model table
+            </b>
+          </div>
           <ResultModelsTarget
             result={{
               ...props.result.oneManyResults[modelSelection],
@@ -95,7 +120,7 @@ const ResultModelModel = (props: {
           />
         </>
       ) : null}
-    </>
+    </div>
   );
 };
 

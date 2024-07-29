@@ -14,21 +14,21 @@ const TableTorsionAnglesPseudo = () => {
           </td>
         </tr>
         <tr>
-          <td className={styles.cell}>{`\u03B7`}</td>
+          <td className={styles.cell}>{`\u03B7 (Eta)`}</td>
           <td className={styles.cell}>
             C4{`'`}
             <sub>n-1</sub>-P-C4{`'`}-P<sub>n+1</sub>
           </td>
         </tr>
         <tr>
-          <td className={styles.cell}>{`\u03B8`}</td>
+          <td className={styles.cell}>{`\u03B8 (Theta)`}</td>
           <td className={styles.cell}>
             P-C4{`'`}-P<sub>n+1</sub>-C4{`'`}
             <sub>n+1</sub>
           </td>
         </tr>
         <tr>
-          <td className={styles.cell}>{`\u03B7'`}</td>
+          <td className={styles.cell}>{`\u03B7' (Eta prim)`}</td>
           <td className={styles.cell}>
             C1{`'`}
             <sub>n-1</sub>-P-C1{`'`}-P<sub>n+1</sub>
@@ -37,7 +37,7 @@ const TableTorsionAnglesPseudo = () => {
         <tr>
           <td
             className={`${styles.cell} ${styles.lastRowCell}`}
-          >{`\u03B8'`}</td>
+          >{`\u03B8' (Thete prim)`}</td>
           <td className={`${styles.cell} ${styles.lastRowCell}`}>
             P-C1{`'`}-P<sub>n+1</sub>-C1{`'`}
             <sub>n+1</sub>

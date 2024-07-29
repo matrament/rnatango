@@ -245,14 +245,13 @@ const MolStarWrapper = (props: MolStarWrapperProps) => {
     if (plugin) {
       plugin.clear();
       addStructure(plugin, props.target_file, props.model_file, props.lcs);
-    
     }
   }, [props.model_file]);
 
   return (
     <div
       style={{
-        height: "700px",
+        height: "650px",
         width: "100%",
         position: "relative",
         zIndex: "9999",

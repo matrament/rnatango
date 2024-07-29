@@ -9,6 +9,7 @@ const StatusTask = (props: {
   taskId: string;
   setSeedState: any;
   stepsNumber: number;
+  error: boolean;
   removeDate: string;
 }) => {
   const isDesktop = useMediaQuery({ query: "(min-width: 1200px)" });
@@ -48,19 +49,8 @@ const StatusTask = (props: {
             direction={isDesktop ? "horizontal" : "vertical"}
             current={props.stepsNumber}
             items={steps}
-            status="wait"
+            status={props.error ? "error" : "wait"}
           />
-          {props.stepsNumber === 5 ? (
-            <Alert
-              message="Your task failed"
-              showIcon
-              // description={resultSet.error_message}
-              type="error"
-              style={{ margin: "20px" }}
-            />
-          ) : (
-            <></>
-          )}
         </div>
       </Row>
 

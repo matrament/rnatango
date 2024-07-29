@@ -24,19 +24,26 @@ const ResultSecondScenario = () => {
   const taskID = searchParams.get("id");
   const [result, setResult] = useState<second_scenario_result>(initResult);
   const [status, setStatus] = useState("");
-  const [stepsNumber, setStepsNumber] = useState(2);
+  const [error, setError] = useState<boolean>(false);
+  const [stepsNumber, setStepsNumber] = useState(1);
   const [seedState, setSeedState] = useState(1);
 
   useEffect(() => {
-    processingResponse(taskID, setResult, setStatus, "one-many");
+    processingResponse(taskID, setResult, setStatus, setError, "one-many");
   }, []);
 
   useEffect(() => {
+    if (status === "WAITING") {
+      setStepsNumber(2);
+    }
     if (status === "PROCESSING") {
       setStepsNumber(3);
     }
     if (status === "SUCCESS") {
       setStepsNumber(4);
+    }
+    if (status === "FAILED") {
+      setStepsNumber(0);
     }
   }, [status]);
 
@@ -46,13 +53,22 @@ const ResultSecondScenario = () => {
         taskId={searchParams.get("id")!}
         setSeedState={setSeedState}
         stepsNumber={stepsNumber}
+        error={error}
         removeDate={
           result?.resultRemovedAfter ? result.resultRemovedAfter : "..."
         }
       />
       {result && result.differences ? (
         result.differences.length === 0 ? (
-          <LoadingCard />
+          !error ? (
+            <LoadingCard />
+          ) : (
+            <h3>
+              No results exist in the system for task
+              <br />
+              {searchParams.get("id")!}
+            </h3>
+          )
         ) : (
           <div className={styles.scenario}>
             <ResultModelsTarget

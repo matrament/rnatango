@@ -14,9 +14,14 @@ import HeatMap from "@/components/second-scenario/output/HeatMap";
 import MCQstructure from "./MCQstructure";
 import SelectedModelsForAnalyse from "./SelectedModelsForAnalyse";
 import LCSta from "./LCSta";
+import GlobalMCQ from "./GlobalMCQ";
 
-const ResultModelsTarget = (props: { result: second_scenario_result, scenario: "one-many"|"many-many" }) => {
+const ResultModelsTarget = (props: {
+  result: second_scenario_result;
+  scenario: "one-many" | "many-many";
+}) => {
   const [models, setModels] = useState<{ [key: number]: string }[]>([]);
+  const [globalMCQ, setGlobalMCQ] = useState<{ [key: string]: string }>({});
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [comparsionModelsMCQ, setComparsionModelsMCQ] = useState([]);
   const [dataset, setDataset] = useState<second_scenario_result_dataset[]>([]);
@@ -28,11 +33,13 @@ const ResultModelsTarget = (props: { result: second_scenario_result, scenario: "
     let temp_models: any = [];
     let temp_comparsionModelsMCQ: any = [];
     let temp_seq: string[] = [];
+    let temp_global_mcq: { [key: string]: string } = {};
 
     props.result.differences
       .sort((a, b) => a.modelMCQ - b.modelMCQ)
       .map((el, i) => {
         let model: any = [];
+        temp_global_mcq[el.modelName] = el.modelMCQ.toFixed(2);
         props.result.differences[i].residues.map((residue, index) => {
           model.push({
             key: index,
@@ -77,6 +84,7 @@ const ResultModelsTarget = (props: { result: second_scenario_result, scenario: "
     );
     setComparsionModelsMCQ(temp_comparsionModelsMCQ);
     setSequence(temp_seq.join(""));
+    setGlobalMCQ(temp_global_mcq);
   }, [props.result]);
 
   const onChange = (key: string) => {
@@ -91,7 +99,7 @@ const ResultModelsTarget = (props: { result: second_scenario_result, scenario: "
   });
 
   return (
-    <>
+    <div style={{ width: "100%" }}>
       {models.length != 0 ? (
         <>
           <SelectedModelsForAnalyse
@@ -103,6 +111,7 @@ const ResultModelsTarget = (props: { result: second_scenario_result, scenario: "
           <Divider />
           {selectedModels.length != 0 ? (
             <>
+              <GlobalMCQ dataset={globalMCQ} models={selectedModels} />
               <ModelsNucleotyde
                 dataset={comparsionModelsMCQ}
                 models={selectedModels}
@@ -162,7 +171,7 @@ const ResultModelsTarget = (props: { result: second_scenario_result, scenario: "
           )}
         </>
       ) : null}
-    </>
+    </div>
   );
 };
 export default ResultModelsTarget;

@@ -22,21 +22,26 @@ const ResultThirdScenario = () => {
   const taskID = searchParams.get("id");
   const [result, setResult] = useState<third_scenario_result>(initModel);
   const [status, setStatus] = useState("");
-  const [stepsNumber, setStepsNumber] = useState(2);
+  const [error, setError] = useState<boolean>(false);
+  const [stepsNumber, setStepsNumber] = useState(1);
   const [seedState, setSeedState] = useState(1);
 
   useEffect(() => {
-    processingResponse(taskID, setResult, setStatus, "many-many");
+    processingResponse(taskID, setResult, setStatus, setError, "many-many");
   }, []);
 
- 
-
   useEffect(() => {
+    if (status === "WAITING") {
+      setStepsNumber(2);
+    }
     if (status === "PROCESSING") {
       setStepsNumber(3);
     }
     if (status === "SUCCESS") {
       setStepsNumber(4);
+    }
+    if (status === "FAILED") {
+      setStepsNumber(0);
     }
   }, [status]);
 
@@ -46,6 +51,7 @@ const ResultThirdScenario = () => {
         taskId={searchParams.get("id")!}
         setSeedState={setSeedState}
         stepsNumber={stepsNumber}
+        error={error}
         removeDate={
           result?.resultRemovedAfter ? result.resultRemovedAfter : "..."
         }

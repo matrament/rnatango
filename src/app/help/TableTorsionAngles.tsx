@@ -20,12 +20,12 @@ const TableTorsionAngles = () => {
           </td>
         </tr>
         <tr>
-          <td className={styles.cell}>{`\u03B1`}</td>
+          <td className={styles.cell}>{`\u03B1 (Alpha)`}</td>
           <td className={styles.cell}>
             O3{`'`}
             <sub>n-1</sub>-P-O5{`'`}-C5{`'`}
           </td>
-          <td className={styles.cell}>{`\u03C7`}</td>
+          <td className={styles.cell}>{`\u03C7 (Chi)`}</td>
           <td className={styles.cell}>
             O4{`'`}-C1{`'`}-N1-C2
             <br />
@@ -33,7 +33,7 @@ const TableTorsionAngles = () => {
           </td>
         </tr>
         <tr>
-          <td className={styles.cell}>{`\u03B2`}</td>
+          <td className={styles.cell}>{`\u03B2 (Beta)`}</td>
           <td className={styles.cell}>
             P-O5{`'`}-C5{`'`}-C4{`'`}
           </td>
@@ -45,7 +45,7 @@ const TableTorsionAngles = () => {
           </td>
         </tr>
         <tr>
-          <td className={styles.cell}>{`\u03B3`}</td>
+          <td className={styles.cell}>{`\u03B3 (Gamma)`}</td>
           <td className={styles.cell}>
             O5{`'`}-C5{`'`}-C4{`'`}-C3{`'`}
           </td>
@@ -57,7 +57,7 @@ const TableTorsionAngles = () => {
           </td>
         </tr>
         <tr>
-          <td className={styles.cell}>{`\u03B4`}</td>
+          <td className={styles.cell}>{`\u03B4 (Delta)`}</td>
           <td className={styles.cell}>
             C5{`'`}-C4{`'`}-C3{`'`}-O3{`'`}
           </td>
@@ -69,7 +69,7 @@ const TableTorsionAngles = () => {
           </td>
         </tr>
         <tr>
-          <td className={styles.cell}>{`\u03B5`}</td>
+          <td className={styles.cell}>{`\u03B5 (Epsilon)`}</td>
           <td className={styles.cell}>
             C4{`'`}-C3{`'`}-O3{`'`}-O
           </td>
@@ -81,7 +81,7 @@ const TableTorsionAngles = () => {
           </td>
         </tr>
         <tr>
-          <td className={styles.cell}>{`\u03B6`}</td>
+          <td className={styles.cell}>{`\u03B6 (Zeta)`}</td>
           <td className={styles.cell}>
             C3{`'`}-O3{`'`}-P-O5{`'`}
             <sub>n+1</sub>
