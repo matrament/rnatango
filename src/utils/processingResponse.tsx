@@ -6,7 +6,8 @@ export function processingResponse(
   setResultFile: any,
   setStatus: any,
   setError: any,
-  scenario: "single" | "one-many" | "many-many"
+  scenario: "single" | "one-many" | "many-many",
+  setProgress: any
 ) {
   const requestOptions = {
     method: "GET",
@@ -34,6 +35,8 @@ export function processingResponse(
       let a = JSON.parse(event.data);
       setStatus(a.status);
 
+      scenario != "single" ? setProgress(a.progress) : null;
+
       if (a.status === "SUCCESS" || a.status === "FAILED") {
         clearInterval(timer);
         if (a.status === "SUCCESS") {
@@ -43,6 +46,7 @@ export function processingResponse(
           )
             .then((response: any) => response.json())
             .then((response: any) => {
+              setProgress(1);
               setResultFile(response);
             })
             .catch((error: any) => {
@@ -54,7 +58,7 @@ export function processingResponse(
     };
     socket.onclose = socket.onerror = () => {
       clearInterval(timer);
-      setError(true);
+      // setError(true);
     };
   };
 
@@ -69,6 +73,7 @@ export function processingResponse(
       })
       .then((response) => {
         setResultFile(response);
+        setProgress(1);
         setStatus("SUCCESS");
       })
       .catch((error) => {

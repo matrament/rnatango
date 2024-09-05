@@ -11,6 +11,7 @@ const StatusTask = (props: {
   stepsNumber: number;
   error: boolean;
   removeDate: string;
+  scenario: "Single model" | "Model(s) vs Target" | "Model vs Model";
 }) => {
   const isDesktop = useMediaQuery({ query: "(min-width: 1200px)" });
 
@@ -19,7 +20,7 @@ const StatusTask = (props: {
     { title: "Queueing" },
     { title: "Processing" },
     {
-      title: "Success",
+      title: "Task completed",
       description: `${
         props.stepsNumber === 4
           ? "Results will be stored until " + props.removeDate
@@ -30,8 +31,8 @@ const StatusTask = (props: {
 
   return (
     <div className={styles.scenario} style={{ width: "100%" }}>
-      <h1>
-        Task ID:{" "}
+      <h1 style={{ fontSize: "20px", marginTop: "25px" }}>
+        {`${props.scenario} scenario (task `}
         <span
           onClick={() => {
             window.navigator["clipboard"].writeText(props.taskId!);
@@ -42,16 +43,29 @@ const StatusTask = (props: {
             {props.taskId}
           </Tooltip>
         </span>
+        {`)`}
       </h1>
-      <Row justify={"center"}>
-        <div className={styles.steps}>
-          <Steps
-            direction={isDesktop ? "horizontal" : "vertical"}
-            current={props.stepsNumber}
-            items={steps}
-            status={props.error ? "error" : "wait"}
-          />
-        </div>
+      <Row style={{ width: "100%" }} justify={"center"}>
+        {props.stepsNumber != 4 ? (
+          <div className={styles.steps}>
+            <Steps
+              direction={isDesktop ? "horizontal" : "vertical"}
+              current={props.stepsNumber}
+              items={steps}
+              status={props.error ? "error" : "wait"}
+            />
+          </div>
+        ) : (
+          <h5
+            style={{
+              fontSize: "18px",
+              marginBottom: "10px",
+              textAlign: "center",
+            }}
+          >
+            {"Results available until " + props.removeDate}
+          </h5>
+        )}
       </Row>
 
       <div className={styles.resetSettings}>
@@ -63,7 +77,7 @@ const StatusTask = (props: {
             props.setSeedState((prevCount: number) => prevCount + 1)
           }
         >
-          Reload result page
+          Reset view
         </Button>
       </div>
     </div>

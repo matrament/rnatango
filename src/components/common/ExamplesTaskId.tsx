@@ -112,7 +112,7 @@ function getTaskId(
   fetch(`${config.SERVER_URL}/${scenario}/example/${example}`, requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
-        message.error(lang.error_deleting);
+        message.error(lang.error_uploading);
       } else {
         return response.json();
       }
