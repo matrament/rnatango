@@ -1,0 +1,13 @@
+[
+  { "label": "Alpha (\u03B1)", "value": "ALPHA" },
+  { "label": "Beta (\u03B2)", "value": "BETA" },
+  { "label": "Gamma (\u03B3)", "value": "GAMMA" },
+  { "label": "Delta (\u03B4)", "value": "DELTA" },
+  { "label": "Epsilon (\u03B5)", "value": "EPSILON" },
+  { "label": "Zeta (\u03B6)", "value": "ZETA" },
+  { "label": "Eta (\u03B7)", "value": "ETA" },
+  { "label": "Theta (\u03B8)", "value": "THETA" },
+  { "label": "Eta prim (\u03B7')", "value": "ETA_PRIM" },
+  { "label": "Theta prim (\u03B8')", "value": "THETA_PRIM" },
+  { "label": "Chi (\u03C7)", "value": "CHI" }
+]

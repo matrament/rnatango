@@ -1,0 +1,21 @@
+{
+  "1": {
+    "title": "Select file with 3D RNA structure (PDB/CIF)",
+    "example": [
+      { "ID": "1PBM", "description": "A-RNA" },
+      { "ID": "1ZEW", "description": "B-DNA" },
+      { "ID": "1T4X", "description": "Z-RNA" }
+    ],
+    "scenario": 1
+  },
+
+  "2": {
+    "title": "Select target",
+    "example": [
+      { "ID": "1PBM", "description": "A-RNA" },
+      { "ID": "1ZEW", "description": "B-DNA" },
+      { "ID": "1T4X", "description": "Z-RNA" }
+    ],
+    "scenario": 2
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "file_not_pdb_cif": "Improper file format: ",
+  "uploading_file": "File upload in progress: ",
+  "file_upload_success": "Successfully uploaded: ",
+  "error_uploading": "Failed to upload ",
+  "lack_of_source": "Select file to upload.",
+  "wrong_value": "Improper data in ",
+  "notification_turned_on": "Notification turned on.",
+  "rcsb_error_with_name": "Invalid data or PDB ID: ",
+  "rcsb_error": "Invalid structure",
+  "turn_on_notification": "Turn notification on",
+  "delete_model_success": "Successfully deleted model",
+  "error_deleting": "Failed to delete model"
+}

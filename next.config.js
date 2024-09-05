@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  output: "export",
+  swcMinify: false,
 
-module.exports = nextConfig
+  // trailingSlash: true,
+  // experimental: {
+  //   missingSuspenseWithCSRBailout: false,
+  // },
+};
+// export default nextConfig;
+module.exports = nextConfig;

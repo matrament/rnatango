@@ -1,0 +1,19 @@
+.scenario {
+  border: 1px solid #dcdcdc;
+  border-radius: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.section {
+  border-top: 1px solid #dcdcdc;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+

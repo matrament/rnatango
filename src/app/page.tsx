@@ -1,95 +1,70 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import styles from "./page.module.css";
+import ThirdScenarioUpload from "../components/third-scenario/ThirdScenarioUpload";
+import LoadData from "../components/first-scenario/LoadData";
+import scenarios from "../json/scenarios.json";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Suspense, useState } from "react";
 
-export default function Home() {
+const Home = () => {
+  const router = useRouter();
+  const [seedState, setSeedState] = useState(1);
+  const searchParams = useSearchParams();
+  const selectedScenario = searchParams.get("scenario") || "1";
+  const scenariosVariants: { [key: string]: string } = {
+    "1": "Single model",
+    "2": "Model(s) vs Target",
+    "3": "Model vs Model",
+  };
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <p style={{ textAlign: "justify", margin: "15px" }}>
+        Welcome to <b>RNAtango</b>, a web server to study 3D RNA structures
+        through torsion angles. Depending on the selected scenario, users can
+        explore the distribution of torsion angles in a single RNA structure or
+        its fragment, compare the RNA model(s) with the native structure, or
+        perform a comparative analysis in a set of models. The comparison
+        procedure applies MCQ and LCS-TA metrics to assess RNA angular
+        similarity. <b>Select a scenario to start...</b>
+      </p>
+      <div className={styles.scenario}>
+        <div className={styles.buttond}>
+          {Object.keys(scenariosVariants).map(
+            (version: string, index: number) => (
+              <div
+                key={index}
+                className={`${styles.buttonscenario} ${
+                  selectedScenario === version
+                    ? styles.active
+                    : styles.nonactive
+                }`}
+                onClick={() => {
+                  router.push(`/?scenario=${version}`);
+                  setSeedState((prevCount: number) => prevCount + 1);
+                }}
+              >
+                {scenariosVariants[version]}
+              </div>
+            )
+          )}
         </div>
       </div>
+      {selectedScenario === "1" ? <LoadData key={seedState} /> : null}
+      {selectedScenario === "2" ? <LoadData key={seedState} /> : null}
+      {selectedScenario === "3" ? (
+        <ThirdScenarioUpload key={seedState} />
+      ) : null}
+    </>
+  );
+};
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+const HomePage = () => {
+  return (
+    <Suspense>
+      <Home />
+    </Suspense>
+  );
+};
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+export default HomePage;

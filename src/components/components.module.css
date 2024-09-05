@@ -1,0 +1,103 @@
+.background {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  border-bottom: solid 1px #dcdcdc;
+  /* background: #eeeeee; */
+  margin-bottom: 20px;
+}
+
+.header {
+  height: 80px;
+  display: flex;
+  width: 60vw;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pages {
+  display: flex;
+  flex-direction: row;
+  width: 40%;
+  justify-content: space-between;
+}
+
+.foot {
+  display: flex;
+  border-top: solid 1px #dcdcdc;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: auto;
+  height: 100px;
+}
+
+.footer {
+  bottom: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.active {
+  text-decoration-color: #fb5f4c;
+  text-decoration-line: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 3px;
+}
+
+.loader {
+  display: inline-grid;
+  padding: 5px;
+  background: #fff;
+
+  filter: blur(4px) contrast(12);
+}
+.loader:before,
+.loader:after {
+  content: "";
+  grid-area: 1/1;
+  height: 50px;
+  aspect-ratio: 3;
+  --c: #0000 64%, #000 66% 98%, #0000 101%;
+  background: radial-gradient(35% 146% at 50% 159%, var(--c)) 0 0,
+    radial-gradient(35% 146% at 50% -59%, var(--c)) 100% 100%;
+  background-size: calc(200% / 3) 50%;
+  background-repeat: repeat-x;
+}
+.loader:before {
+  -webkit-mask: repeating-linear-gradient(90deg, #000 0 8%, #0000 0 15%);
+}
+.loader:after {
+  clip-path: inset(0 100% 0 0);
+  animation: l13 1.5s infinite linear;
+}
+@keyframes l13 {
+  50% {
+    clip-path: inset(0);
+  }
+  to {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+.flyoutMenu {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: transform 0.4s cubic-bezier(0, 0.6, 0, 0.6);
+
+  z-index: 1000;
+}
+
+.flyoutMenuHide {
+  transform: translate3d(-100vw, 0, 0);
+  overflow: scroll;
+}
+
+.flyoutMenuShow {
+  transform: translate3d(0vw, 0, 0);
+  overflow: hidden;
+}
