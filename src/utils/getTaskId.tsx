@@ -1,6 +1,5 @@
 import { message } from "antd";
 import lang from "./lang.json";
-import config from "../config.json";
 
 export function getTaskId(
   result: any,
@@ -18,7 +17,7 @@ export function getTaskId(
     },
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
-  fetch(`${config.SERVER_URL}/${scenario}`, requestOptions)
+  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/${scenario}`, requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
         message.error(lang.rcsb_error);

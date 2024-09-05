@@ -1,6 +1,4 @@
 import { Button, message, Image, Divider, Row, Col } from "antd";
-import lang from "../../../utils/lang.json";
-import config from "../../../config.json";
 import { DownloadOutlined } from "@ant-design/icons";
 import styles from "../../first-scenario/first-scenario.module.css";
 
@@ -14,7 +12,9 @@ function downloadFile(type: any, modelId: string) {
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
   fetch(
-    config.SERVER_URL + "/one-many/secondary/structure/" + modelId,
+    process.env.NEXT_PUBLIC_SERVER_URL +
+      "/one-many/secondary/structure/" +
+      modelId,
     requestOptions
   )
     .then((res) => res.blob())
@@ -44,7 +44,7 @@ const MCQstructure = (props: { modelHashId: string }) => {
                 objectPosition: "50% 50%",
               }}
               width={"100%"}
-              src={`${config.SERVER_URL}/one-many/secondary/structure/${props.modelHashId}`}
+              src={`${process.env.NEXT_PUBLIC_SERVER_URL}/one-many/secondary/structure/${props.modelHashId}`}
             />
           </div>
         </Col>

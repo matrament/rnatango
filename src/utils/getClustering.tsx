@@ -1,6 +1,4 @@
 import { message } from "antd";
-import lang from "./lang.json";
-import config from "../config.json";
 
 export function getClustering(taskId: string | null, setData: any) {
   const requestOptions = {
@@ -13,7 +11,7 @@ export function getClustering(taskId: string | null, setData: any) {
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
   fetch(
-    config.SERVER_URL + "/many-many/" + taskId + "/clustering",
+    process.env.NEXT_PUBLIC_SERVER_URL + "/many-many/" + taskId + "/clustering",
     requestOptions
   )
     .then((response: any) => {

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/env": "^14.2.8",
     "antd": "^5.12.5",
     "echarts-for-react": "^3.0.2",
     "molstar": "^4.4.1",

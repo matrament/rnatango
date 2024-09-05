@@ -2,7 +2,6 @@
 import { Suspense, useEffect, useState } from "react";
 import { RenderLoader } from "../../common/RenderLoader";
 import MolStarWrapper from "./MolStarWrapper";
-import config from "../../../config.json";
 import { DownloadOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -109,20 +108,6 @@ const LCSta = (props: {
     );
     setDataset(dataset_temp);
     setCsvData(dataset_temp);
-    // console.log(
-    //   `${
-    //     config.SERVER_URL +
-    //     "/one-many/tertiary/structure/" +
-    //     props.lcs[activeModel].modelId
-    //   }`
-    // );
-    // console.log(
-    //   `${
-    //     config.SERVER_URL +
-    //     "/one-many/tertiary/structure/" +
-    //     props.target.targetId
-    //   }`
-    // );
   }, [props.target, props.lcs]);
 
   const columns: TableColumnsType<DataType> = [
@@ -263,12 +248,12 @@ const LCSta = (props: {
         <div style={{ display: "block", margin: "30px 30px 0 30px" }}>
           <MolStarWrapper
             model_file={
-              config.SERVER_URL +
+              process.env.NEXT_PUBLIC_SERVER_URL +
               "/one-many/tertiary/structure/" +
               props.lcs[activeModel].modelId
             }
             target_file={
-              config.SERVER_URL +
+              process.env.NEXT_PUBLIC_SERVER_URL +
               "/one-many/tertiary/structure/" +
               props.target.targetId
             }
@@ -324,7 +309,7 @@ const LCSta = (props: {
             onClick={() =>
               downloadFile(
                 props.target.targetId + ".cif",
-                config.SERVER_URL +
+                process.env.NEXT_PUBLIC_SERVER_URL +
                   "/one-many/tertiary/structure/" +
                   props.target.targetId
               )
@@ -340,7 +325,7 @@ const LCSta = (props: {
             onClick={() =>
               downloadFile(
                 props.lcs[activeModel].name.split(".")[0] + ".cif",
-                config.SERVER_URL +
+                process.env.NEXT_PUBLIC_SERVER_URL +
                   "/one-many/tertiary/structure/" +
                   props.lcs[activeModel].modelId
               )

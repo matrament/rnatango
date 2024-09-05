@@ -1,7 +1,5 @@
 import { message } from "antd";
 import lang from "../lang.json";
-import config from "../../config.json";
-import initTarget from "../../json/initTarget.json";
 
 export function UploadedTaskDetails(
   taskId: string | null,
@@ -18,7 +16,7 @@ export function UploadedTaskDetails(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  fetch(`${config.SERVER_URL}${scenario}${taskId}`, requestOptions)
+  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${scenario}${taskId}`, requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
         // setModels(initTarget);

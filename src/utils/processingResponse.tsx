@@ -1,5 +1,4 @@
 import { message } from "antd";
-import config from "../config.json";
 
 export function processingResponse(
   taskId: string | null,
@@ -20,7 +19,9 @@ export function processingResponse(
 
   const openWebSocket = () => {
     let socket = new WebSocket(
-      `${config.SERVER_WEB_SOCKET_URL}/${scenario.split("-").join("")}`
+      `${process.env.NEXT_PUBLIC_SERVER_WEB_SOCKET_URL}/${scenario
+        .split("-")
+        .join("")}`
     );
     let timer: any = null;
 
@@ -41,7 +42,7 @@ export function processingResponse(
         clearInterval(timer);
         if (a.status === "SUCCESS") {
           fetch(
-            `${config.SERVER_URL}/${scenario}/${taskId}/result`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/${scenario}/${taskId}/result`,
             requestOptions
           )
             .then((response: any) => response.json())
@@ -63,7 +64,10 @@ export function processingResponse(
   };
 
   const getResult = () => {
-    fetch(`${config.SERVER_URL}/${scenario}/${taskId}/result`, requestOptions)
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/${scenario}/${taskId}/result`,
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           setError(true);
@@ -82,7 +86,10 @@ export function processingResponse(
       });
   };
 
-  fetch(`${config.SERVER_URL}/${scenario}/${taskId}`, requestOptions)
+  fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/${scenario}/${taskId}`,
+    requestOptions
+  )
     .then((response) => {
       if (!response.ok) {
         setError(true);

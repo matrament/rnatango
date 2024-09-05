@@ -1,6 +1,5 @@
 import { message, UploadFile, UploadProps, Upload } from "antd";
 import { pdb_id } from "../../../types/modelsType";
-import config from "../../../config.json";
 import lang from "../../../utils/lang.json";
 import { InboxOutlined } from "@ant-design/icons";
 import { structure } from "../../../types/modelsType";
@@ -41,7 +40,7 @@ const UploadStructureFile = (props: UploadFileArguments) => {
   let uploader_props: UploadProps = {
     name: "file",
     multiple: false,
-    action: config.SERVER_URL + "/upload",
+    action: process.env.NEXT_PUBLIC_SERVER_URL + "/upload",
     maxCount: 1,
     beforeUpload: (file: File) => {
       let fileName = file.name.split(".");
@@ -126,7 +125,10 @@ export function removeFile(fileId: string) {
     },
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
-  fetch(config.SERVER_URL + "/upload/remove/" + fileId, requestOptions)
+  fetch(
+    process.env.NEXT_PUBLIC_SERVER_URL + "/upload/remove/" + fileId,
+    requestOptions
+  )
     .then((response: any) => {
       if (response.status == 200) {
       }

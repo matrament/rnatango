@@ -1,6 +1,5 @@
 import { message } from "antd";
 import lang from "../lang.json";
-import config from "../../config.json";
 
 export function deleteModel(
   taskId: string | null,
@@ -18,7 +17,7 @@ export function deleteModel(
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
   fetch(
-    `${config.SERVER_URL}/${scenario}/form/remove/model/${taskId}/${modelId}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/${scenario}/form/remove/model/${taskId}/${modelId}`,
     requestOptions
   )
     .then((response: any) => {

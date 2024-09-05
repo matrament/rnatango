@@ -1,5 +1,3 @@
-import config from "../config.json";
-
 export function downloadFile(type: any, path: string) {
   const requestOptions = {
     method: "GET",
@@ -9,7 +7,7 @@ export function downloadFile(type: any, path: string) {
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  fetch(`${config.SERVER_URL}${path}`, requestOptions)
+  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${path}`, requestOptions)
     .then((res) => res.blob())
     .then((blob) => {
       let url = URL.createObjectURL(blob);

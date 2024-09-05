@@ -3,7 +3,6 @@ import styles from "./first-scenario.module.css";
 import { Button, Space, Tooltip } from "antd";
 import { message } from "antd";
 import lang from "../../utils/lang.json";
-import config from "../../config.json";
 import { useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -109,7 +108,7 @@ function getTaskId(
   };
   requestOptions.headers["Access-Control-Allow-Origin"] = "*";
 
-  fetch(`${config.SERVER_URL}/${scenario}/example/${example}`, requestOptions)
+  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/${scenario}/example/${example}`, requestOptions)
     .then((response: any) => {
       if (response.status == 404) {
         message.error(lang.error_uploading);

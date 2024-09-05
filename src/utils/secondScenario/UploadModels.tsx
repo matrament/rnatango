@@ -1,29 +1,10 @@
-import { UploadOutlined } from "@ant-design/icons";
 import { message, Upload, UploadProps, UploadFile, Divider } from "antd";
-import config from "../../config.json";
-import { second_scenario_models_target } from "@/types/modelsType";
+
 import { InboxOutlined } from "@ant-design/icons";
-import styles from "../first-scenario/first-scenario.module.css";
-import { useState } from "react";
+
 import lang from "../lang.json";
 
 const { Dragger } = Upload;
-
-// let firstStructure: structure = {
-//   fileHashId: "",
-//   models: [
-//     {
-//       name: "",
-//       chains: [
-//         {
-//           name: "",
-//           sequence: "",
-//           residuesWithoutAtoms: [],
-//         },
-//       ],
-//     },
-//   ],
-// };
 
 interface UploadFileArguments {
   uploadStructure: UploadFile[] | undefined;
@@ -38,12 +19,12 @@ interface UploadFileArguments {
 
 const getActionUrl = (scenario: string, taskID: string | null) => {
   if (scenario === "2") {
-    return `${config.SERVER_URL}/one-many/form/add/model/${taskID}`;
+    return `${process.env.NEXT_PUBLIC_SERVER_URL}/one-many/form/add/model/${taskID}`;
   } else {
     if (taskID != null && taskID !== "") {
-      return `${config.SERVER_URL}/many-many/form/add/model/${taskID}`;
+      return `${process.env.NEXT_PUBLIC_SERVER_URL}/many-many/form/add/model/${taskID}`;
     } else {
-      return `${config.SERVER_URL}/many-many/set`;
+      return `${process.env.NEXT_PUBLIC_SERVER_URL}/many-many/set`;
     }
   }
 };

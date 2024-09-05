@@ -1,7 +1,6 @@
 "use client";
 import { third_scenario_result } from "@/types/modelsType";
-import { Button, message, Image, Divider, Col, Row } from "antd";
-import config from "../../config.json";
+import { Button, Image, Divider, Col, Row } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import { Suspense, useEffect, useState } from "react";
 import ModelsMatrix from "./ModelsMatrix";
@@ -67,7 +66,7 @@ const ResultModelModel = (props: {
                     }}
                     width={"100%"}
                     // className="two-d-image"
-                    src={`${config.SERVER_URL}/many-many/${props.taskId}/dendrogram`}
+                    src={`${process.env.NEXT_PUBLIC_SERVER_URL}/many-many/${props.taskId}/dendrogram`}
                   />
                 </div>
               </Col>

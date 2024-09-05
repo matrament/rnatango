@@ -1,5 +1,0 @@
-{
-  "SERVER_URL": "https://rnatango.cs.put.poznan.pl/api",
-  "SERVER_WEB_SOCKET_URL": "wss://rnatango.cs.put.poznan.pl/api/ws",
-  "FRONTEND_URL": ""
-}
