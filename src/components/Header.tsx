@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname} from "next/navigation";
 import styles from "./components.module.css";
 import Logo from "../assets/logornatango.svg";
 import { useState } from "react";
@@ -19,13 +19,9 @@ export default Header;
 const DesktopHeader = () => {
   const pathname = usePathname();
 
-  const router = useRouter();
-
   const handleHomeClick = (e: any) => {
     if (pathname === "/") {
-      // Prevent the default behavior of the link
       e.preventDefault();
-      // Force a reload of the page
       window.location.href = "/";
     }
   };
@@ -67,13 +63,13 @@ const DesktopHeader = () => {
 const HeaderMobile = () => {
   const pathname = usePathname();
   const [showMenu, setShowMenu] = useState(false);
-  const router = useRouter();
+
 
   const handleHomeClick = (e: any) => {
     if (pathname === "/") {
-      // Prevent the default behavior of the link
+
       e.preventDefault();
-      // Force a reload of the page
+
       window.location.href = "/";
     }
   };

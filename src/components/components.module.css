@@ -2,10 +2,13 @@
   width: 100vw;
   display: flex;
   justify-content: center;
+  border-bottom: solid 1px #dcdcdc;
+  /* background: #eeeeee; */
+  margin-bottom: 20px;
 }
 
 .header {
-  height: 100px;
+  height: 80px;
   display: flex;
   width: 60vw;
   justify-content: space-between;
