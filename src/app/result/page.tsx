@@ -30,6 +30,7 @@ const ResultPage = (props: any) => {
   const [stepsNumber, setStepsNumber] = useState(1);
   const [error, setError] = useState<boolean>(false);
   const [seedState, setSeedState] = useState(1);
+  const [progress, setProgress] = useState(1);
 
   useEffect(() => {
     processingResponse(
@@ -37,7 +38,8 @@ const ResultPage = (props: any) => {
       setResultFile,
       setStatus,
       setError,
-      "single"
+      "single",
+      setProgress
     );
   }, []);
 
@@ -64,6 +66,7 @@ const ResultPage = (props: any) => {
         stepsNumber={stepsNumber}
         error={error}
         removeDate={resultFile.resultRemovedAfter}
+        scenario={"Single model"}
       />
       {resultFile.structureName === "" ? (
         <LoadingCard />

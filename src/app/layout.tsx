@@ -35,6 +35,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={openSans.className}>
+      <header>
+        <script
+          defer
+          data-domain="rnatango.cs.put.poznan.pl"
+          src="https://plausible.cs.put.poznan.pl/js/plausible.js"
+        ></script>
+      </header>
       {/* <link rel="icon" href="/favicon.ico" sizes="any" /> */}
       <body>
         <ConfigProvider

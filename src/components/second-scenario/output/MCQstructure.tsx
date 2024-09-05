@@ -50,9 +50,9 @@ const MCQstructure = (props: { modelHashId: string }) => {
         </Col>
         <Col flex="75px">
           <Button
-            type="text"
-            size="large"
-            style={{ marginTop: "15px", width: "30px" }}
+            type="primary"
+            // size="medium"
+            style={{ marginTop: "15px", width: "32px" }}
             icon={<DownloadOutlined />}
             onClick={() => {
               downloadFile("secondary_structure.svg", props.modelHashId);

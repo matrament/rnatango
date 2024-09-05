@@ -95,6 +95,32 @@ const options: ItemProps[] = [
   },
 ];
 
+const avgRange: { [key: string]: [number, number, number] } = {
+  ["alpha"]: [55, 65, 75],
+
+  ["beta"]: [176, -173, -162],
+
+  ["gamma"]: [-63, -54, -45],
+
+  ["delta"]: [-84, -80, -76],
+
+  ["epsilon"]: [141, 150, 159],
+
+  ["zeta"]: [66, 73, 80],
+
+  ["eta"]: [0, 0, 0],
+
+  ["theta"]: [0, 0, 0],
+
+  ["eta_prim"]: [0, 0, 0],
+
+  ["theta_prim"]: [0, 0, 0],
+
+  ["chi"]: [142, 161, 180],
+
+  ["p"]: [0, 0, 0],
+};
+
 const DataResult = (props: { resultFile: single_result_angle }) => {
   const [resultTorsionAngle, setResultTorsionAngle] = useState<
     torsion_angles[]
@@ -206,8 +232,10 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
                 alignItems: "center",
               }}
             >
-              <h2 style={{ marginTop: 0 }}>Torsion angle values</h2>
-
+              <h2 style={{ margin: 0 }}>Torsion angle values</h2>
+              <p style={{ color: "#8c8c8c" }}>
+                Click component(s) below to expand/collapse
+              </p>
               {resultTorsionAngle.map((el, index) => (
                 <div
                   style={{ paddingBottom: "10px", width: "100%" }}
@@ -272,6 +300,11 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
                       (el) => el[angleName.split("-")[1] as ObjectKey]
                     )}
                     fileName={props.resultFile.structureName}
+                    avgRange={
+                      concatResidues[0].name.split(".")[1][0] != "D"
+                        ? avgRange[angleName.split("-")[1] as ObjectKey]
+                        : [0, 0, 0]
+                    }
                   />
                 ))}
               </div>

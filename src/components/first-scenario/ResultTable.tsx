@@ -128,7 +128,7 @@ const ResultTable = (props: {
   const [selectedAngles, setSelectedAngles] = useState<string[]>([]);
   const [csvData, setCsvData] = useState<torsion_angles_residue[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
+  const [open, setOpen] = useState<string | string[]>([]);
   useEffect(() => {
     handleChange(Object.keys(angleName));
     setSelectedAngles(Object.keys(angleName));
@@ -165,10 +165,16 @@ const ResultTable = (props: {
                   ) as keyof typeof P_angle_label
                 ];
               return (
-                <>
-                  <p className={styles.tableAngleMono}>{value}</p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <p className={styles.tableAngleMono}>{value}</p>&nbsp;&nbsp;
                   <Tag color={label.color}>{label.name}</Tag>
-                </>
+                </div>
               );
             } else {
               null;
@@ -221,20 +227,30 @@ const ResultTable = (props: {
     selectedRowKeys,
     onChange: handleOnChange,
   };
+  const onChange = (key: string | string[]) => {
+    setOpen(key);
+  };
 
   return (
     <>
       <Collapse
         style={{ width: "100%" }}
+        onChange={onChange}
         items={[
           {
             key: "1",
             label: (
               <>
-                <div className={styles.chainTitle}>Chain: {props.chain}</div>
-                <div className={styles.sequenceText}>
-                  {props.sequence.toUpperCase()}
-                </div>
+                <Tooltip
+                  title={`${
+                    open.length === 0 ? "click to expand" : "click to collapse"
+                  }`}
+                >
+                  <div className={styles.chainTitle}>Chain: {props.chain}</div>
+                  <div className={styles.sequenceText}>
+                    {props.sequence.toUpperCase()}
+                  </div>
+                </Tooltip>
               </>
             ),
             children: (

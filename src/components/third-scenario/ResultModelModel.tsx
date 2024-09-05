@@ -45,7 +45,7 @@ const ResultModelModel = (props: {
           />
 
           <>
-            <h2 style={{ marginTop: 0 }}>Dendrogram</h2>
+            <h2 style={{ marginTop: 0 }}>Dendrogram (based on global MCQ)</h2>
             <Row>
               <Col
                 flex="auto"
@@ -73,9 +73,9 @@ const ResultModelModel = (props: {
               </Col>
               <Col flex="75px">
                 <Button
-                  type="text"
-                  size="large"
-                  style={{ marginTop: "15px" }}
+                  type="primary"
+                  // size="large"
+                  style={{ marginTop: "15px", width: "32px" }}
                   icon={<DownloadOutlined />}
                   onClick={() => {
                     downloadFile(

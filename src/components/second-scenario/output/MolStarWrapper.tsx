@@ -82,7 +82,7 @@ async function addComponents(
         ]),
       }),
       isTarget ? "target-component-common" : `model-component-common`,
-      isTarget ? { label: `Target common` } : { label: `Model common` }
+      isTarget ? { label: `Target` } : { label: `Model` }
     );
   const otherComponent =
     await plugin.builders.structure.tryCreateComponentFromExpression(

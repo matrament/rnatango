@@ -24,6 +24,7 @@ import TableOfContent from "./TableOfContent";
 import TableTorsionAngles from "./TableTorsionAngles";
 import TableTorsionAnglesPseudo from "./TableTorsionAnglesPseudo";
 import TableFiles from "./TableFiles";
+import help_line_plot from "../../assets/help/help_line_plot.png";
 
 const Help = () => {
   return (
@@ -211,7 +212,6 @@ const Help = () => {
         width={300}
         src={equation.src}
       />
-      <small>Figure 5.</small>
       <p>
         {`RNA structure analysis utilizes also pseudo-torsion angles, defined
         between non-bonded atoms. These angles, \u03B7, \u03B8, \u03B7', and \u03B8', are
@@ -408,6 +408,20 @@ Given two structures `}
       a continuous range from 0\u00B0 to 180\u00B0 (Figure 6. top) and discrete 
       ranges of 0\u00B0-15\u00B0, 15\u00B0-30\u00B0, 30\u00B0-60\u00B0, and >60\u00B0 (Figure 6. bottom). The heatmap can be zoomed in or out using a slider or by scrolling. Additionally, users can adjust the range of displayed elements and download the heatmap as an SVG file.`}</p>
       <Image
+        alt={"help_line_plot"}
+        style={{
+          width: "100%",
+        }}
+        width={800}
+        src={help_line_plot.src}
+      />
+      <small>Figure 7. Line plot with residue-wise angle values.</small>
+      <p>
+        Specific line plots can be enabled by clicking the button corresponding
+        to the angle name. Additionally, users can zoom in on a specific
+        fragment using the slider at the bottom.
+      </p>
+      <Image
         alt={"help_molstar"}
         style={{
           width: "100%",
@@ -416,7 +430,7 @@ Given two structures `}
         src={help_molstar.src}
       />
       <small>
-        Figure 7. Alignment of the longest continuous segments found by LCS-TA.
+        Figure 8. Alignment of the longest continuous segments found by LCS-TA.
       </small>
       <p>
         {`This option allows users to focus on a specific model for detailed
@@ -441,7 +455,7 @@ Given two structures `}
         src={help_scatter.src}
       />
       <small>
-        Figure 8. Clusters resulting from model clustering in the Model vs Model
+        Figure 9. Clusters resulting from model clustering in the Model vs Model
         scenario.
       </small>
       <Image
@@ -453,7 +467,7 @@ Given two structures `}
         src={help_model_matrix.src}
       />
       <small>
-        Figure 9. Result table in the <i>Model vs Model</i> scenario.
+        Figure 10. Result table in the <i>Model vs Model</i> scenario.
       </small>
       <p>
         {`This scenario allows users to select a single structure as the target.

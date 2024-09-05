@@ -292,7 +292,7 @@ const LCSta = (props: {
           </Row>
           <div
             style={{
-              backgroundColor: "#fb5f4c",
+              backgroundColor: "#04afa4",
               height: "10px",
 
               borderRadius: "5px",
@@ -305,7 +305,7 @@ const LCSta = (props: {
           </Row>
           <div
             style={{
-              backgroundColor: "#04afa4",
+              backgroundColor: "#fb5f4c",
               height: "10px",
               width: "100%",
 
