@@ -183,7 +183,6 @@ const ResultTable = (props: {
         };
       }
 
-      // Domyślna konfiguracja, jeśli value nie jest równe "p"
       return {
         title: (
           <p style={{ whiteSpace: "nowrap" }}>{`${
@@ -241,16 +240,19 @@ const ResultTable = (props: {
             key: "1",
             label: (
               <>
-                <Tooltip
-                  title={`${
-                    open.length === 0 ? "click to expand" : "click to collapse"
-                  }`}
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <div className={styles.chainTitle}>Chain: {props.chain}</div>
-                  <div className={styles.sequenceText}>
-                    {props.sequence.toUpperCase()}
+                  <div style={{ marginRight: "13px", color: "#04afa4" }}>
+                    {open.length === 0
+                      ? "click to expand"
+                      : "click to collapse"}
                   </div>
-                </Tooltip>
+                </div>
+                <div className={styles.sequenceText}>
+                  {props.sequence.toUpperCase()}
+                </div>
               </>
             ),
             children: (

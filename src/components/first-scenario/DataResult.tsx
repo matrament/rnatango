@@ -232,10 +232,8 @@ const DataResult = (props: { resultFile: single_result_angle }) => {
                 alignItems: "center",
               }}
             >
-              <h2 style={{ margin: 0 }}>Torsion angle values</h2>
-              <p style={{ color: "#8c8c8c" }}>
-                Click component(s) below to expand/collapse
-              </p>
+              <h2 style={{ marginTop: 0 }}>Torsion angle values</h2>
+
               {resultTorsionAngle.map((el, index) => (
                 <div
                   style={{ paddingBottom: "10px", width: "100%" }}

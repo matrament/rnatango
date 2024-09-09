@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 const CiteUs = () => {
   return (
     <div className={styles.scenario}>
-      <h2>Cite us</h2>
+      <h1>Cite us</h1>
       <p>
         <b>
           In any published work that has made use of RNAtango, please cite the
