@@ -3,11 +3,61 @@
   border-radius: 60px;
   width: 100%;
   min-height: 100px;
-  margin-top: 30px;
+  margin-top: 15px;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   padding-top: 20px;
+}
+
+.scenariobutton {
+  border: 1px solid #dcdcdc;
+  border-radius: 40px;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  /* margin-bottom: 10px; */
+  display: flex;
+  column-gap: 10px;
+  flex-direction: column;
+}
+
+.buttond {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* flex-wrap: wrap; */
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+  }
+}
+
+.buttonscenario {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  height: 60px;
+  border-radius: 30px;
+  justify-content: center;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+}
+
+.nonactive {
+  background-color: #eeeeee;
+  color: #fb5f4c;
+}
+
+.nonactive:hover {
+  background: #f2e9e8;
+}
+
+.active {
+  background: #fb5f4c;
+  color: #f8f8f8;
 }

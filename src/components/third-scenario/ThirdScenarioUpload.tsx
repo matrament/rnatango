@@ -282,20 +282,29 @@ const ThirdScenarioUpload = () => {
                   setParams={setParams}
                 />
                 <Row justify={"center"}>
-                  <Button
-                    style={{ marginBottom: "20px", width: "150px" }}
-                    type="primary"
-                    shape="round"
-                    size="large"
-                    loading={loading}
-                    onClick={submit}
-                    disabled={
+                  <Tooltip
+                    title={
                       params.angles.length === 0 ||
                       modelsTarget.models.length < 3
+                        ? "Upload 3 - 10 models to proceed"
+                        : ""
                     }
                   >
-                    Submit
-                  </Button>
+                    <Button
+                      style={{ marginBottom: "20px", width: "150px" }}
+                      type="primary"
+                      shape="round"
+                      size="large"
+                      loading={loading}
+                      onClick={submit}
+                      disabled={
+                        params.angles.length === 0 ||
+                        modelsTarget.models.length < 3
+                      }
+                    >
+                      Submit
+                    </Button>
+                  </Tooltip>
                 </Row>
               </>
             ) : null}

@@ -167,7 +167,7 @@ const ResultModelsTarget = (props: {
               />
             </>
           ) : (
-            <p>no models selected</p>
+            <p style={{ textAlign: "center" }}>no models selected</p>
           )}
         </>
       ) : null}

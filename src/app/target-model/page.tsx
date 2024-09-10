@@ -33,7 +33,7 @@ const TargetModels = () => {
   const [datasetModels, setDatasetModels] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const selectedScenario = useState<string>("2");
   const searchParams = useSearchParams();
   const targetID = searchParams.get("id");
   const [params, setParams] = useState<second_scenario_submit>({
@@ -53,6 +53,11 @@ const TargetModels = () => {
     ],
     threshold: 15,
   });
+  const scenariosVariants: { [key: string]: string } = {
+    "1": "Single model",
+    "2": "Model(s) vs Target",
+    "3": "Model vs Model",
+  };
 
   const [uploadStructure, setUploadStructure] = useState<
     UploadFile[] | undefined
@@ -131,6 +136,25 @@ const TargetModels = () => {
 
   return (
     <>
+      <div className={styles.scenariobutton}>
+        <div className={styles.buttond}>
+          {Object.keys(scenariosVariants).map(
+            (version: string, index: number) => (
+              <div
+                key={index}
+                className={`${styles.buttonscenario} ${
+                  "2" === version ? styles.active : styles.nonactive
+                }`}
+                onClick={() => {
+                  router.push(`/?scenario=${version}`);
+                }}
+              >
+                {scenariosVariants[version]}
+              </div>
+            )
+          )}
+        </div>
+      </div>
       <div className={styles.scenario}>
         <h1>
           Task id:{" "}
